@@ -31,14 +31,16 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
  typedef struct
 {
 	INT8U  NowVoltage;
-	INT16U  Nowcount;//INT8U  Nowcount;
+	INT8U  Nowcount;
 	INT8U  ReadIRBit;
 	INT8U  ReadIRFlag;
 	INT8U  ReadIRByte;
 	INT8U  AABit;     
 	INT8U  ReadIR[4];
-	INT16U  ReadIRData[3];//INT8U  ReadIRData[3];
+	INT8U  ReadIRData[8];//WT.EDIT [3]
 	INT8U  Runcontrol;
+	INT8U  BitHigh ; //WT.EDTI
+	INT8U  BitLow;   //WT.EDIT
 } ReadIRByte ;
 
 KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;
