@@ -70,19 +70,19 @@ void Remote1_Count(void)
                 SendCount=1;
                 SBUF=Usart1Send[SendCount];
 			#endif 
-		if(Remote1_ReadIR.Nowcount>53 )//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
+		if(Remote1_ReadIR.Nowcount>=40 )//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
 		{
 			//Remote1_ReadIR.ReadIRFlag=2;
 			//Remote1_ReadIR.AABit ++ ;
 			 
 			     Remote1_ReadIR.BitHigh ++;
-			     Remote1_ReadIR.ReadIRData[Remote1_ReadIR.BitHigh] =1 ;
+			     Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
 				
 			
 		}
 		else if(Remote1_ReadIR.Nowcount<40 && Remote1_ReadIR.Nowcount > 10){
 		       Remote1_ReadIR.BitHigh ++;
-			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.BitHigh] =0; 
+			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0; 
 		       
 
       }
