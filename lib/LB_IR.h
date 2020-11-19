@@ -28,7 +28,6 @@ version  : 见文件尾端
 #define  KAKA_IR_EXT extern
 #endif
 
-
 #define IR1   0
 #define IR3   0
 #define IR2   1
@@ -45,7 +44,8 @@ version  : 见文件尾端
 	INT16U  ReadIRData[8];//WT.EDIT [3]
 	INT8U  Runcontrol;
 	INT8U  BitHigh ; //WT.EDTI
-	INT8U  BitLow;   //WT.EDIT
+	INT8U  Interrupt_IR1;   //WT.EDIT
+	INT8U  Interrupt_IR2;   //WT.EDIT
 } ReadIRByte ;
 
 KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;
@@ -54,11 +54,11 @@ KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;
 
 KAKA_IR_EXT void Init_IR();
 
-KAKA_IR_EXT void Remote13_Count(void);
+KAKA_IR_EXT void Remote1_Count(void);
 KAKA_IR_EXT void Remote11_Count(void); //WT.EIDT
 KAKA_IR_EXT void Remote12_Count(void); //WT.EIDT
 
-KAKA_IR_EXT void Read_Remote13IR();
+KAKA_IR_EXT void Read_Remote1IR();
 KAKA_IR_EXT void Read_Remote11IR(); //WT.EDIT
 KAKA_IR_EXT void Read_Remote12IR(); //WT.EDIT
 

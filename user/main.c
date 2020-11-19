@@ -197,15 +197,29 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	
 	if(PINTF1&0x40)						//判断INT14中断标志位--IR
 	{
-		PINTF1 &=~ 0x40;				//清除INT14中断标志位	
-		#if IR3 
-		 Read_Remote13IR();  //ir3
+		PINTF1 &=~ 0x40;	//清除INT14中断标志位	
+		#if IR3
+		    Read_Remote1IR();  //ir3
 		#endif 
 		#if IR1
-			Read_Remote11IR(); //ir1
+		   Read_Remote11IR(); //ir1
 		#endif 
 		#if IR2
-		   Read_Remote12IR(); //ir2
+		   Read_Remote12IR(); //ir1
+		   if(InterruptTime <7){
+				Remote1_ReadIR.Interrupt_IR2 ++ ;
+
+		        }
+		   if(InterruptTime >7){
+					  Usart1Send[0]=2;
+					  Usart1Send[1]=Remote1_ReadIR.Interrupt_IR2;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
+                       Usart1Send[2]=0x12;
+					  SendCount=1;
+					  SBUF=Usart1Send[SendCount];
+					  //Remote1_ReadIR.Interrupt_IR2=0;
+					  InterruptTime =10;
+		    }
+		   
 		#endif 
 	}
 
@@ -226,21 +240,18 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U t_1s;
   //IRTime++;
   t_10ms++;
+  
   ReadAD5ms();
-  #if IR3
- 	 Remote13_Count(); //ir3
-  #endif 
-  #if IR1
-  Remote11_Count();//ir1
- #endif 
- #if IR2 
+ // Remote1_Count(); //ir3
+ // Remote11_Count();//ir1
    Remote12_Count(); //ir2
- #endif  
-  if(t_10ms>99)
+  
+  if(t_10ms>99) //10ms
   {
   	t_10ms=0;
 	t_100ms++;
 	t_1s++;
+	InterruptTime ++ ;
 	RunMs++;
  	  CheckLeftMotorSpeed();
 	  CheckRightMotorSpeed();
