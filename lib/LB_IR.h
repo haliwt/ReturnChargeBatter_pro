@@ -50,10 +50,14 @@ KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;
 KAKA_IR_EXT void Init_IR();
 
 KAKA_IR_EXT void Remote1_Count(void);
+KAKA_IR_EXT void Remote11_Count(void); //WT.EIDT
+
 KAKA_IR_EXT void Read_Remote1IR();
+KAKA_IR_EXT void Read_Remote11IR(); //WT.EDIT
 
 KAKA_IR_EXT INT8U CheckHandsetIR();
-KAKA_IR_EXT void CheckXReadIR(ReadIRByte *P); //WT.EDIT
+//KAKA_IR_EXT void CheckXReadIR(ReadIRByte *P); //WT.EDIT
+//KAKA_IR_EXT void CheckXReadIR_IR1(ReadIRByte *P); //WT.EDIT
 KAKA_IR_EXT void Delay_ms(unsigned int fui_i);
 
 #endif

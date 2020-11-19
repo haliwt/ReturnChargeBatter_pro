@@ -198,7 +198,8 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	if(PINTF1&0x40)						//判断INT14中断标志位--IR
 	{
 		PINTF1 &=~ 0x40;				//清除INT14中断标志位	
-		Read_Remote1IR();
+		//Read_Remote1IR();  //ir3
+		Read_Remote11IR(); //ir1
 	}
 
 	
@@ -219,7 +220,8 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   //IRTime++;
   t_10ms++;
   ReadAD5ms();
-  Remote1_Count();
+ // Remote1_Count(); //ir3
+  Remote11_Count();//ir1
   
   if(t_10ms>99)
   {
