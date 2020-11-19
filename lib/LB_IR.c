@@ -70,19 +70,19 @@ void Remote1_Count(void)
                 SendCount=1;
                 SBUF=Usart1Send[SendCount];
 			#endif 
-		if(Remote1_ReadIR.Nowcount>=40 )//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
+		if(Remote1_ReadIR.Nowcount>=0x32)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
 		{
 			//Remote1_ReadIR.ReadIRFlag=2;
 			//Remote1_ReadIR.AABit ++ ;
 			 
 			     Remote1_ReadIR.BitHigh ++;
-			     Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
-				
+			    // Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
+				Remote1_ReadIR.ReadIRData[Remote1_ReadIR.BitHigh] =1 ;
 			
 		}
-		else if(Remote1_ReadIR.Nowcount<40 && Remote1_ReadIR.Nowcount > 10){
+		else if(Remote1_ReadIR.Nowcount<0x32 && Remote1_ReadIR.Nowcount > 10){
 		       Remote1_ReadIR.BitHigh ++;
-			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0; 
+			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.BitHigh] =0; 
 		       
 
       }
@@ -120,9 +120,9 @@ void Read_Remote1IR(void)
 //	  SBUF=Usart1Send[SendCount];
 		 Remote1_ReadIR.ReadIRBit++; //bit numbers add 
 		
-		if(Remote1_ReadIR.ReadIRBit >6){//WT.EDIT   ir_Middle //if(Remote1_ReadIR.ReadIRBit>80)
+		if(Remote1_ReadIR.ReadIRBit >7){//WT.EDIT   ir_Middle //if(Remote1_ReadIR.ReadIRBit>80)
 			Remote1_ReadIR.ReadIRFlag=2; 
-		    //Remote1_ReadIR.BitHigh=0;
+		    Remote1_ReadIR.BitHigh=0;
 		}
 		
 		
@@ -151,21 +151,21 @@ void CheckXReadIR(ReadIRByte *P)
 		k=0;
 		//if(P->ReadIRData[1]==1)//if(P->ReadIRData[P->AABit]>120) //
 		{
-			for(P->AABit=0; P->AABit< P->ReadIRBit; P->AABit++)
+			for(P->AABit=1; P->AABit<= P->ReadIRBit; P->AABit++)
 			{				     
 					P->ReadIRByte=P->ReadIRData[P->AABit]<<1;//P->ReadIRByte=P->ReadIRData[P->AABit]<<=1;
 					 {
 					 	//P->ReadIRByte<<=1;
 					    k++;
 						#if 1
-						if(k>6)
+						if(k>7)
 					    {
 						    P->ReadIR[ReadIR_cnt++]=P->ReadIRByte;
 						    k=0;
 						    P->ReadIRByte=0;
 							P->ReadIRFlag=3;
 							Remote1_ReadIR.ReadIRFlag=0;
-							 Remote1_ReadIR.ReadIRBit=0;
+							Remote1_ReadIR.ReadIRBit=0;
 							 Remote1_ReadIR.BitHigh=0;
 
 					    }

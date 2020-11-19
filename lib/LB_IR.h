@@ -37,7 +37,7 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 	INT8U  ReadIRByte;
 	INT8U  AABit;     
 	INT8U  ReadIR[4];
-	INT8U  ReadIRData[8];//WT.EDIT [3]
+	INT16U  ReadIRData[8];//WT.EDIT [3]
 	INT8U  Runcontrol;
 	INT8U  BitHigh ; //WT.EDTI
 	INT8U  BitLow;   //WT.EDIT
