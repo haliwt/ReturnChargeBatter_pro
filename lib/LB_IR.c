@@ -27,9 +27,6 @@ version  : 见文件尾端
 #define clrbit(x,y)   	 		x&=~(1<<y)        //将X的第Y位清0
 #define reversebit(x,y) 	 	x^=(1<<y)        //取反
 #define getbit(x,y)  			((x) >> (y)&1)    //读取位
-#define IR1   0
-#define IR3   0
-#define IR2   1
 
 
 
@@ -59,10 +56,12 @@ void Init_IR()
 	*
 	*
 **************************************************************/
-void Remote1_Count(void)
+#if IR3
+
+void Remote13_Count(void)
 {
 
-#if 0 //IR3
+
 	if(Remote1_ReadIR.ReadIRFlag==1) //IR_gpio 中断中置 1
 	{
 		
@@ -83,8 +82,9 @@ void Remote1_Count(void)
 
       }
    }
-#endif
+
 }
+#endif 
 /**************************************************************
 	*
 	*Function Name:void Remote11_Count(void)
@@ -93,10 +93,12 @@ void Remote1_Count(void)
 	*
 	*
 **************************************************************/
+#if IR1
+
 void Remote11_Count(void)
 {
 
-#if IR1
+
 	if(Remote1_ReadIR.ReadIRFlag==1) //IR_gpio 中断中置 1
 	{
 		if(P1_6 ==1)
@@ -119,8 +121,9 @@ void Remote11_Count(void)
 
       }
    }
-#endif
+
 }
+#endif 
 /**************************************************************
 	*
 	*Function Name:void Remote11_Count(void)
@@ -129,16 +132,18 @@ void Remote11_Count(void)
 	*
 	*
 **************************************************************/
+#if IR2
+
 void Remote12_Count(void)
 {
 
-#if IR2
+
 	if(Remote1_ReadIR.ReadIRFlag==1) //IR_gpio 中断中置 1
 	{
 		if(P1_6 ==1)
 		    Remote1_ReadIR.Nowcount++ ;
-		else Remote1_ReadIR.Nowcount--;
-		if(Remote1_ReadIR.Nowcount>=0x16)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
+		//else Remote1_ReadIR.Nowcount--;
+		if(Remote1_ReadIR.Nowcount>=0x18)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
 		{
 			
 			 
@@ -147,28 +152,31 @@ void Remote12_Count(void)
 				
 			
 		}
-		else if(Remote1_ReadIR.Nowcount<0x16 ){
+		else if(Remote1_ReadIR.Nowcount<0x18   && Remote1_ReadIR.Nowcount>5 ){
 		       
 			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0 ;
 		       
 
       }
    }
-#endif
+
 }
+#endif
 
 
 /**************************************************************
 	*
-	*Function Name:void Read_Remote1IR(void)
+	*Function Name:void Read_Remote13IR(void)
 	*Fucntion :GPIO ,中断函数中执行,IR3
 	*Input Ref:NO
 	*Return Ref: NO
 	*
 **************************************************************/
-void Read_Remote1IR(void)
+#if IR3
+
+void Read_Remote13IR(void)
 {
-#if 0//IR3
+
 	Remote1_ReadIR.NowVoltage=P1_6; //remotoe receive GPIO
 	
     if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))//input interrupt program
@@ -198,8 +206,10 @@ void Read_Remote1IR(void)
 		
 		
 	}
-#endif 
+
 }
+#endif 
+
 /**************************************************************
 	*
 	*Function Name:void Read_Remote11IR(void)
@@ -208,9 +218,11 @@ void Read_Remote1IR(void)
 	*Return Ref: NO
 	*
 **************************************************************/
+#if IR1
+
 void Read_Remote11IR(void)
 {
-#if IR1
+
 	Remote1_ReadIR.NowVoltage=P1_6; //remotoe receive GPIO
 	
     if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))//input interrupt program
@@ -240,9 +252,9 @@ void Read_Remote11IR(void)
 		
 		
 	}
-#endif 
-}
 
+}
+#endif 
 
 /**************************************************************
 	*
@@ -252,9 +264,11 @@ void Read_Remote11IR(void)
 	*Return Ref: NO
 	*
 **************************************************************/
+#if IR2
+
 void Read_Remote12IR(void)
 {
-#if IR2
+
 	Remote1_ReadIR.NowVoltage=P1_6; //remotoe receive GPIO
 	
     if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))//input interrupt program
@@ -284,20 +298,21 @@ void Read_Remote12IR(void)
 		
 		
 	}
-#endif 
-}
 
+}
+#endif 
 /********************************************************************
 	*
-	*Function Name:void CheckXReadIR(ReadIRByte *P)
+	*Function Name:void CheckXReadIR_IR3(ReadIRByte *P)
 	*Function :
 	*Input Ref: pointer *p
 	*Return Ref: NO 
 	*
 ********************************************************************/
-//void CheckXReadIR(ReadIRByte *P)
-//{
-#if 0 //ir3	
+#if IR3	
+void CheckXReadIR_IR3(ReadIRByte *P)
+{
+
 	INT8U k,ReadIR_cnt,FristCodeflag;
 	FristCodeflag=0;
 	ReadIR_cnt=0;
@@ -351,37 +366,22 @@ void Read_Remote12IR(void)
 
 					 }
 			}
-			//for(P->AABit=0; P->AABit<600; P->AABit++)
-			//{
-			  //  P->ReadIRData[P->AABit]=0;
-			//}
+			
 		}
-		#if 0
-		//else if((P->ReadIRData[P->AABit]>105)&&(P->ReadIRData[P->AABit]<115))
-		//{
-			//P->ReadIRFlag=3;
-		//}
-		else
-		{
-			Remote1_ReadIR.ReadIRFlag=0;
-			for(P->AABit=0; P->AABit<80; P->AABit++)
-			{
-			     P->ReadIRData[P->AABit]=0;
-			}
-		}	
-		#endif 
+		
 	}
+
+}
 #endif 
-//}
 /********************************************************************
 	*
-	*Function Name:void CheckXReadIR_IR1(ReadIRByte *P)
+	*Function Name:void CheckXReadIR_IR11(ReadIRByte *P)
 	*Function :
 	*Input Ref: pointer *p
 	*Return Ref: NO 
 	*
 ********************************************************************/
-#if 0
+#if IR1
 void CheckXReadIR_IR1(ReadIRByte *P)
 {
 	INT8U k,ReadIR_cnt,FristCodeflag,j;
@@ -467,7 +467,7 @@ void CheckXReadIR_IR1(ReadIRByte *P)
 /********************************************************************
 	*
 	*Function Name:void CheckXReadIR_IR2(ReadIRByte *P)
-	*Function :
+	*Function :IR2
 	*Input Ref: pointer *p
 	*Return Ref: NO 
 	*
@@ -571,10 +571,15 @@ INT8U CheckHandsetIR()
 	//ReadIRByte irStruct;
    // irStruct.ReadIR[0]=0;
 	
-
-  // CheckXReadIR(&Remote1_ReadIR);
-   // CheckXReadIR_IR1(&Remote1_ReadIR);
+#if IR3
+    CheckXReadIR_IR3(&Remote1_ReadIR);
+#endif 
+#if IR1
+    CheckXReadIR_IR1(&Remote1_ReadIR);
+#endif 
+#if IR2
 	CheckXReadIR_IR2(&Remote1_ReadIR);
+#endif 
 #if 0
     Usart1Send[0]=2;
 	//Usart1Send[1]=irStruct.ReadIR[0];

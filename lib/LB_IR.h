@@ -28,6 +28,11 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #define  KAKA_IR_EXT extern
 #endif
 
+
+#define IR1   0
+#define IR3   0
+#define IR2   1
+
  typedef struct
 {
 	INT8U  NowVoltage;
@@ -49,11 +54,11 @@ KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;
 
 KAKA_IR_EXT void Init_IR();
 
-KAKA_IR_EXT void Remote1_Count(void);
+KAKA_IR_EXT void Remote13_Count(void);
 KAKA_IR_EXT void Remote11_Count(void); //WT.EIDT
 KAKA_IR_EXT void Remote12_Count(void); //WT.EIDT
 
-KAKA_IR_EXT void Read_Remote1IR();
+KAKA_IR_EXT void Read_Remote13IR();
 KAKA_IR_EXT void Read_Remote11IR(); //WT.EDIT
 KAKA_IR_EXT void Read_Remote12IR(); //WT.EDIT
 
