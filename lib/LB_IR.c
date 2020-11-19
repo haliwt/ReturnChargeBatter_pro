@@ -20,8 +20,16 @@ version  : 见文件尾端
 #include "..\lib\LB_Usart.h"
 #include "LB_Motor.h"
 #include "LB_Run.h"
+#include "LB_Led.h"
 
 #endif
+#define setbit(x,y)    	 		x|=(1<<y)          //将X的第Y位置1
+#define clrbit(x,y)   	 		x&=~(1<<y)        //将X的第Y位清0
+#define reversebit(x,y) 	 	x^=(1<<y)        //取反
+#define getbit(x,y)  			((x) >> (y)&1)    //读取位
+
+
+
 
 void Init_IR()
 {
@@ -29,8 +37,11 @@ void Init_IR()
     
 	P1M6 = 0x68;			        	//P1_6设置为带SMT(施密特功能)上拉输入
 
- 	PITS3 |= (1<<4);						//INT14,外部中断电平选择,红外接收头，上升沿中断
-    PINTE1 |= 0x40;						//使能INT14
+ 	//PITS3 |= 0x00;						//INT14,外部中断电平选择,红外接收头，上升沿中断
+	//PITS3 |=(3<<4);
+	PITS3 &=~(1<<5);
+	
+	PINTE1 |= 0x40;						//使能INT14
 
 	IE2 |= 0x01;						//打开INT8-17中断
 	EA=1;
@@ -50,19 +61,29 @@ void Remote1_Count(void)
 {
 	if(Remote1_ReadIR.ReadIRFlag==1) //IR_gpio 中断中置 1
 	{
-		Remote1_ReadIR.Nowcount++;
-		if(Remote1_ReadIR.Nowcount>70 )//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
+			#if 0
+				 Remote1_ReadIR.Nowcount++;
+		         Usart1Send[0]=1;
+				//Remote1_ReadIR.ReadIR[0]=P->ReadIR[0];
+                Usart1Send[1]=Remote1_ReadIR.Nowcount++;
+				//Usart1Send[2]=0xAB;
+                SendCount=1;
+                SBUF=Usart1Send[SendCount];
+			#endif 
+		if(Remote1_ReadIR.Nowcount>50 )//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
 		{
 			//Remote1_ReadIR.ReadIRFlag=2;
 			//Remote1_ReadIR.AABit ++ ;
 			 
 			     Remote1_ReadIR.BitHigh ++;
 			     Remote1_ReadIR.ReadIRData[Remote1_ReadIR.BitHigh] =1 ;
+				
 			
 		}
-		else if(Remote1_ReadIR.Nowcount<40 && Remote1_ReadIR.Nowcount > 20){
+		else if(Remote1_ReadIR.Nowcount<50 && Remote1_ReadIR.Nowcount > 10){
 		       Remote1_ReadIR.BitHigh ++;
 			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.BitHigh] =0; 
+		       
 
       }
 }
@@ -88,7 +109,7 @@ void Read_Remote1IR(void)
 	}
     else if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==1))
 	{
-		Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
+		//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
 		Remote1_ReadIR.Runcontrol=Remote1_ReadIR.Nowcount;
 		Remote1_ReadIR.Nowcount=0;
 		
@@ -102,6 +123,7 @@ void Read_Remote1IR(void)
 			Remote1_ReadIR.ReadIRFlag=2; 
 		    Remote1_ReadIR.BitHigh=0;
 			}
+		Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
 		
 	}
 }
@@ -126,11 +148,11 @@ void CheckXReadIR(ReadIRByte *P)
 	{		
 		P->ReadIRByte=0; //第一个字节 0
 		k=0;
-		//if(P->ReadIRData[P->AABit]>=7)//if(P->ReadIRData[P->AABit]>120) //
+		//if(P->ReadIRData[1]==1)//if(P->ReadIRData[P->AABit]>120) //
 		{
-			for(P->AABit=0; P->AABit< P->ReadIRBit; P->AABit++)
+			for(P->AABit=1; P->AABit<= P->ReadIRBit; P->AABit++)
 			{				     
-					P->ReadIRByte=P->ReadIRData[P->AABit]<<=1;
+					P->ReadIRByte=P->ReadIRData[P->AABit]<<1;//P->ReadIRByte=P->ReadIRData[P->AABit]<<=1;
 					 {
 					 	//P->ReadIRByte<<=1;
 					    k++;
@@ -140,7 +162,8 @@ void CheckXReadIR(ReadIRByte *P)
 						    P->ReadIR[ReadIR_cnt++]=P->ReadIRByte;
 						    k=0;
 						    P->ReadIRByte=0;
-//							P->ReadIRFlag=3;
+							P->ReadIRFlag=3;
+							//Remote1_ReadIR.ReadIRFlag=0;
 
 					    }
 						#endif 
@@ -148,12 +171,14 @@ void CheckXReadIR(ReadIRByte *P)
 					
 					 if(ReadIR_cnt ==1)//4
 					 {
-			    	    Usart1Send[0]=2;
-						Remote1_ReadIR.ReadIR[0]=P->ReadIR[0];
-	                    Usart1Send[1]=P->ReadIR[0];
-						Usart1Send[2]=0x12;//P->ReadIR[1];
+						
+						Usart1Send[0]=1;
+						//Remote1_ReadIR.ReadIR[0]=P->ReadIR[0];
+	                    Usart1Send[1]=P->ReadIR[1];
+						//Usart1Send[2]=P->ReadIR[2];
 						//Usart1Send[3]=P->ReadIR[2];
 						//Usart1Send[4]=P->ReadIR[3];
+						if(ReadIR_cnt==1)ReadIR_cnt=0;
 	                    SendCount=1;
 	                    SBUF=Usart1Send[SendCount];
 						ReadIR_cnt=0;
@@ -203,7 +228,7 @@ INT8U CheckHandsetIR()
 	
 
    CheckXReadIR(&Remote1_ReadIR);
-
+#if 0
     Usart1Send[0]=2;
 	//Usart1Send[1]=irStruct.ReadIR[0];
     Usart1Send[1]=Remote1_ReadIR.ReadIR[0];
@@ -214,43 +239,19 @@ INT8U CheckHandsetIR()
 	 Delay_ms(500);
     SendCount=1;
     SBUF=Usart1Send[SendCount];
-
+#endif 
    
 
    if(Remote1_ReadIR.ReadIRFlag==3)
    {
       KeyclearTime=0;
       Remote1_ReadIR.ReadIRFlag=0;
-	  if(Remote1_ReadIR.ReadIR[0]==0X44)
+	  if(Remote1_ReadIR.ReadIR[0]==0X7A)//if(Remote1_ReadIR.ReadIR[0]==0X44)
 	  {
-	     if(Remote1_ReadIR.ReadIR[2]==0x30)
-		 {
-		   KK=3;
-		   Remote1_ReadIR.ReadIR[2]=0x00;
-		 }
-		 else if(Remote1_ReadIR.ReadIR[2]==0x88)
-		 {
-		   KK=4;
-		   Remote1_ReadIR.ReadIR[2]=0x00;
-		 }
-		 else if(Remote1_ReadIR.ReadIR[2]==0x18)		 
-		   KK=5;
-		 else if(Remote1_ReadIR.ReadIR[2]==0xf0)
-		   KK=6;
-		 else if(Remote1_ReadIR.ReadIR[2]==0xb8)
-		 {
-		   KK=7;
-		   Remote1_ReadIR.ReadIR[2]=0x00;
-		 }
-		 else if(Remote1_ReadIR.ReadIR[2]==0xe0)
-		   KK=8;
-		 else if(Remote1_ReadIR.ReadIR[2]==0xf8)
-		   KK=9;
-		 else if(Remote1_ReadIR.ReadIR[2]==0x68)
-		 {
-		   KK=10;
-		   Remote1_ReadIR.ReadIR[2]=0x00;
-		 }
+	     LedGreenON();
+		 LedGreenOff();
+		 LedGreenON();
+		  LedGreenOff();
    	       //SBUF=KK;
 
 	  }
