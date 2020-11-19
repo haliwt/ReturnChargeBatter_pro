@@ -199,7 +199,10 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	{
 		PINTF1 &=~ 0x40;				//清除INT14中断标志位	
 		//Read_Remote1IR();  //ir3
-		Read_Remote11IR(); //ir1
+		//Read_Remote11IR(); //ir1
+		#if 1
+		   Read_Remote12IR(); //ir1
+		#endif 
 	}
 
 	
@@ -221,7 +224,8 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   t_10ms++;
   ReadAD5ms();
  // Remote1_Count(); //ir3
-  Remote11_Count();//ir1
+ // Remote11_Count();//ir1
+   Remote12_Count(); //ir2
   
   if(t_10ms>99)
   {
