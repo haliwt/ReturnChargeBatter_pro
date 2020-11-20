@@ -49,10 +49,10 @@ void Init_IR()
 {
 
     #if 1
-	P1M6 = 0x68;			        	//P1_6设置为带SMT(施密特功能)上拉输入
+	P1M6 = 0x62;//0x68;			        	//P1_6设置为带SMT(施密特功能)上拉输入
 
- 	//PITS3 |= 0x00;						//INT14,外部中断电平选择,红外接收头，上升沿中断
-	 PITS3 |=(0x2<<4);
+ 	// PITS3 |= 0x00;						//INT14,外部中断电平选择,红外接收头，上升沿中断
+	 PITS3 |=(1<<4);   //01 下降沿出发
 	//PITS3 &=~(1<<5); //set 0 
 	
 	PINTE1 |= 0x40;						//使能INT14
@@ -151,22 +151,25 @@ void Remote12_Count(void)
 	{
 		if(P1_6 ==1)
 		    Remote1_ReadIR.Nowcount++ ;
-		//else Remote1_ReadIR.Nowcount--;
-		if(Remote1_ReadIR.Nowcount>=0x16)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
-		{
-			
-			 
-			   
-			    Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
-				
-			
-		}
-		else if(Remote1_ReadIR.Nowcount<0x16 ){
-		       
-			   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0 ;
-		       
+		if(RecoderTime < 16){
 
-      }
+			if(Remote1_ReadIR.Nowcount>=0x16)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
+			{
+				
+				 
+				   
+				    Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
+					
+				
+			}
+			else if(Remote1_ReadIR.Nowcount<0x16 ){
+			       
+				   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0 ;
+			       
+
+	      }
+	  }
+	  
    }
 
 }
@@ -533,7 +536,7 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 							k=0;
 							//P->ReadIRByte=0;
 							P->ReadIRFlag=3;
-				
+				            RecoderTime =0;
 							//Remote1_ReadIR.ReadIRFlag=0;
 							//Remote1_ReadIR.ReadIRBit=0;
 						

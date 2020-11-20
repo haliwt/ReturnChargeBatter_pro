@@ -244,6 +244,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   	t_10ms=0;
 	t_100ms++;
 	t_1s++;
+	RecoderTime++ ;
 	InterruptTime ++ ;
 	RunMs++;
  	  CheckLeftMotorSpeed();
