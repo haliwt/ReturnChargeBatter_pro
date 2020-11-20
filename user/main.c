@@ -382,7 +382,7 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 		
 	}
 	#endif 
-    if(InterruptTime >7){
+    if(InterruptTime >6){
 					  Usart1Send[0]=2;
 					  Usart1Send[1]=gui_T5Value;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
                        Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
