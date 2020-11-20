@@ -42,6 +42,10 @@
 #include "..\lib\LB_IR.h"
 #include "..\lib\LB_Run.h"
 
+unsigned int gui_T5Value;               //T5 捕获获取值
+unsigned int gui_newT5Value = 0;		//T5 捕获获取新值
+unsigned int gui_oldT5Value = 0; 		//T5 捕获获取旧值
+
 void InitSysclk(INT8U SYS)
 {
 
@@ -121,6 +125,7 @@ void main(void)
 	Init_MotorSpeed();
     InitMotorIO();
 	Init_Usart1();
+	Iint_T5(); //WT.EDIT
 	//InitMotorForward();
 	InitFanEdgeIO();
 	InitLed();
@@ -194,7 +199,8 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 		PINTF1 &=~ 0x80;				//清除INT15中断标志位
 
 	}
-	
+
+	#if 1
 	if(PINTF1&0x40)						//判断INT14中断标志位--IR
 	{
 		PINTF1 &=~ 0x40;	//清除INT14中断标志位	
@@ -205,24 +211,11 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 		   Read_Remote11IR(); //ir1
 		#endif 
 		#if IR2
-		   Read_Remote12IR(); //ir1
-		   if(InterruptTime <7){
-				Remote1_ReadIR.Interrupt_IR2 ++ ;
-
-		        }
-		   if(InterruptTime >7){
-					  Usart1Send[0]=2;
-					  Usart1Send[1]=Remote1_ReadIR.Interrupt_IR2;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
-                       Usart1Send[2]=0x12;
-					  SendCount=1;
-					  SBUF=Usart1Send[SendCount];
-					  //Remote1_ReadIR.Interrupt_IR2=0;
-					  InterruptTime =10;
-		    }
+		   Read_Remote12IR(); //ir2
 		   
-		#endif 
+		  #endif 
 	}
-
+   #endif
 	
 }
 /****************************************************************
@@ -238,9 +231,9 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U t_10ms;
   static INT8U t_100ms;
   static INT8U t_1s;
-  //IRTime++;
+ 
   t_10ms++;
-  
+ 
   ReadAD5ms();
  // Remote1_Count(); //ir3
  // Remote11_Count();//ir1
@@ -260,7 +253,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	CheckVoltage();
 	if(t_100ms>9)
 	{
-	  
+	 
 	  t_100ms=0;
 	  Run100MSecond++;
 	   KeydelayTime++;
@@ -353,6 +346,58 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	}
   }
 }
+/***************************************************************************************
+  * @说明  	T5中断服务函数
+  *	@参数	无
+  * @返回值 无
+  * @注		无
+***************************************************************************************/
+void TIMER5_Rpt(void) interrupt T5_VECTOR
+{     
+    if(T5CON&0x40)                      //是否为外部事件
+    {
+		
+			 gui_T5Value =RCAP5;			//读取获取的数据
+
+		Remote1_ReadIR.Interrupt_IR2 ++ ;
+		
+      //  Remote1_ReadIR.Interrupt_IR2=RCAP5;
+		
+    }
+	#if 1
+	if(gui_newT5Value!=gui_T5Value)
+	{	
+		if(gui_newT5Value>gui_oldT5Value)
+		{
+			gui_T5Value = gui_newT5Value-gui_oldT5Value;
+		}else if(gui_newT5Value<gui_oldT5Value){
+			gui_T5Value = gui_oldT5Value-gui_newT5Value;
+
+		}
+		else{
+			 gui_newT5Value = gui_T5Value;
+			 if(gui_oldT5Value ==0) gui_oldT5Value  = gui_T5Value ;
+		}
+		
+	}
+	#endif 
+    if(InterruptTime >7){
+					  Usart1Send[0]=2;
+					  Usart1Send[1]=gui_T5Value;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
+                       Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
+					  SendCount=1;
+					  SBUF=Usart1Send[SendCount];
+					  InterruptTime =0;
+					  Remote1_ReadIR.Interrupt_IR2=0;
+					  gui_T5Value=0;
+		    }
+		   //else Remote1_ReadIR.Interrupt_IR2 ++ ;
+
+	
+    T5CON &=~ 0x40;						//清除引脚外部输入事件发生标志位        
+	T5CON &=~ 0x80;						//清除T5中断标志位      
+}
+
 void WDT_Rpt() interrupt WDT_VECTOR
 {
 	WDTC &=~ 0x20;						//清除WDT中断标志位
