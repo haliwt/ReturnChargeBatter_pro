@@ -151,7 +151,8 @@ void Remote12_Count(void)
 	{
 		if(P1_6 ==1)
 		    Remote1_ReadIR.Nowcount++ ;
-		if(RecoderTime < 16){
+		//if(RecoderTime < 16){
+			if(RecoderTime < 13){
 
 			if(Remote1_ReadIR.Nowcount>=0x16)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
 			{
@@ -291,7 +292,8 @@ void Read_Remote12IR(void)
 		Remote1_ReadIR.ReadIRFlag=1;
 		Remote1_ReadIR.Nowcount=0;
 		Remote1_ReadIR.ReadIRBit=0;
-		Remote1_ReadIR.BitHigh=0;
+	    RecoderTime =0 ;//WT.EDIT 2020.11.20
+		
 	}
     else if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==1))
 	{
@@ -351,11 +353,11 @@ void CheckXReadIR(ReadIRByte *P)
 					    {
 						    P->ReadIR[ReadIR_cnt++]=P->ReadIRByte;
 						    k=0;
-						    P->ReadIRByte=0;
+						//    P->ReadIRByte=0;
 							P->ReadIRFlag=3;
-							Remote1_ReadIR.ReadIRFlag=0;
-							Remote1_ReadIR.ReadIRBit=0;
-							 Remote1_ReadIR.BitHigh=0;
+						//	Remote1_ReadIR.ReadIRFlag=0;
+						//	Remote1_ReadIR.ReadIRBit=0;
+						//	 Remote1_ReadIR.BitHigh=0;
 
 					    }
 						#endif 
@@ -536,7 +538,7 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 							k=0;
 							//P->ReadIRByte=0;
 							P->ReadIRFlag=3;
-				            RecoderTime =0;
+				           // RecoderTime =0;
 							//Remote1_ReadIR.ReadIRFlag=0;
 							//Remote1_ReadIR.ReadIRBit=0;
 						
@@ -634,7 +636,7 @@ INT8U CheckHandsetIR()
    {
       KeyclearTime=0;
       Remote1_ReadIR.ReadIRFlag=0;
-	  Remote1_ReadIR.ReadIRBit=0;//WT.EDIT 
+	 // Remote1_ReadIR.ReadIRBit=0;//WT.EDIT 
 	  if(Remote1_ReadIR.ReadIR[1]==0X7A)//if(Remote1_ReadIR.ReadIR[0]==0X44)
 	  {
 	     LedGreenON();
