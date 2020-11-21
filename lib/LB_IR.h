@@ -36,13 +36,14 @@ version  : ���ļ�β��
 {
 	
 	INT16U  Nowcount;
-	INT16U  Inttime ; //记录中断时间    
+	INT16U  Inttime ; //记录中断时间 
+	INT16U  AABit; 
 	INT8U  NowVoltage;
 	INT8U  ReadIRBit;
 	INT8U  ReadIRFlag;
 	INT8U  ReadIRByte;
-	INT8U  AABit;     
-	INT8U  ReadIR[4];
+	    
+	INT8U  ReadIR[6];
 	INT8U  ReadIRData[12];//WT.EDIT [3]
 	INT8U  Runcontrol;
 	INT8U  Interrupt_IR1;   //WT.EDIT

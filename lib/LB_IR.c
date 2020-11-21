@@ -317,203 +317,12 @@ void Read_Remote12IR(void)
       
 		 Remote1_ReadIR.ReadIRBit++; //bit numbers add 
 		
-		#if 0
-		if(Remote1_ReadIR.ReadIRBit >11){//WT.EDIT   ir_Middle //if(Remote1_ReadIR.ReadIRBit>80)
-			Remote1_ReadIR.ReadIRFlag=2; 
-		   
-		}
-		if(Remote1_ReadIR.ReadIRBit >8){//WT.EDIT   ir_Middle //if(Remote1_ReadIR.ReadIRBit>80)
-			Remote1_ReadIR.ReadIRFlag=4; 
-		   
-		}
 		
-		#endif 
 	}
 		}
 }
 #endif
 
-/********************************************************************
-	*
-	*Function Name:void CheckXReadIR(ReadIRByte *P)
-	*Function :
-	*Input Ref: pointer *p
-	*Return Ref: NO 
-	*
-********************************************************************/
-#if  0 //IR3
-void CheckXReadIR(ReadIRByte *P)
-{
-
-	INT8U k,ReadIR_cnt,FristCodeflag;
-	FristCodeflag=0;
-	ReadIR_cnt=0;
-	P->AABit=0;
-	
-               
-
-	if(P->ReadIRFlag==2) // ir receive of Byte(8 bit)
-	{		
-		P->ReadIRByte=0; //第一个字节 0
-		k=0;
-		//if(P->ReadIRData[1]==1)//if(P->ReadIRData[P->AABit]>120) //
-		{
-			for(P->AABit=1; P->AABit<= P->ReadIRBit; P->AABit++)
-			{				     
-					P->ReadIRByte=P->ReadIRData[P->AABit]<<1;//P->ReadIRByte=P->ReadIRData[P->AABit]<<=1;
-					 {
-					 	//P->ReadIRByte<<=1;
-					    k++;
-						#if 1
-						if(k>7)
-					    {
-						    P->ReadIR[ReadIR_cnt++]=P->ReadIRByte;
-						    k=0;
-						//    P->ReadIRByte=0;
-							P->ReadIRFlag=3;
-						//	Remote1_ReadIR.ReadIRFlag=0;
-						//	Remote1_ReadIR.ReadIRBit=0;
-						//	 Remote1_ReadIR.BitHigh=0;
-
-					    }
-						#endif 
-					 }
-					
-					 if(ReadIR_cnt ==1)//4
-					 {
-						
-						Usart1Send[0]=1;
-						//Remote1_ReadIR.ReadIR[0]=P->ReadIR[0];
-	                    Usart1Send[1]=P->ReadIR[1];
-						//Usart1Send[2]=P->ReadIR[2];
-						//Usart1Send[3]=P->ReadIR[2];
-						//Usart1Send[4]=P->ReadIR[3];
-						if(ReadIR_cnt==1)ReadIR_cnt=0;
-	                    SendCount=1;
-	                    SBUF=Usart1Send[SendCount];
-						ReadIR_cnt=0;
-						FristCodeflag=0;
-						P->ReadIRFlag=3;
-
-
-					 }
-			}
-			//for(P->AABit=0; P->AABit<600; P->AABit++)
-			//{
-			  //  P->ReadIRData[P->AABit]=0;
-			//}
-		}
-		#if 0
-		//else if((P->ReadIRData[P->AABit]>105)&&(P->ReadIRData[P->AABit]<115))
-		//{
-			//P->ReadIRFlag=3;
-		//}
-		else
-		{
-			Remote1_ReadIR.ReadIRFlag=0;
-			for(P->AABit=0; P->AABit<80; P->AABit++)
-			{
-			     P->ReadIRData[P->AABit]=0;
-			}
-		}	
-		#endif 
-	}
-
-}
-#endif 
-
-/********************************************************************
-	*
-	*Function Name:void CheckXReadIR_IR1(ReadIRByte *P)
-	*Function :
-	*Input Ref: pointer *p
-	*Return Ref: NO 
-	*
-********************************************************************/
-#if 0//  IR1
-void CheckXReadIR_IR1(ReadIRByte *P)
-{
-	INT8U k,ReadIR_cnt,FristCodeflag,j;
-	FristCodeflag=0;
-	ReadIR_cnt=0;
-	P->AABit=0;
-	
-	if(P->Interrupt_IR1 == 10){         
-
-	if(P->ReadIRFlag==2) // ir receive of Byte(8 bit)
-	{		
-		P->ReadIRByte=0; //第一个字节 0
-		k=0;
-		//if(P->ReadIRData[1]==1)//if(P->ReadIRData[P->AABit]>120) //
-		{
-			for(P->AABit=1; P->AABit< 9; P->AABit++)
-			{				     
-					P->ReadIRByte=P->ReadIRData[P->AABit]<<1;//P->ReadIRByte=P->ReadIRData[P->AABit]<<=1;
-					 {
-					 	//P->ReadIRByte<<=1;
-					    k++;
-						
-						#if 1
-						if(k==8)
-					    {
-						    P->ReadIR[ReadIR_cnt++]=P->ReadIRByte;
-							k=0;
-						    
-
-					    }
-						
-						#endif 
-					 }
-			}	
-			for(P->AABit=9; P->AABit< 11; P->AABit++)
-			{				     
-					P->ReadIRByte=P->ReadIRData[P->AABit]<<1;//P->ReadIRByte=P->ReadIRData[P->AABit]<<=1;
-					 {
-					 	//P->ReadIRByte<<=1;
-					    j++;
-						
-						#if 1
-						if(j==3)
-					    {
-						    P->ReadIR[ReadIR_cnt++]=P->ReadIRByte;
-							j=0;
-						    P->ReadIRByte=0;
-							P->ReadIRFlag=3;
-							Remote1_ReadIR.ReadIRFlag=0;
-							Remote1_ReadIR.ReadIRBit=0;
-							Remote1_ReadIR.BitHigh=0;
-						    P->Interrupt_IR1 =0;
-
-					    }
-						
-						#endif 
-					 }
-			    }			
-					 if(ReadIR_cnt ==2)//4
-					 {
-						
-						Usart1Send[0]=1;
-						//Remote1_ReadIR.ReadIR[0]=P->ReadIR[0];
-	                    Usart1Send[1]=P->ReadIR[1];
-						Usart1Send[2]=P->ReadIR[2];
-						//Usart1Send[3]=P->ReadIR[2];
-						//Usart1Send[4]=P->ReadIR[3];
-						if(ReadIR_cnt==2)ReadIR_cnt=0;
-	                    SendCount=1;
-	                    SBUF=Usart1Send[SendCount];
-						ReadIR_cnt=0;
-						FristCodeflag=0;
-						P->ReadIRFlag=3;
-
-
-					 }
-			}
-		
-      }
-	}
-
-}
-#endif 
 /********************************************************************
 	*
 	*Function Name:void CheckXReadIR_IR2(ReadIRByte *P)
@@ -526,9 +335,7 @@ void CheckXReadIR_IR1(ReadIRByte *P)
 void CheckXReadIR_IR2(ReadIRByte *P)
 {
 	INT8U j,i,temp;
-	//FristCodeflag=0;
-	//ReadIR_cnt=0;
-	//P->AABit=0;
+	static INT8U n=0;
 	if(P->ReadIRFlag==2){ // ir receive of Byte(8 bit)
 
         for(j=0;j<8;j++){
@@ -547,18 +354,33 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 
 
        	}
-	             P->ReadIR[1] =temp ;
+              P->ReadIR[1]=temp;
+		        
+				 if(P->BitLow !=0){
+				 	n++;
+				    P->ReadIR[n+1] =  P->BitLow;
+				 }
+				  // P->ReadIR[1] =temp ;
+				// P->AABit=0;
 		         if(temp !=0) P->ReadIRFlag=4;
 				 
 	  #endif 
 		}
+     #if 1
+	   if(n==5){
+           n=0;
+          
+           P->AABit = (P->ReadIR[2]+P->ReadIR[3]+P->ReadIR[4]+P->ReadIR[5]+P->ReadIR[6])/5;
+
+	   }
+	   #endif 
 				if( P->ReadIRFlag==4){
 	                  P->ReadIRFlag=3;
 		              Usart1Send[0]=5;
 				
 	                Usart1Send[1]=P->ReadIR[0];
 				    Usart1Send[2]=P->ReadIR[1];
-					 Usart1Send[3]=P->BitHigh;
+					 Usart1Send[3]=P->AABit;
 					  Usart1Send[4]=P->BitLow;
 					Usart1Send[5]=0x88;
 	                SendCount=1;
