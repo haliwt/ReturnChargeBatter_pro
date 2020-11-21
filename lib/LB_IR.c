@@ -354,11 +354,11 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 
 
        	}
-              P->ReadIR[1]=temp;
+             // P->ReadIR[1]=temp;
 		        
 				 if(P->BitLow !=0){
 				 	n++;
-				    P->ReadIR[n+1] =  P->BitLow;
+				    P->ReadIR[n] =  P->BitLow;
 				 }
 				  // P->ReadIR[1] =temp ;
 				// P->AABit=0;
@@ -367,22 +367,24 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 	  #endif 
 		}
      #if 1
-	   if(n==5){
+	   if(n==10){
            n=0;
           
-           P->AABit = (P->ReadIR[2]+P->ReadIR[3]+P->ReadIR[4]+P->ReadIR[5]+P->ReadIR[6])/5;
+           P->AABit = (P->ReadIR[1]+P->ReadIR[2]+P->ReadIR[3]+P->ReadIR[4]+P->ReadIR[5]
+                         +P->ReadIR[6]+P->ReadIR[7]+P->ReadIR[8]+P->ReadIR[9]+P->ReadIR[10])/10;
 
 	   }
 	   #endif 
 				if( P->ReadIRFlag==4){
 	                  P->ReadIRFlag=3;
-		              Usart1Send[0]=5;
+		              Usart1Send[0]=4;
 				
 	                Usart1Send[1]=P->ReadIR[0];
-				    Usart1Send[2]=P->ReadIR[1];
-					 Usart1Send[3]=P->AABit;
-					  Usart1Send[4]=P->BitLow;
-					Usart1Send[5]=0x88;
+				   // Usart1Send[2]=P->ReadIR[1];
+					 
+					 Usart1Send[2]=P->BitLow;
+				      Usart1Send[3]=P->AABit;
+					Usart1Send[4]=0x88;
 	                SendCount=1;
 	                SBUF=Usart1Send[SendCount];
 					
