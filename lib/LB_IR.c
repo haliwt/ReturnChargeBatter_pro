@@ -178,7 +178,7 @@ void Remote12_Count(void)
 	  
       
 	}
-   if(Remote1_ReadIR.ReadIRBit==12){
+   if(Remote1_ReadIR.ReadIRBit==11){
    	    Remote1_ReadIR.ReadIRFlag=2;
 		
 		
@@ -297,7 +297,7 @@ void Read_Remote12IR(void)
 {
 
 	Remote1_ReadIR.NowVoltage=P1_6; //remotoe receive GPIO
-	if(Remote1_ReadIR.ReadIRBit!=12){
+	if(Remote1_ReadIR.ReadIRBit!=11){
     if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))//input interrupt program
 	{
 		Remote1_ReadIR.ReadIRFlag=1;
@@ -533,21 +533,21 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 
         for(j=0;j<8;j++){
 	   	
-		 // temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
-		  temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
+		  temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
+		 // temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
 
 
        	}
 			P->ReadIR[0] =temp;
-		   // if(temp !=0) P->ReadIRFlag=4;
+		  //  if(temp !=0) P->ReadIRFlag=4;
 		#if 1
-		for(i=0;i<4;i++){
+		for(i=8;i<16;i++){
 	   	
-		  temp= temp | (Remote1_ReadIR.ReadIRData[i+8]<< i);
+		  temp= temp | (Remote1_ReadIR.ReadIRData[i-8]<< (i-8));
 
 
        	}
-	             P->ReadIR[1] =temp & 0x0f;
+	             P->ReadIR[1] =temp ;
 		         if(temp !=0) P->ReadIRFlag=4;
 				 
 	  #endif 
