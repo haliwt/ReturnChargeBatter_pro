@@ -115,7 +115,7 @@ void InitSysclk(INT8U SYS)
 void main(void)
 {
 	INT8U  KK;
-	//ReadIRByte *P;
+	
 
 	
 	InitSysclk(1);
@@ -162,9 +162,6 @@ void main(void)
 	   KK= CheckHandsetIR();
 	    CheckMode(KK);
 
-	  
-
-	  //CheckXReadIR(P); //WT.EDIT
 	  
 	   CheckGround();
 	   CheckRun();
@@ -228,23 +225,21 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 ****************************************************************/
 void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 {
+  
   static INT8U t_10ms;
   static INT8U t_100ms;
   static INT8U t_1s;
- 
   t_10ms++;
- 
   ReadAD5ms();
  // Remote1_Count(); //ir3
  // Remote11_Count();//ir1
    Remote12_Count(); //ir2
-  
   if(t_10ms>99) //10ms
   {
   	t_10ms=0;
 	t_100ms++;
 	t_1s++;
-	RecoderTime++ ;
+	
 	InterruptTime ++ ;
 	RunMs++;
  	  CheckLeftMotorSpeed();
@@ -382,7 +377,7 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 		
 	}
 	#endif 
-    if(InterruptTime >6){
+    if(InterruptTime >10){  //>6
 					  Usart1Send[0]=2;
 					  Usart1Send[1]=gui_T5Value;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
                        Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
