@@ -297,8 +297,8 @@ void Read_Remote12IR(void)
 {
 
 	Remote1_ReadIR.NowVoltage=P1_6; //remotoe receive GPIO
-	
-    if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0)&& (Remote1_ReadIR.ReadIRBit!=12))//input interrupt program
+	if(Remote1_ReadIR.ReadIRBit!=12){
+    if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))//input interrupt program
 	{
 		Remote1_ReadIR.ReadIRFlag=1;
 		Remote1_ReadIR.Nowcount=0;
@@ -329,7 +329,7 @@ void Read_Remote12IR(void)
 		
 		#endif 
 	}
- 
+		}
 }
 #endif
 
