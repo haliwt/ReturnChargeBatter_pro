@@ -187,33 +187,40 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 			//P->ReadIR[0] =temp;
 		   // if(temp!=0) P->ReadIRFlag=4;
 		     n++;
-
-			if(n<7){
+          
+			if(n<12){
                if(P->BitLow >= 0xA7){  //Left IR1 
 				    if(P->BitHigh < 0xF0 && P->BitHigh >0XCF ) right++;
 					else if(P->BitHigh < 0x6F && P->BitHigh > 0x30) left++;
 					else if(P->BitHigh > 0x3F && P->BitHigh < 0x5F )left++;
 					else if(P->BitHigh >0x6F && P->BitHigh < 0xA1)right++;
+					else if(P->BitHigh >0xB0 && P->BitHigh < 0xe0)left++;
 	            }
+			    else if(P->BitLow < 0xA7 && P->BitLow > 0xA5 ){
+					left++;
+					
+				}
 				else if(P->BitLow < 0xA5 && P->BitLow > 0xA1 ){
 					if(P->BitHigh > 0x40 && P->BitHigh <0x5f)right++;
 					
 				}
 				else if(P->BitLow < 0xA1 && P->BitLow > 0x8F){
-								right++;
+					      if(P->BitHigh >= 0x9F && P->BitHigh <=0x9F)left++;
+						  else right++;
 
 				}
 			   else if(P->BitLow < 0x7F  && P->BitLow >0x40){
 					          left++;
 			   }
 			}
-			if(n > 6){
+			if(n > 10){
 				if(left > right) P->ReadIR[1] = 1; //left IR
 				
 				else if(left < right )P->ReadIR[1] =2;  //right IR
 			
 			}
-		    if(n>6) P->ReadIRFlag=4;
+			#endif 
+		    if(n > 10) P->ReadIRFlag=4;
 		   
 		 
 	}
