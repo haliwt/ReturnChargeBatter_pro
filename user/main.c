@@ -162,13 +162,10 @@ void main(void)
 	   KK= CheckHandsetIR();
 	    CheckMode(KK);
 
-	  
 	   CheckGround();
 	   CheckRun();
 	   
-	 
-
-	}
+	 }
 
 }
 /************************************************************

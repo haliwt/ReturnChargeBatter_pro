@@ -43,7 +43,7 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 	INT8U  ReadIRFlag;
 	INT8U  ReadIRByte;
 	    
-	INT8U  ReadIR[11];
+	INT8U  ReadIR[3];
 	INT8U  ReadIRData[12];//WT.EDIT [3]
 	INT8U  Runcontrol;
 	INT8U  Interrupt_IR1;   //WT.EDIT
@@ -71,5 +71,6 @@ KAKA_IR_EXT void Read_Remote12IR(); //WT.EDIT
 KAKA_IR_EXT INT8U CheckHandsetIR();
 
 KAKA_IR_EXT void Delay_ms(unsigned int fui_i);
+KAKA_IR_EXT void AutoBack_ChargeBatter(void);
 
 #endif
