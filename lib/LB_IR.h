@@ -50,6 +50,7 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 	INT8U  Interrupt_IR2;   //WT.EDIT
 	INT8U  BitHigh;
 	INT8U  BitLow;
+	INT8U  recordTime;
 } ReadIRByte ;
 
 KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;

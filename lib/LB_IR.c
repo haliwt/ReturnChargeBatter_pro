@@ -110,9 +110,8 @@ void Remote12_Count(void)
 	  
 		    }
 	
-    if(Remote1_ReadIR.ReadIRBit==11){
+    if(Remote1_ReadIR.ReadIRBit ==11 ){
    	    Remote1_ReadIR.ReadIRFlag=2;
-		
 	}
 
 }
@@ -144,6 +143,7 @@ void Read_Remote12IR(void)
 	    Remote1_ReadIR.Inttime =0;
 		Remote1_ReadIR.BitLow=0;
 		Remote1_ReadIR.BitHigh =0;
+		Remote1_ReadIR.recordTime =0;//WT.EDIT
 		
 	}
     else if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==1))
@@ -184,48 +184,51 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 
        	}
 			P->ReadIR[0] =temp;
-		  //  if(temp !=0) P->ReadIRFlag=4;
-		#if 1
-		for(i=8;i<16;i++){
-	   	
-		  temp= temp | (Remote1_ReadIR.ReadIRData[i-8]<< (i-8));
-
-
-       	}
-             // P->ReadIR[1]=temp;
-		       #if 0 
-				 if(P->BitLow !=0){
-				 	P->BitHigh++;
-				    P->ReadIR[P->BitHigh] =  P->BitLow;
-				 }
-				  // P->ReadIR[1] =temp ;
-				// P->AABit=0;
+		   if(temp!=0) P->ReadIRFlag=4;
+		   //if(P->BitHigh-P->BitLow >0) {
+              //  P->AABit=P->BitHigh-P->BitLow;
+		   //}
+		  // else P->AABit=0;
+		 
+		     #if 0
+			     if(P->recordTime<6){
+					 if(P->BitLow !=0){
+					 	P->recordTime++;
+					    P->ReadIR[P->recordTime] =  P->BitLow;
+					 }
+			     }
+			
 			#endif
-		         if(temp !=0) P->ReadIRFlag=4;
+		        
 				 
-	  #endif 
-		}
-     #if 0
-	   if(P->BitHigh==10){
-           
-          
-           P->AABit = (P->ReadIR[1]+P->ReadIR[2]+P->ReadIR[3]+P->ReadIR[4]+P->ReadIR[5]
-                         +P->ReadIR[6]+P->ReadIR[7]+P->ReadIR[8]+P->ReadIR[9]+P->ReadIR[10])/10;
+	}
+		
+     	#if 0
+		   if(P->recordTime > 5){
+	           
+	          
+	           P->AABit = (P->ReadIR[1]+P->ReadIR[2]+P->ReadIR[3]+P->ReadIR[4]+P->ReadIR[5])/5;
+	                        // +P->ReadIR[6]+P->ReadIR[7]+P->ReadIR[8]+P->ReadIR[9]+P->ReadIR[10])/10;
 
-	   }
-	   #endif 
+		   }
+	      #endif 
+    
 				if( P->ReadIRFlag==4){
 	                  P->ReadIRFlag=3;
 		              Usart1Send[0]=4;
 				
 	                Usart1Send[1]=P->ReadIR[0];
-				   // Usart1Send[2]=P->ReadIR[1];
-					 
+				
 					 Usart1Send[2]=P->BitLow;
-				      Usart1Send[3]=P->BitHigh;//P->AABit;
+				      Usart1Send[3]=P->BitHigh;
+				  
+				        //  Usart1Send[4]=P->AABit;
+					
 					Usart1Send[4]=0x88;
 	                SendCount=1;
 	                SBUF=Usart1Send[SendCount];
+					// for(i=0;i<12;i++)
+	                   //   Remote1_ReadIR.ReadIR[i]=0;
 					
 				
 				}
@@ -244,15 +247,10 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 ********************************************************************/
 INT8U CheckHandsetIR()
 {
-	INT8U KK=0;
+	INT8U KK=0,i =0;
 	INT8U N=0;
 	INT8U M=0;
-	//ReadIRByte irStruct;
-   // irStruct.ReadIR[0]=0;
 	
-
-  // CheckXReadIR(&Remote1_ReadIR);
-   // CheckXReadIR_IR1(&Remote1_ReadIR);
 	CheckXReadIR_IR2(&Remote1_ReadIR);
 
   if(Remote1_ReadIR.ReadIRFlag==3)
@@ -261,8 +259,10 @@ INT8U CheckHandsetIR()
       Remote1_ReadIR.ReadIRFlag=0;
 	  Remote1_ReadIR.BitHigh=0;
 	  Remote1_ReadIR.BitLow =0 ;
-	  Remote1_ReadIR.ReadIRBit=0;   
-	 
+	  Remote1_ReadIR.ReadIRBit=0; 
+	  Remote1_ReadIR.recordTime =0;//WT.EDIT
+	  for(i=0;i<12;i++)
+	     Remote1_ReadIR.ReadIR[i]=0;
 	  
 	  if(Remote1_ReadIR.ReadIR[1]==0X7A)//if(Remote1_ReadIR.ReadIR[0]==0X44)
 	  {
