@@ -193,6 +193,7 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 				    if(P->BitHigh < 0xF0 && P->BitHigh >0XCF ) right++;
 					else if(P->BitHigh < 0x6F && P->BitHigh > 0x30) left++;
 					else if(P->BitHigh > 0x3F && P->BitHigh < 0x5F )left++;
+					else if(P->BitHigh >0x6F && P->BitHigh < 0xA1)right++;
 	            }
 				else if(P->BitLow < 0xA5 && P->BitLow > 0xA1 ){
 					if(P->BitHigh > 0x40 && P->BitHigh <0x5f)right++;
