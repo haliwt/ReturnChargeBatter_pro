@@ -303,13 +303,12 @@ INT8U  AutoBack_ChargeBatter(void)
 {
 	static INT8U value ;
 
-     if(Remote1_ReadIR.Timelock==1){
-	 	  Remote1_ReadIR.Timelock=0;
-		     
+     if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >= 0x0D){
+	 	 
 		     return (3); //5直线行走
 
 	 }
-	 else if(Remote1_ReadIR.Timelock==2){
+	  if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] < 0x0D && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] > 0x0A){
 	 	
 		 Remote1_ReadIR.Timelock=0;
 		 return (4); //5直线行走
@@ -317,7 +316,8 @@ INT8U  AutoBack_ChargeBatter(void)
     else{
 	      if(Remote1_ReadIR.ReadIR[1]==1) //left IR 在左边
 		 	{
-	            return (1);
+
+				return (1);
 			   
 		 	}
 			else if(Remote1_ReadIR.ReadIR[1]==2){ //right IR

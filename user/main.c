@@ -158,50 +158,47 @@ void main(void)
 	while(1)
 	{
 
-	  CheckHandsetIR();
-	  CheckRun();
-	 #if 0
-	                
-				     if(KeyclearTime<2)//前进
-					 {
-						SetXMotor(2,10,20,2,2,2,2,2);
-				        SetMotorcm(1,50);
-						SetXMotor(2,10,20,2,2,0,1,2);
-				        SetMotorcm(1,50);
-					    SetXMotor(2,10,20,2,2,5,5,2);
-				        SetMotorcm(1,50);
+	  //CheckHandsetIR();
+	  //CheckRun();
+		
+		if(KeyclearTime < 2)
+			 {	
+				
+				SetXMotor(2,10,20,2,2,2,2,2);
+		        SetMotorcm(1,50);
+				SetXMotor(2,10,20,2,2,0,1,2);
+		        SetMotorcm(1,50);
+			    SetXMotor(2,10,20,2,2,5,5,2);
+		        SetMotorcm(1,50);
+				if(ReadPowerDCIn()){
+					KeyclearTime =100;
+                       AllStop(); 
+				}
+			}
+		  if(KeyclearTime>2)
+		AllStop(); 		
+		
+		#if 0  //
+		if(KeyclearTime < 1)
+		{	
+					
+			     SetXMotor(2,5,5,2,2,5,5,2);
+		        SetMotorcm(1,50);
+				SetXMotor(2,10,20,2,2,0,1,2);
+		        SetMotorcm(1,50);
+			    SetXMotor(2,10,20,2,2,1,1,2);
+		        SetMotorcm(1,50);
+				
+					if(ReadPowerDCIn()){
 						
-						 
-					 }
-					if(KeyclearTime >2)
-					   AllStop();
-					#endif 
-					#if 0
-					 //IR1,left 
-				    if(KeyclearTime<3)//To motor move to right dir 
-					 {	
-						 LedRedON();
-						if(KeyclearTime<2){
-						 SetXMotor(2,5,5,1,1,5,5,1);
-						 SetMotorcm(3,45);
-						 
-						//SetXMotor(1,5,5,1,2,5,5,1);
-						//SetMotorcm(4,45);//SetMotorcm(4,45);
-							RunMs =0;
-						}
-						if(RunMs<40){
-							SetXMotor(2,5,5,1,1,5,5,1);
-						   SetMotorcm(3,45);
-							//SetXMotor(1,5,5,1,2,5,5,1);
-						    //SetMotorcm(4,200);//SetMotorcm(4,45);
-						}
-						 
-					}	 
-                    AllStop();
-					#endif 
-                    					 
-	   
-	 }
+                         AllStop();
+					}
+			}
+		if(KeyclearTime>1)
+		AllStop(); 
+		#endif 
+	
+  }
 
 }
 /************************************************************
@@ -284,7 +281,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	{
 	 
 	  t_100ms=0;
-	  Run100MSecond++;
+	   Run100MSecond++;
 	   KeydelayTime++;
 	   KeyRunTime++;
 	  CheckLCurrent();
@@ -383,7 +380,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 ***************************************************************************************/
 void TIMER5_Rpt(void) interrupt T5_VECTOR
 {     
-   static INT8U i=0;
+ 
 	if(T5CON&0x40)                      //是否为外部事件
     {
 		
@@ -418,18 +415,13 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 					  SendCount=1;
 					  SBUF=Usart1Send[SendCount];
 					  InterruptTime =0;
-
-					   if(Remote1_ReadIR.Interrupt_IR2==0x0D || Remote1_ReadIR.Interrupt_IR2==0X0E || Remote1_ReadIR.Interrupt_IR2==0x0F){
-	 	                              Remote1_ReadIR.Timelock=1;
-
-		               }
-					   else if(Remote1_ReadIR.Interrupt_IR2==0x0A || Remote1_ReadIR.Interrupt_IR2==0X0B || Remote1_ReadIR.Interrupt_IR2==0x0C){
-	 	                              Remote1_ReadIR.Timelock=2;
-
-		               }
-					   else  Remote1_ReadIR.Interrupt_IR2=0;
+                       Remote1_ReadIR.ReadA_Time++;
+					   Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]=Remote1_ReadIR.Interrupt_IR2;
+					  
+					   Remote1_ReadIR.Interrupt_IR2=0;
 					  
 					  gui_T5Value=0;
+					  if(Remote1_ReadIR.ReadA_Time>20)Remote1_ReadIR.ReadA_Time=0;
 					
 		    }
 		   //else Remote1_ReadIR.Interrupt_IR2 ++ ;

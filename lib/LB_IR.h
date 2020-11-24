@@ -45,8 +45,9 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 	    
 	INT8U  ReadIR[3];
 	INT8U  ReadIRData[12];//WT.EDIT [3]
+	INT8U  ReadASTAR[20]; //
 	INT8U  Runcontrol;
-	INT8U  Interrupt_IR1;   //WT.EDIT
+	INT8U  ReadA_Time;   //WT.EDIT
 	INT8U  Interrupt_IR2;   //WT.EDIT
 	INT8U  BitHigh;
 	INT8U  BitLow;
