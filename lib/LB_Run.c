@@ -33,7 +33,8 @@ void  CheckRun()
 				 RunMs=0;
 				 KeyclearTime=0;
 		         runkey= CheckHandsetIR();
-				
+				 if(runkey ==3)Step = 1;    //left IR ,To motor move right dir
+				 Step =1;
 	             
 
 		break;
@@ -41,7 +42,7 @@ void  CheckRun()
 		case 1:  //直线行走
 		
 			  LedRedON();
-			  if(runkey==3){
+			
 			
 		     if(KeyclearTime < 2)
 			 {	
@@ -75,7 +76,7 @@ void  CheckRun()
 							LedGreenON();
 						}					 
 		     }
-			  	}
+			  	
 		 else 
 		     Step =2;
 		
@@ -86,8 +87,7 @@ void  CheckRun()
                  AllStop();
 				 RunMs=0;
 		         KeyclearTime=0;
-				  runkey= CheckHandsetIR();
-				 Step =3;
+		         Step =3;
 				 
 
 		break;
@@ -95,7 +95,7 @@ void  CheckRun()
 		case 3:
 
 				LedRedON();
-			  if(runkey==3){  //曲直线
+			
 			
 		     if(KeyclearTime < 3)
 			 {	
@@ -129,7 +129,7 @@ void  CheckRun()
 							LedGreenON();
 						}					 
 		     }
-			  	}
+			  
 		 else 
 		     Step =4;
 
@@ -140,7 +140,7 @@ void  CheckRun()
                  AllStop();
 				 RunMs=0;
 		         KeyclearTime=0;
-				  runkey= CheckHandsetIR();
+
 				 Step =5;
 
 		break;
@@ -248,7 +248,7 @@ void  CheckRun()
                  AllStop();
 				 RunMs=0;
 				KeyclearTime=0;
-		         Step =1;
+		         Step =0;
 				  
 		break;
 		
