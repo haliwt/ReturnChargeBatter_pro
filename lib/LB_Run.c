@@ -24,8 +24,8 @@ version  : 见文件尾端
  
 void  CheckRun()
 {
-      static INT8U runkey;
-	  
+      
+	  INT8U runkey=0;
 	   switch(Step){
 		case 0:
                  LedGreenON();
@@ -33,117 +33,222 @@ void  CheckRun()
 				 RunMs=0;
 				 KeyclearTime=0;
 		         runkey= CheckHandsetIR();
-				 if(runkey ==1)Step = 3;    //left IR ,To motor move right dir
-				 else if(runkey ==2)Step =4; //right IR ,To move left dir
-				 else Step =1;
+				
 	             
 
 		break;
 
 		case 1:  //直线行走
 		
-			 LedRedON();
-             RunMs=0;
-		     if(KeyclearTime < 10)
-			 {	
-				SetXMotor(2,5,5,2,2,5,5,2); ///SetXMotor(1,5,5,1,1,5,5,1);---后退
-				SetMotorcm(1,10);
-		     
-				if(ReadPowerDCIn()){ //自动充电
-              if(RunSecond>1)
-				{
-	               RunSecond=0;
-				   LedRedOff();
-				   RunStep =1;
-				   LedGreenON();
-				   RunMs=0;
-				   
-				}
-				if(Voltage>820)
-				{
-                     Mode=0;
-			         Step=0;
-					LedGreenON();
-				}					 
-		     }
-		 }
-			 else Step =2;
+			  LedRedON();
+			  if(runkey==3){
 			
+		     if(KeyclearTime < 2)
+			 {	
+				
+				SetXMotor(2,10,20,2,2,2,2,2);
+		        SetMotorcm(1,50);
+				SetXMotor(2,10,20,2,2,0,1,2);
+		        SetMotorcm(1,50);
+			    SetXMotor(2,10,20,2,2,5,5,2);
+		        SetMotorcm(1,50);
+				if(ReadPowerDCIn()){
+					KeyclearTime =100;
+
+				}
+		     }		
+
+			 if(ReadPowerDCIn()){ //自动充电
+		              if(RunSecond>1)
+						{
+			               RunSecond=0;
+						   LedRedOff();
+						   RunStep =1;
+						   LedGreenON();
+						   RunMs=0;
+						   
+						}
+						if(Voltage>820)
+						{
+		                     Mode=0;
+					         Step=0;
+							LedGreenON();
+						}					 
+		     }
+			  	}
+		 else 
+		     Step =2;
 		
 	    break;
+
 
 		case 2:
                  AllStop();
 				 RunMs=0;
 		         KeyclearTime=0;
-		          runkey= CheckHandsetIR();
-				 if(runkey ==1)Step = 3;    //left IR ,To motor move right dir
-				 else if(runkey ==1)Step =4; //right IR ,To move left dir
-				 else Step =1;
+				  runkey= CheckHandsetIR();
+				 Step =3;
 				 
 
 		break;
 
-		case 3:  //To move right dir CCW (agree 90 )
-                
-				     if(KeyclearTime<3)//To motor move to right dir 
-					 {	
-						
-						if(KeyclearTime<2){
-						  SetXMotor(1,5,5,1,2,5,5,1);
-						  SetMotorcm(4,45);//SetMotorcm(4,45);
-						  RunMs =0;
+		case 3:
+
+				LedRedON();
+			  if(runkey==3){  //曲直线
+			
+		     if(KeyclearTime < 3)
+			 {	
+				
+				SetXMotor(2,10,20,2,2,2,2,2);
+		        SetMotorcm(1,50);
+				SetXMotor(2,10,20,2,2,0,1,2);
+		        SetMotorcm(1,50);
+			    SetXMotor(2,10,20,2,2,5,5,2);
+		        SetMotorcm(1,50);
+				if(ReadPowerDCIn()){
+					KeyclearTime =100;
+
+				}
+		     }		
+
+			 if(ReadPowerDCIn()){ //自动充电
+		              if(RunSecond>1)
+						{
+			               RunSecond=0;
+						   LedRedOff();
+						   RunStep =1;
+						   LedGreenON();
+						   RunMs=0;
+						   
 						}
-						if(RunMs<40){
-							SetXMotor(1,5,5,1,2,5,5,1);
-						    SetMotorcm(4,45);//SetMotorcm(4,45);
-						}
-						 
-					  }	 
-				     Step=4;
+						if(Voltage>820)
+						{
+		                     Mode=0;
+					         Step=0;
+							LedGreenON();
+						}					 
+		     }
+			  	}
+		 else 
+		     Step =4;
+
+
+		break;
+
+		case 4:
+                 AllStop();
+				 RunMs=0;
+		         KeyclearTime=0;
+				  runkey= CheckHandsetIR();
+				 Step =5;
+
+		break;
+		
+
+		case 5:  //To move right dir CCW (agree 90 )
+               
+				if(KeyclearTime<3)//To motor CCW 
+				{	
+							
+							if(KeyclearTime<2){
+							  SetXMotor(1,5,5,1,2,5,5,1);
+							  SetMotorcm(4,45);//SetMotorcm(4,45);
+							  RunMs =0;
+							}
+							if(RunMs<40){
+								SetXMotor(1,5,5,1,2,5,5,1);
+							    SetMotorcm(4,45);//SetMotorcm(4,45);
+							}
+							 
+				}
+				else 
+				  Step=6;
 				
 
 		break;
-	    case 4:
+	    case 6:
 			     AllStop();
 				 RunMs=0;
 				KeyclearTime=0;
-		          runkey= CheckHandsetIR();
-				 if(runkey ==1)Step = 3;    //left IR ,To motor move right dir
-				 else if(runkey ==2)Step =5; //right IR ,To move left dir
-				 else Step =1;
+				Step=7;
+
+		break;
+
+		case 7:
+				if(KeyclearTime < 1)
+				 {	
+					
+					SetXMotor(2,10,20,2,2,2,2,2);
+			        SetMotorcm(1,50);
+					SetXMotor(2,10,20,2,2,0,1,2);
+			        SetMotorcm(1,50);
+				    SetXMotor(2,10,20,2,2,5,5,2);
+			        SetMotorcm(1,50);
+					if(ReadPowerDCIn()){
+						KeyclearTime =100;
+
+					}
+			     }		
+
+			 if(ReadPowerDCIn()){ //自动充电
+		              if(RunSecond>1)
+						{
+			               RunSecond=0;
+						   LedRedOff();
+						   RunStep =1;
+						   LedGreenON();
+						   RunMs=0;
+						   
+						}
+						if(Voltage>820)
+						{
+		                     Mode=0;
+					         Step=0;
+							LedGreenON();
+						}					 
+		     }
+			  else 
+		     Step =8;
+
+		break;
+
+		case 8:
+                   AllStop();
+				 RunMs=0;
+				KeyclearTime=0;
+				Step =9;
+
 
 		break;
 
 	
-		case 5: //CW motor 90 degree ---顺时针旋转 90 度
-				  if(KeyclearTime<3)//To motor move to right dir 
-					 {	
-						 LedRedON();
-						if(KeyclearTime<2){
-						 SetXMotor(2,5,5,1,1,5,5,1);
-						 SetMotorcm(3,45);
-							RunMs =0;
-						}
-						if(RunMs<40){
-							SetXMotor(2,5,5,1,1,5,5,1);
-						   SetMotorcm(3,45);
-							
-						}
-						 
-					}	 
-	   	             Step=5;
+		case 9: //CW motor 90 degree ---顺时针旋转 90 度
+		
+			  if(KeyclearTime<3)//To motor move to right dir 
+				 {	
+							 LedRedON();
+							if(KeyclearTime<2){
+							   SetXMotor(2,5,5,1,1,5,5,1);
+						       SetMotorcm(3,45);
+								RunMs =0;
+							}
+							if(RunMs<40){
+								SetXMotor(2,5,5,1,1,5,5,1);
+							   SetMotorcm(3,45);
+								
+							}
+							 
+					}
+                    else Step=10;
 				
 		break;
 
-		case 6:
+		case 10:
                  AllStop();
 				 RunMs=0;
 				KeyclearTime=0;
-		          runkey= CheckHandsetIR();
-				 if(runkey ==1)Step = 2;
-				 else if(runkey ==2)Step =4; //right IR ,
-				 else Step =1;
+		         Step =1;
 				  
 		break;
 		

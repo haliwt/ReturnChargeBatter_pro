@@ -309,11 +309,13 @@ INT8U  AutoBack_ChargeBatter(void)
 		     return (3); //5直线行走
 
 	 }
-
+	 else if(Remote1_ReadIR.Timelock==2){
+	 	
+		 Remote1_ReadIR.Timelock=0;
+		 return (4); //5直线行走
+	 }
     else{
-	    
-
-		 	if(Remote1_ReadIR.ReadIR[1]==1) //left IR 在左边
+	      if(Remote1_ReadIR.ReadIR[1]==1) //left IR 在左边
 		 	{
 	            return (1);
 			   

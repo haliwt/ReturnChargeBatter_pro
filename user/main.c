@@ -157,14 +157,10 @@ void main(void)
 	ModeBackup=0;
 	while(1)
 	{
-	 // KK=ReadKey();
-	  //if(KK==0)
-	//   KK= CheckHandsetIR();
-	  //  CheckMode(KK);
 
-	  // CheckGround();
-	 //  CheckRun();
-	 #if 1
+	  CheckHandsetIR();
+	  CheckRun();
+	 #if 0
 	                
 				     if(KeyclearTime<2)//Ç°½ø
 					 {
@@ -425,6 +421,10 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 
 					   if(Remote1_ReadIR.Interrupt_IR2==0x0D || Remote1_ReadIR.Interrupt_IR2==0X0E || Remote1_ReadIR.Interrupt_IR2==0x0F){
 	 	                              Remote1_ReadIR.Timelock=1;
+
+		               }
+					   else if(Remote1_ReadIR.Interrupt_IR2==0x0A || Remote1_ReadIR.Interrupt_IR2==0X0B || Remote1_ReadIR.Interrupt_IR2==0x0C){
+	 	                              Remote1_ReadIR.Timelock=2;
 
 		               }
 					   else  Remote1_ReadIR.Interrupt_IR2=0;
