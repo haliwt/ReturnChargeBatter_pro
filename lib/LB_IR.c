@@ -177,18 +177,9 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 	static INT8U right,left,n;
 	if(P->ReadIRFlag==2){ // ir receive of Byte(8 bit)
 
-       // for(j=0;j<8;j++){
-	   	
-		 // temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
-		 // temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
-
-
-       //	}
-			//P->ReadIR[0] =temp;
-		   // if(temp!=0) P->ReadIRFlag=4;
-		     n++;
+        n++;
           
-			if(n<12){
+	    if(n<12){
                if(P->BitLow >= 0xA7){  //Left IR1 
 				    if(P->BitHigh < 0xF0 && P->BitHigh >0XCF ) right++;
 					else if(P->BitHigh < 0x6F && P->BitHigh > 0x30) left++;
@@ -236,7 +227,7 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 				
 					 Usart1Send[1]=P->BitLow;
 				     Usart1Send[2]=P->BitHigh;
-				      Usart1Send[3]= P->ReadIR[1];
+				     Usart1Send[3]= P->ReadIR[1];
 		
 					Usart1Send[4]=0x88;
 	                SendCount=1;
@@ -270,29 +261,18 @@ INT8U CheckHandsetIR()
   if(Remote1_ReadIR.ReadIRFlag==3)
    {
       KeyclearTime=0;
-      Remote1_ReadIR.ReadIRFlag=0;
-	  Remote1_ReadIR.BitHigh=0;
-	  Remote1_ReadIR.BitLow =0 ;
-	  Remote1_ReadIR.ReadIRBit=0; 
+     Remote1_ReadIR.ReadIRFlag=0;
+	 Remote1_ReadIR.BitHigh=0;
+	 Remote1_ReadIR.BitLow =0 ;
+	 Remote1_ReadIR.ReadIRBit=0; 
 	  Remote1_ReadIR.recordTime =0;//WT.EDIT
 	  
 	  
-	  AutoBack_ChargeBatter();
-	 
+	  KK = AutoBack_ChargeBatter();
+	  return (KK);
 	 
    }
-   else	if(Remote1_ReadIR.ReadIRFlag!=3)
-   {
-   	 if(KeyclearTime>4)
-     {
-	    KeyclearTime=0;
-
-		for(N=0; N<5; N++)
-		{
-		  //Remote1_ReadIR.ReadIR[N]=0;
-		}
-	 }
-   }
+   
   return(KK);
 }
 
@@ -319,31 +299,38 @@ void Delay_ms(INT16U fui_i)
 	*Return Ref: NO 
 	*
 ********************************************************************/
-void AutoBack_ChargeBatter(void)
+INT8U  AutoBack_ChargeBatter(void)
 {
 	static INT8U value ;
-	 if(Remote1_ReadIR.Interrupt_IR2 !=0xF){
 
-	 	if(Remote1_ReadIR.ReadIR[1]==0) //left IR 在左边
-	 	{
-           value =0;
-	 	}
-		if(Remote1_ReadIR.ReadIR[1]==1){
-
-		   value =1;
-              
-		} //right IR 在右边
-	         
-
-      }
-	 else{
-	 	 value =0;
+     if(Remote1_ReadIR.Timelock==1){
+	 	  Remote1_ReadIR.Timelock=0;
+		     
+		     return (3); //5直线行走
 
 	 }
-     
 
+    else{
+	    
 
+		 	if(Remote1_ReadIR.ReadIR[1]==1) //left IR 在左边
+		 	{
+	            return (1);
+			   
+		 	}
+			else if(Remote1_ReadIR.ReadIR[1]==2){ //right IR
 
+	          
+			    
+				  return (2);
+			  
+	              
+			} //right IR 在右边
+		         
 
+	      
+	
+    }
+	
 }
 

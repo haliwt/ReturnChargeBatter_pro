@@ -51,6 +51,7 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 	INT8U  BitHigh;
 	INT8U  BitLow;
 	INT8U  recordTime;
+	INT8U  Timelock;
 } ReadIRByte ;
 
 KAKA_IR_EXT	 xdata ReadIRByte Remote1_ReadIR;
@@ -71,6 +72,6 @@ KAKA_IR_EXT void Read_Remote12IR(); //WT.EDIT
 KAKA_IR_EXT INT8U CheckHandsetIR();
 
 KAKA_IR_EXT void Delay_ms(unsigned int fui_i);
-KAKA_IR_EXT void AutoBack_ChargeBatter(void);
+KAKA_IR_EXT INT8U AutoBack_ChargeBatter(void);
 
 #endif

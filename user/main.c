@@ -115,7 +115,7 @@ void InitSysclk(INT8U SYS)
 void main(void)
 {
 	INT8U  KK;
-	
+	static INT8U keylock;
 
 	
 	InitSysclk(1);
@@ -157,13 +157,53 @@ void main(void)
 	ModeBackup=0;
 	while(1)
 	{
-	  KK=ReadKey();
-	  if(KK==0)
-	   KK= CheckHandsetIR();
-	    CheckMode(KK);
+	 // KK=ReadKey();
+	  //if(KK==0)
+	//   KK= CheckHandsetIR();
+	  //  CheckMode(KK);
 
-	   CheckGround();
-	   CheckRun();
+	  // CheckGround();
+	 //  CheckRun();
+	 #if 1
+	                
+				     if(KeyclearTime<2)//前进
+					 {
+						SetXMotor(2,10,20,2,2,2,2,2);
+				        SetMotorcm(1,50);
+						SetXMotor(2,10,20,2,2,0,1,2);
+				        SetMotorcm(1,50);
+					    SetXMotor(2,10,20,2,2,5,5,2);
+				        SetMotorcm(1,50);
+						
+						 
+					 }
+					if(KeyclearTime >2)
+					   AllStop();
+					#endif 
+					#if 0
+					 //IR1,left 
+				    if(KeyclearTime<3)//To motor move to right dir 
+					 {	
+						 LedRedON();
+						if(KeyclearTime<2){
+						 SetXMotor(2,5,5,1,1,5,5,1);
+						 SetMotorcm(3,45);
+						 
+						//SetXMotor(1,5,5,1,2,5,5,1);
+						//SetMotorcm(4,45);//SetMotorcm(4,45);
+							RunMs =0;
+						}
+						if(RunMs<40){
+							SetXMotor(2,5,5,1,1,5,5,1);
+						   SetMotorcm(3,45);
+							//SetXMotor(1,5,5,1,2,5,5,1);
+						    //SetMotorcm(4,200);//SetMotorcm(4,45);
+						}
+						 
+					}	 
+                    AllStop();
+					#endif 
+                    					 
 	   
 	 }
 
@@ -238,13 +278,13 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	t_1s++;
 	
 	InterruptTime ++ ;
-	RunMs++;
+	  RunMs++;
  	  CheckLeftMotorSpeed();
 	  CheckRightMotorSpeed();
 	  AdjustSpeed();
 	CheckBuzzer();
 	CheckVoltage();
-	if(t_100ms>9)
+	if(t_100ms>9) //100ms
 	{
 	 
 	  t_100ms=0;
@@ -347,10 +387,11 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 ***************************************************************************************/
 void TIMER5_Rpt(void) interrupt T5_VECTOR
 {     
-    if(T5CON&0x40)                      //是否为外部事件
+   static INT8U i=0;
+	if(T5CON&0x40)                      //是否为外部事件
     {
 		
-			 gui_T5Value =RCAP5;			//读取获取的数据
+		gui_T5Value =RCAP5;			//读取获取的数据
 
 		Remote1_ReadIR.Interrupt_IR2 ++ ;
 		
@@ -374,15 +415,22 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 		
 	}
 	#endif 
-    if(InterruptTime >10){  //>6
+    if(InterruptTime >6){  //>6
 					  Usart1Send[0]=2;
-					  Usart1Send[1]=gui_T5Value;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
-                       Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
+					  Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
+                      Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
 					  SendCount=1;
 					  SBUF=Usart1Send[SendCount];
 					  InterruptTime =0;
-					  Remote1_ReadIR.Interrupt_IR2=0;
+
+					   if(Remote1_ReadIR.Interrupt_IR2==0x0D || Remote1_ReadIR.Interrupt_IR2==0X0E || Remote1_ReadIR.Interrupt_IR2==0x0F){
+	 	                              Remote1_ReadIR.Timelock=1;
+
+		               }
+					   else  Remote1_ReadIR.Interrupt_IR2=0;
+					  
 					  gui_T5Value=0;
+					
 		    }
 		   //else Remote1_ReadIR.Interrupt_IR2 ++ ;
 

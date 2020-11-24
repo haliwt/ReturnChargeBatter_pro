@@ -24,1872 +24,141 @@ version  : 见文件尾端
  
 void  CheckRun()
 {
-
-		switch(RunStep)
-		{
+      static INT8U runkey;
+	  
+	   switch(Step){
 		case 0:
-		{
+                 LedGreenON();
+	             AllStop();
+				 RunMs=0;
+				 KeyclearTime=0;
+		         runkey= CheckHandsetIR();
+				 if(runkey ==1)Step = 3;    //left IR ,To motor move right dir
+				 else if(runkey ==2)Step =4; //right IR ,To move left dir
+				 else Step =1;
+	             
 
-		}
 		break;
 
-		case 0x0D:
-		{
+		case 1:  //直线行走
+		
+			 LedRedON();
+             RunMs=0;
+		     if(KeyclearTime < 10)
+			 {	
+				SetXMotor(2,5,5,2,2,5,5,2); ///SetXMotor(1,5,5,1,1,5,5,1);---后退
+				SetMotorcm(1,10);
+		     
+				if(ReadPowerDCIn()){ //自动充电
+              if(RunSecond>1)
+				{
+	               RunSecond=0;
+				   LedRedOff();
+				   RunStep =1;
+				   LedGreenON();
+				   RunMs=0;
+				   
+				}
+				if(Voltage>820)
+				{
+                     Mode=0;
+			         Step=0;
+					LedGreenON();
+				}					 
+		     }
+		 }
+			 else Step =2;
+			
+		
+	    break;
 
-			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
-			{
-				ImpSecond=0;
-				RunStep=0x0;
-				AllStop();
-			}
-			else 
-
-			if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,10);
-				RunMs=0;
-				RunStep=0;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,10);
-				RunMs=0;
-				RunStep=0;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,10);
-				RunMs=0;
-				RunStep=0;
-			}
-		}
-		break;
-		case 0x0c:
-		{
-			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
-			{
-				ImpSecond=0;
-				RunStep=0x1;
-				AllStop();
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,10);
-				RunMs=0;
-				RunStep=3;
-				Enter3=8;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,10);
-				RunMs=0;
-				RunStep=3;
-				Enter3=9;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,10);
-				RunMs=0;
-				RunStep=3;
-				Enter3=10;
-			}
-		}
-		break;
-
-		case 1:
-		{
-			ImpSecond=0;
-			SetXMotor(1,10,15,1,1,10,15,1);
-			SetMotorcm(1,1000);
-			RunStep=2;
-			RunMs=0;
-		}
-		break;
 		case 2:
-		///*
-		     if(ImpSecond>5)
-			 Imp2Time=0;
+                 AllStop();
+				 RunMs=0;
+		         KeyclearTime=0;
+		          runkey= CheckHandsetIR();
+				 if(runkey ==1)Step = 3;    //left IR ,To motor move right dir
+				 else if(runkey ==1)Step =4; //right IR ,To move left dir
+				 else Step =1;
+				 
 
-			if(GroundDp[1]<GroundMin)
-			{
+		break;
 
-				NoImpSecond=0;
-				RunStep=0x3;
-				SetXMotor(2,10,25,1,2,10,25,1);
-				SetMotorcm(2,5);
-				RunMs=20;
-				Imp2Time++;
-				Enter3=1;
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
+		case 3:  //To move right dir CCW (agree 90 )
+                
+				     if(KeyclearTime<3)//To motor move to right dir 
+					 {	
+						
+						if(KeyclearTime<2){
+						  SetXMotor(1,5,5,1,2,5,5,1);
+						  SetMotorcm(4,45);//SetMotorcm(4,45);
+						  RunMs =0;
+						}
+						if(RunMs<40){
+							SetXMotor(1,5,5,1,2,5,5,1);
+						    SetMotorcm(4,45);//SetMotorcm(4,45);
+						}
+						 
+					  }	 
+				     Step=4;
+				
 
-				NoImpSecond=0;
-				RunStep=0x3;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-				Imp2Time++;
-				Enter3=2;
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
+		break;
+	    case 4:
+			     AllStop();
+				 RunMs=0;
+				KeyclearTime=0;
+		          runkey= CheckHandsetIR();
+				 if(runkey ==1)Step = 3;    //left IR ,To motor move right dir
+				 else if(runkey ==2)Step =5; //right IR ,To move left dir
+				 else Step =1;
 
-				NoImpSecond=0;
-				RunStep=0x3;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-				Imp2Time++;
-				Enter3=3;
-			}
-			else   
-			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
-			{
-				NoImpSecond=0;
-				RunStep=0x3;
-				AllStop();
-				RunMs=0;
-				Enter3=4;		
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
+		break;
 
-				NoImpSecond=0;
-
-				RunStep=0x3;
-				AllStop();
-				RunMs=0;
-				Enter3=5;
-
-			}
-            else if(ImpStatus==1)
-			{
-				Imp2Time++;
-
-				NoImpSecond=0;
-
-				RunStep=0x3;
-				AllStop();
-				RunMs=0;
-				Enter3=6;
-
-			}
-			//*/
-			break;
-		case 3:
-//			if(RunMs>10)
-//			{
-//			    if(Gong_Step==1)
-//			    {
-//				  SetXMotor(2,10,20,1,2,10,20,1);
-//				  SetMotorcm(2,5);
-//				}
-//				
-//				RunMs=0;
-//				RunStep=4;
-//			}
-//			break;
-            if(RunMs>10)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=4;
-			}
-			break;
-
-		case 4:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-			    if((ImpStatus==1))
-				{
-				AllStop();
-				RunMs=0;
-				RunStep=3;
-				IMPTime++;
-				Enter3=11;
-				}
-				else 
-				{
-				AllStop();
-				RunMs=0;
-				RunStep=5;
-				IMPTime=0;
-				IMPTime=0;
-				}
-			}
-//			else if(Gong_Step==0)
-//			{				
-//				AllStop();
-//				RunMs=0;
-//				RunStep=5;
-//				IMPTime=0;
-//				IMPTime=0;
-//				Gong_Step=1;
-//			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				NoImpSecond=0;
-				RunStep=0x3;
-				AllStop();
-				RunMs=0;
-				Enter3=7;
-			}
-			break;
-		case 5:
-			if(RunMs>10)
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,90);
-				RunMs=0;
-				RunStep=6;
-			}
-			break;
+	
+		case 5: //CW motor 90 degree ---顺时针旋转 90 度
+				  if(KeyclearTime<3)//To motor move to right dir 
+					 {	
+						 LedRedON();
+						if(KeyclearTime<2){
+						 SetXMotor(2,5,5,1,1,5,5,1);
+						 SetMotorcm(3,45);
+							RunMs =0;
+						}
+						if(RunMs<40){
+							SetXMotor(2,5,5,1,1,5,5,1);
+						   SetMotorcm(3,45);
+							
+						}
+						 
+					}	 
+	   	             Step=5;
+				
+		break;
 
 		case 6:
-
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				AllStop();
-				//InitMotorForward();
-				RunMs=0;
-				RunStep=7;
-				LCurrent=0;
-				RCurrent=0;
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				Enter3=12;
-
-			}
-			else if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=20;
-				Enter3=13;
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-				Enter3=14;
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-				Enter3=15;
-			}
-
-
-			break;
-		case 7:
-		{
-			if(RunMs>10)
-			{
-				SetXMotor(1,10,20,1,1,10,20,1);
-				SetMotorcm(1,20);
-				RunMs=0;
-				RunStep=8;
-				LCurrent=0;
-				RCurrent=0;
-			}
-		}
+                 AllStop();
+				 RunMs=0;
+				KeyclearTime=0;
+		          runkey= CheckHandsetIR();
+				 if(runkey ==1)Step = 2;
+				 else if(runkey ==2)Step =4; //right IR ,
+				 else Step =1;
+				  
 		break;
-		case 8:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				AllStop();
-				RunMs=0;
-				RunStep=9;
-
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-			}
-			else if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				CurrentMax++;
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-				Imp2Time++;
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-				Imp2Time++;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-
-				CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=9;
-			}
-			else if((ImpStatus==1))
-			{
-
-				Imp2Time++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=9;
-			}
-			break;
-		case 9:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				if(ImpStatus==1)
-			   {
-			   	  IMPTime++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);				  
-			   }
-			   else
-			   {
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,90);
-				RunMs=0;
-				RunStep=10;
-				IMPTime=0;
-			   }
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-
-				NoImpSecond=0;
-				RunStep=10;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			break;
-			break;
-
-		case 10:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-
-				{
-					//InitMotorForward();
-					AllStop();
-					RunMs=0;
-					RunStep=11;
-					LCurrent=0;
-					RCurrent=0;
-				}
-			}
-			else if((ImpStatus==1))
-			{
-
-				Imp2Time++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=11;
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=11;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				CurrentMax++;
-			}
-			else if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=20;
-				Enter3=16;
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-				Enter3=17;
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=3;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-				Enter3=18;
-			}
-
-			break;
-		case 11:
-			if(RunMs>10)
-			{
-				SetXMotor(1,10,15,1,1,10,15,1);
-				SetMotorcm(1,1000);
-				RunMs=0;
-				RunStep=0x12;
-				ImpSecond=0;
-				LCurrent=0;
-				RCurrent=0;
-			}
-			else if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=9;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-			break;
-		case 0x12:
-		{
-		   	if(ImpSecond>5)
-			 Imp2Time=0;
-			 if(RunMs>200)
-			   CurrentMax=0;
-			if(GroundDp[1]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x13;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=20;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x13;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x13;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
- 			else   
-			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
-			{
-				NoImpSecond=0;
-
-				RunStep=0x13;
-				AllStop();
-				RunMs=0;		
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-
-				CurrentMax++;
-				EdgeTime=0;
-				NoImpSecond=0;
-				RunStep=0x13;
-				AllStop();
-				RunMs=0;
-			}
-			else if(ImpStatus==1)
-			{
-
-				Imp2Time++;
-				EdgeTime=0;
-				NoImpSecond=0;
-				RunStep=0x13;
-				AllStop();
-				RunMs=0;
-			}
-			else  if(RunMs>500)
-			{
-				CurrentMax=0;
-			}
-		}
-		break;
-		case 0x13:
-			if(RunMs>10)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x14;
-			}
-			break;
-
-		case 0x14:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-			   if(ImpStatus==1)
-			   {
-			   	  IMPTime++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);				  
-			   }
-			   else
-			   {
-				AllStop();
-				RunMs=0;
-				RunStep=0x15;
-				IMPTime=0;
-				}
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-
-				NoImpSecond=0;
-				RunStep=0x15;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			break;
-		case 0x15:
-			if(RunMs>10)
-			{
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,90);
-				RunMs=0;
-				RunStep=0x16;
-			}
-			break;
-
-		case 0x16:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				AllStop();
-				//InitMotorForward();
-				RunMs=0;
-				RunStep=0x17;
-				LCurrent=0;
-				RCurrent=0;
-			}
- 			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x14;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else 	  if(GroundDp[1]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x14;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x14;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x14;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-
-			break;
-		case 0x17:
-		{
-			if(RunMs>10)
-			{
-				SetXMotor(1,10,20,1,1,10,20,1);
-				SetMotorcm(1,20);
-				RunMs=0;
-				RunStep=0x18;
-				LCurrent=0;
-				RCurrent=0;
-			}
-		}
-		break;
-		case 0x18:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				AllStop();
-				RunMs=0;
-				RunStep=0x19;
-
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else 	  if(GroundDp[1]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x19;
-			}
-			else if(ImpStatus==1)
-			{
-				Imp2Time++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x19;
-			}
-			break;
-		case 0x19:
-			if(RunMs>20)
-			{
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,90);
-				RunMs=0;
-				RunStep=0x1a;
-			}
-			break;
-
-		case 0x1a:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				//InitMotorForward();
-
-				AllStop();
-				RunMs=0;
-				RunStep=0x1b;
-				LCurrent=0;
-				RCurrent=0;
-
-			}
-						else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else 	  if(GroundDp[1]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-
-			break;
-		case 0x1b:
-			if(RunMs>20)
-			{
-				SetXMotor(1,10,15,1,1,10,15,1);
-				SetMotorcm(1,1000);
-				RunMs=0;
-				RunStep=0x2;
-				ImpSecond=0;
-				LCurrent=0;
-				RCurrent=0;
-			}
-			else 	  if(GroundDp[1]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-				Imp2Time++;
-				NoImpSecond=0;
-				RunStep=0x19;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-
-			break;
-			//沿墙
-		case 0x20:
-		{
-			if(RunMs>20)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x21;
-			}
-		}
-		break;
-		case 0x21:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				AllStop();
-				RunMs=0;
-				RunStep=0x22;
-			}
-
-		}
-		break;
-		case 0x22:
-		{
-			if(RunMs>5)
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,60);
-				RunMs=0;
-				RunStep=0x23;
-			}
-		}
-		break;
-		case 0x23:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-			   if(ImpStatus==1)
-			   {
-			   	  IMPTime++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);				  
-			   }
-			   else
-			   {
-				AllStop();
-				RunMs=0;
-				RunStep=0x24;
-				IMPTime=0;
-				}
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x21;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else 	  if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x21;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x20;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x20;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-		}
-		break;
-		case 0x24:
-		{
-			if(RunMs>10)
-			{
-				SetXMotor(1,20,20,1,1,10,10,1);
-				SetMotorcm(5,100);
-				RunMs=0;
-				RunStep=0x25;
-			}
-
-		}
-		break;
-
-		case 0x25:
-		{
-			if(RunMs>250)
-			{
-				SetXMotor(1,10,15,1,1,10,15,1);
-				SetMotorcm(1,1000);
-				RunMs=0;
-				RunStep=0x26;
-			}
-			else 	  if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x21;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x22;
-				//InitMotorLeftMax();
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x22;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
-				AllStop();
-				NoImpSecond=0;
-				RunMs=0;
-				RunStep=0x20;
-			}
-			else if(ImpStatus==1)
-			{
-				//CurrentMax++;
-				AllStop();
-				NoImpSecond=0;
-				RunMs=0;
-				RunStep=0x20;
-			}
-		}
-		break;
-
-		case 0x26:
-		{
-			if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x20;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x20;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x20;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
-				AllStop();
-				NoImpSecond=0;
-				RunMs=0;
-				RunStep=0x20;
-			}
-			else if(ImpStatus==1)
-			{
-				//CurrentMax++;
-				AllStop();
-				NoImpSecond=0;
-				RunMs=0;
-				RunStep=0x20;
-			}
-
-
-		}
-		break;
-		case 0x2c:
-		{
-			if(RunMs>70)
-			{
-				ImpSecond=0;
-				SetXMotor(1,10,15,1,1,10,15,1);
-				SetMotorcm(1,1000);
-				RunMs=0;
-				RunStep=0x21;
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x22;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x22;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x22;
-			}
-		}
-		break;
-		//定点
-		case 0x30:
-		{
-			SetXMotor(2,10,10,1,1,10,10,1);
-			SetMotorcm(3,360);
-			RunMs=0;
-			RunStep=0x31;
-			RunSecond=0;
-			LCurrent=0;
-			RCurrent=0;
-		}
-		break;
-		case 0x31:
-		{
-			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
-			{
-				RunSecond=0;
-				RunStep=0x32;
-				SetXMotor(1,4,4,1,1,15,15,1);
-				SetMotorcm(5,1000);
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x38;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		case 0x32:
-		{
-			if(RunSecond>5)
-			{
-				RunSecond=0;
-				RunStep=0x33;
-				SetXMotor(1,6,6,1,1,20,20,1);
-				SetMotorcm(5,1000);
-			}
-  			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x38;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		case 0x33:
-		{
-			if(RunSecond>10)
-			{
-				RunSecond=0;
-				RunStep=0x34;
-				SetXMotor(1,8,8,1,1,20,20,1);
-				SetMotorcm(5,1000);
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x38;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		case 0x34:
-		{
-			if(RunSecond>15)
-			{
-				RunSecond=0;
-				RunStep=0x35;
-				SetXMotor(1,10,10,1,1,20,20,1);
-				SetMotorcm(5,1000);
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x38;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		case 0x35:
-		{
-			if(RunSecond>30)
-			{
-				RunSecond=0;
-				RunStep=0x31;
-				SetXMotor(2,10,10,1,1,10,10,1);
-				SetMotorcm(3,360);
-			}
- 			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x38;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		case 0x38:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-			   if(ImpStatus==1)
-			   {
-			   	  IMPTime++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);				  
-			   }
-			   else
-			   {
-				AllStop();
-				RunMs=0;
-				RunStep=0x39;
-				IMPTime=0;
-			  }
-			}
-		}
-		break;
-		case 0x39:
-		{
-			if(RunMs>5)
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,90);
-				RunMs=0;
-				RunStep=0x3a;
-			}
-		}
-		break;
-		case 0x3a:
-		{
-			if(RunMs>90)
-			{
-				SetXMotor(1,10,15,1,1,10,15,1);
-				SetMotorcm(1,100);
-				RunMs=0;
-				ImpSecond=0;
-				RunStep=0x3b;
-				LCurrent=0;
-				RCurrent=0;
-			}
-		}
-		break;
-		case 0x3b:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				ImpSecond=0;
-				RunStep=0x31;
-				SetXMotor(2,10,10,1,1,10,10,1);
-				SetMotorcm(3,360);
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		case 0x3c:
-		{
-			if(RunMs>70)
-			{
-				ImpSecond=0;
-				RunStep=0x31;
-				SetXMotor(2,10,10,1,1,10,10,1);
-				SetMotorcm(3,360);
-			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				CurrentMax++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-			else if(ImpStatus==1)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x38;
-			}
-		}
-		break;
-		//打滑
-		case 0x40:
-		{
-			AllStop();
-			RunMs=0;
-			RunStep=0x41;
-		}
-		break;
-		case 0x41:
-		{
-			if(RunMs>5)
-			{
-				SetXMotor(2,15,15,1,2,15,15,1);
-				SetMotorcm(2,20);
-				RunMs=0;
-				RunStep=0x42;
-			}
-		}
-		break;
-		case 0x42:
-		{
-			if(RunMs>40)
-			{
-				AllStop();
-				RunMs=0;
-				RunStep=0x43;
-			}
-		}
-		break;
-		case 0x43:
-		{
-			if(RunMs>40)
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-				RunStep=0x44;
-			}
-		}
-		break;
-		case 0x44:
-		{
-			if(RunMs>80)
-			{
-				SetXMotor(1,10,15,1,1,10,15,1);
-				SetMotorcm(1,1000);
-				RunMs=0;
-				RunStep=0x2;
-			}
-		}
-		break;
-		//	自由走
-		case 0x50:
-		{
-
-			SetXMotor(1,10,15,1,1,10,15,1);
-			SetMotorcm(1,1000);
-			RunStep=0x51;
-			LCurrent=0;
-			RCurrent=0;
-		}
-		break;
-		case 0x51:
-			if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				Imp2Time++;
-				if(Imp2Time>4)
-				{
-					if(Imp2Second<300)
-					{
-						RunStep=0x20;
-						SetXMotor(2,10,20,1,2,10,20,1);
-						SetMotorcm(2,5);
-					}
-					else
-					{
-						Imp2Second=0;
-						Imp2Time=0;
-						RunStep=0x52;
-						SetXMotor(2,10,20,1,2,10,20,1);
-						SetMotorcm(2,5);
-					}
-
-				}
-				else
-				{
-					RunStep=0x52;
-					SetXMotor(2,10,20,1,2,10,20,1);
-					SetMotorcm(2,5);
-				}
-				RunMs=20;
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				Imp2Time++;
-				if(Imp2Time>4)
-				{
-					if(Imp2Second<300)
-					{
-						RunStep=0x20;
-						SetXMotor(2,10,20,1,2,10,20,1);
-						SetMotorcm(2,5);
-					}
-					else
-					{
-						Imp2Second=0;
-						Imp2Time=0;
-						RunStep=0x52;
-						SetXMotor(2,10,20,1,2,10,20,1);
-						SetMotorcm(2,5);
-					}
-				}
-				else
-				{
-					RunStep=0x52;
-					SetXMotor(2,10,20,1,1,10,20,1);
-					SetMotorcm(3,45);
-				}
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				Imp2Time++;
-				if(Imp2Time>4)
-				{
-					if(Imp2Second<300)
-					{
-						RunStep=0x20;
-						SetXMotor(1,10,20,1,2,10,20,1);
-						SetMotorcm(4,45);
-					}
-					else
-					{
-						Imp2Second=0;
-						Imp2Time=0;
-						RunStep=0x52;
-						SetXMotor(1,10,20,1,2,10,20,1);
-						SetMotorcm(4,45);
-					}
-
-				}
-				else
-				{
-					RunStep=0x52;
-					SetXMotor(1,10,20,1,2,10,20,1);
-					SetMotorcm(4,45);
-				}
-			}
-			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x52;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-				NoImpSecond=0;
-				Imp2Time++;
-				CurrentMax++;
-				if(Imp2Time>4)
-				{
-					if(Imp2Second<300)
-					{
-						RunStep=0x20;
-					}
-					else
-					{
-						Imp2Second=0;
-						Imp2Time=0;
-						RunStep=0x52;
-						AllStop();
-					}
-				}
-				else
-				{
-					RunStep=0x52;
-					AllStop();
-				}
-				RunMs=0;
-			}
-			else if(ImpStatus==1)
-			{
-				NoImpSecond=0;
-				Imp2Time++;
-				if(Imp2Time>4)
-				{
-					if(Imp2Second<300)
-					{
-						RunStep=0x20;
-					}
-					else
-					{
-						Imp2Second=0;
-						Imp2Time=0;
-						RunStep=0x52;
-						AllStop();
-					}
-				}
-				else
-				{
-					RunStep=0x52;
-					AllStop();
-				}
-				RunMs=0;			
-			}
-			break;
-		case 0x52:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x53;
-			}
-			else if(RunMs>20)
-			{
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-				RunStep=0x53;
-			}
-			break;
-
-		case 0x53:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-			   if(ImpStatus==1)
-			   {
-			   	  IMPTime++;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);				  
-			   }
-			   else
-			   {
-			   IMPTime=0;
-				AllStop();
-				RunMs=0;
-				RunStep=0x54;
-			   }
-			}
-			break;
-		case 0x54:
-			if(RunMs>5)
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-				RunStep=0x55;
-			}
-			break;
-
-		case 0x55:
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				AllStop();
-				RunMs=0;
-				RunStep=0x56;
-			}
- 			else
-			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
-			{
-			    CurrentMax++;
-				NoImpSecond=0;
-				RunStep=0x52;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=0;
-
-			}
-			else if(GroundDp[1]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x52;
-				SetXMotor(2,10,20,1,2,10,20,1);
-				SetMotorcm(2,5);
-				RunMs=20;
-
-			}
-			else if(GroundDp[0]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x52;
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,45);
-				RunMs=0;
-
-			}
-			else if(GroundDp[2]<GroundMin)
-			{
-
-				NoImpSecond=0;
-				RunStep=0x52;
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,45);
-				RunMs=0;
-
-			}
-			break;
-		case 0x56:
-			if(RunMs>50)
-			{
-				RunMs=0;
-				RunStep=0x50;
-			}
-			break;
-
-			//边扫脱困
-		case 0x70:
-		{
-			SetXMotor(2,10,20,1,2,10,20,1);
-			SetMotorcm(2,5);
-			RunMs=0;
-			RunStep=0x71;
-		}
-		break;
-		case 0x71:
-		{
-			if(RunMs>40)
-			{
-				AllStop();
-				RunMs=0;
-				RunStep=0x72;
-			}
-		}
-		break;
-		case 0x72:
-		{
-			if(RunMs>20)
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,90);
-				RunMs=0;
-				RunStep=0x73;
-			}
-		}
-		break;
-
-		case 0x73:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,90);
-				RunMs=0;
-				RunStep=0x74;
-			}
-		}
-		break;
-		case 0x74:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				SetXMotor(2,10,20,1,1,10,20,1);
-				SetMotorcm(3,90);
-				RunMs=0;
-				RunStep=0x75;
-			}
-		}
-		break;
-
-		case 0x75:
-		{
-			if((LeftMoveMotorData.Flag==1)&&(RightMoveMotorData.Flag==1))
-			{
-				SetXMotor(1,10,20,1,2,10,20,1);
-				SetMotorcm(4,90);
-				RunMs=0;
-				RunStep=0x76;
-			}
-		}
-		break;
-		case 0x76:
-		{
-			if(RunMs>80)
-			{
-				//InitMotorForward();
-				RunMs=0;
-				RunStep=0x77;
-				//SetEdge(11);
-			}
-
-		}
-		break;
-		case 0x77:
-			break;
-
+		
+		
+		
 		}
 }
+/******************************************************************
+	*
+	*Function Name:void CheckMode(INT8U Key)
+	*Function : power on be selected motor run mode 
+	*Input Ref:intput button key value
+	*Return Ref:NO
+	*
+******************************************************************/
 void CheckMode(INT8U Key)
 {
 
@@ -1901,11 +170,13 @@ void CheckMode(INT8U Key)
 		 KeydelayTime=0;
 //	     SBUF=Key;
 	   }
-   switch(Key)
+   switch(Key)  //按键输入值，选择模式和运行步伐。
    {
      
 
 	   case 1:
+	   	         Mode =14 ; //WT.EDIT 
+				 
 	   case 4:
 	   {
 	    if(Mode!=2)
@@ -1920,8 +191,7 @@ void CheckMode(INT8U Key)
 	   case 2:
 	   case 7:
 	   {
-	     if(ModeBackup!=0)
-		 {
+	     if(ModeBackup!=0)		 {
 		   Mode= ModeBackup;
 		   Step=0;	
 		   ModeBackup=0;
@@ -1960,11 +230,11 @@ void CheckMode(INT8U Key)
 		  ModeBackup=0;
 	   }
 	   break;
-	   //前
+	   //电机直线移动 ----
 	   case 5:
 	   {
 		 //KeyRunTime=0;
-	     if(Mode<4)
+	     if(Mode<4) //power on Mode =1 ,step =0;
 		 {
 		 SetXMotor(1,10,10,1,1,10,10,1);
 		 SetMotorcm(1,10);
@@ -1985,38 +255,7 @@ void CheckMode(INT8U Key)
 		 {
 		   RunStep=0x2c;
 		 }
-	   /*
-		  RunMs=0;
-		 if((RunStep!=0x0D)||(RunStep!=0x0C)||(RunStep!=0x2C)||(RunStep!=0x3C))
-		 {
-		 KeyRunTime=0;
-	     if(Mode<4)
-		 {
-		 SetXMotor(1,10,10,1,1,10,10,1);
-		 SetMotorcm(1,1000);
-		 }
-	   	 if(Mode==0)
-		 {
-		   RunStep=0x0D;
-		 }
-	   	 if(Mode==1)
-		 {
-		   RunStep=0x0C;
-		 }
-	   	 if(Mode==2)
-		 {
-		   RunStep=0x3c;
-		 }
-	   	 if(Mode==3)
-		 {
-		   RunStep=0x2c;
-		 }		 		 
-		 }
-		 else
-		 {
-		   KeyRunTime=0;
-		 }
-		*/
+	 
 
 	   }
 	   break;
@@ -2104,7 +343,9 @@ void CheckMode(INT8U Key)
      }	   
    
    }
-    switch(Mode)
+   /***************按键按下的模式：电机具体运行的模式 *************************/
+   /**************************************************************************/
+    switch(Mode) ///模式 Mode -> step
 	{
 	  //暂停
 	  case 0:
@@ -2808,7 +1049,7 @@ void CheckMode(INT8U Key)
 		 }	   
 	  }
 	  break;
-	  //充电
+	  //充电,给电池充电
 	  case 4:
 	  {
 	    switch(Step)
@@ -3066,6 +1307,11 @@ void CheckMode(INT8U Key)
 			 }
 		   }
 		   break;
+
+		   case 14: 
+               RunStep =1;
+		      
+		   	break;
 		}
 	  }
 	  break;
