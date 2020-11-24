@@ -39,8 +39,8 @@ void  CheckRun()
 	             AllStop();
 				 RunMs=0;
 				 KeyclearTime=0;
-		         runkey= CheckHandsetIR();
-				 if(runkey ==3)Step = 1;    //left IR ,To motor move right dir
+		        // runkey= CheckHandsetIR();
+				// if(runkey ==3)Step = 1;    //left IR ,To motor move right dir
 				 Step =1;
 	             
 
@@ -49,9 +49,9 @@ void  CheckRun()
 		case 1:  //直线行走
 		
 			LedRedON();
-			if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]>=0x0D){
+			//if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]>=0x0D){
 			
-               if(KeyclearTime < 1)
+               if(KeyclearTime < 10)
 		       {	
 			   SetXMotor(2,5,5,2,2,5,5,2);
 		        SetMotorcm(1,50);
@@ -65,8 +65,8 @@ void  CheckRun()
                          AllStop();
 					}
 			   }
-			}
-			if(KeyclearTime>1)
+			
+			if(KeyclearTime>10)
 		      AllStop(); 
 
 			 if(ReadPowerDCIn()){ //自动充电
@@ -85,8 +85,7 @@ void  CheckRun()
 							LedGreenON();
 						}
 					
-		     }
-		 } 	
+		     } 	
 		 else 
 		     Step =2;
 		
@@ -96,7 +95,7 @@ void  CheckRun()
 		case 2:
                  AllStop();
 				 Delay_ms(500);
-		         if((Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >= Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1])  && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]  >= 0x0D)
+		         if((Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >= Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1])  )
 				 {
 				 	  Step=1;
 		         }
@@ -136,7 +135,7 @@ void  CheckRun()
 			
                AllStop();
 				Delay_ms(500);
-				if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]	>  Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1]	 && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time ]> 0x0D){
+				if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]	>  Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1]	 ){
 					Step=1;
 				}
 				if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1]		  && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time ] < 0x0D)
@@ -158,10 +157,7 @@ void  CheckRun()
            
 				LedRedON();
 			
-			
-		     if(KeyclearTime < 1)
-			 {	
-				if(KeyclearTime < 1)
+		       if(KeyclearTime < 10)// if(KeyclearTime < 1)
 		       {	
 			   SetXMotor(2,5,5,2,2,5,5,2);
 		        SetMotorcm(1,50);
@@ -175,8 +171,8 @@ void  CheckRun()
                          AllStop();
 					}
 			   }
-		     }	
-			 if(KeyclearTime>1)
+		     
+			 if(KeyclearTime>10)
 		       AllStop(); 
 
 			 if(ReadPowerDCIn()){ //自动充电
@@ -205,10 +201,8 @@ void  CheckRun()
 		case 6:
                  AllStop();
 				 Delay_ms(500);
-		         if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]  >  Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1]    && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time ] > 0x0D){
-					 Step=1;
-                 }
-				 if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1]        && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time ] < 0x0D)
+
+				 if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time -1]        )
 				 	{
 				 	  Step=5;
 		         	}

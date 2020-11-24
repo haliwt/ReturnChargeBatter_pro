@@ -159,24 +159,9 @@ void main(void)
 	{
 
 	  //CheckHandsetIR();
-	  //CheckRun();
+	  CheckRun();
 		
-		if(KeyclearTime < 2)
-			 {	
-				
-				SetXMotor(2,10,20,2,2,2,2,2);
-		        SetMotorcm(1,50);
-				SetXMotor(2,10,20,2,2,0,1,2);
-		        SetMotorcm(1,50);
-			    SetXMotor(2,10,20,2,2,5,5,2);
-		        SetMotorcm(1,50);
-				if(ReadPowerDCIn()){
-					KeyclearTime =100;
-                       AllStop(); 
-				}
-			}
-		  if(KeyclearTime>2)
-		AllStop(); 		
+		
 		
 		#if 0  //
 		if(KeyclearTime < 1)
@@ -408,7 +393,7 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 		
 	}
 	#endif 
-    if(InterruptTime >6){  //>6
+    if(InterruptTime >10){  //>6
 					  Usart1Send[0]=2;
 					  Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
                       Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
@@ -421,7 +406,7 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 					   Remote1_ReadIR.Interrupt_IR2=0;
 					  
 					  gui_T5Value=0;
-					  if(Remote1_ReadIR.ReadA_Time>20)Remote1_ReadIR.ReadA_Time=0;
+					  if(Remote1_ReadIR.ReadA_Time>3)Remote1_ReadIR.ReadA_Time=0;
 					
 		    }
 		   //else Remote1_ReadIR.Interrupt_IR2 ++ ;
