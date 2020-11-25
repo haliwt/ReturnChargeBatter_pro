@@ -89,7 +89,7 @@ void  CheckRun()
 				 }
 				 
 				   Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[1];
-				 if(Remote1_ReadIR.ReadASTAR[0][0]   >= 0x0E && Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
+				 if(Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
 
 						    RunMs=0;
 							Step=1;
@@ -131,17 +131,24 @@ void  CheckRun()
 
 		case 3: //CW slow Run  //CW motor 90 degree ---Ë³Ê±ÕëÐý×ª 90 ¶È
 		     
-				  if(RunMs<10)//To motor move to right dir 
-				  {	
-						 LedRedON();
-						
-						 SetXMotor(2,1,1,1,1,1,1,1);
-						 SetMotorcm(3,45);
-							
-						
+				  if(Remote1_ReadIR.ReadCloseList == 1){
+				  	   RunMs =0;
+					   Step=5;
+
 				  }
-				  else 
-	   	          Step=4;
+				  else{
+					  if(RunMs<10)//To motor move to right dir 
+					  {	
+							 LedRedON();
+							
+							 SetXMotor(2,1,1,1,1,1,1,1);
+							 SetMotorcm(3,45);
+								
+							
+					  }
+					  else 
+		   	          Step=4;
+				  }
 				
 		break;
 
@@ -159,7 +166,7 @@ void  CheckRun()
 		 
            
 				 Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[1];
-				 if(Remote1_ReadIR.ReadASTAR[0][0]   >= 0x0E && Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
+				 if(Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
 
 						    RunMs=0;
 							Step=1;
@@ -167,7 +174,8 @@ void  CheckRun()
 				 else {
                         if(Remote1_ReadIR.ReadASTAR[1][0]==0){
 
-						    RunMs=0; 
+							Remote1_ReadIR.ReadCloseList[0]=1;
+							RunMs=0; 
 							Step=5;  //CCW run 
 
 						}
@@ -212,8 +220,13 @@ void  CheckRun()
 	
 
 		case 5:
-				 //CCW 90 RUN,CCW dir run  
-             
+				 //CCW 90 RUN,CCW dir run 
+				if(Remote1_ReadIR.ReadCloseList[1]==1){
+					RunMs =0;
+					Step = 3;
+				 
+				}
+				else{
 				 if(ReadPowerDCIn()){ //CCW 90 
 		             AllStop();
 				 }
@@ -228,6 +241,7 @@ void  CheckRun()
 				 }
 				 else 
 				   Step=6;
+				}
 		
 		
 		break; 
@@ -254,11 +268,11 @@ void  CheckRun()
 				 else {
                         if(Remote1_ReadIR.ReadASTAR[1][0]==0){
 
-						    RunMs=0; 
+                            Remote1_ReadIR.ReadCloseList[1]=1;
+							RunMs=0; 
 							Step=3;  //CCW run 
 
 						}
-
                         else{
 
 						   if(Remote1_ReadIR.ReadASTAR[0][1] ==0x01 ){ //left IR 
