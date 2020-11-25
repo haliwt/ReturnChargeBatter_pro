@@ -53,17 +53,7 @@ void  CheckRun()
 				 Step =3;           //
 			}
 			else{
-               if(KeyclearTime < 1)
-		       {	
-			   SetXMotor(2,5,5,2,2,5,5,2);
-		        SetMotorcm(1,50);
-				SetXMotor(2,10,20,2,2,0,1,2);
-		        SetMotorcm(1,50);
-			    SetXMotor(2,10,20,2,2,1,1,2);
-		        SetMotorcm(1,50);
-				
-				
-					if(ReadPowerDCIn()){ //�Զ����
+				if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   LedGreenON();
@@ -75,8 +65,16 @@ void  CheckRun()
 						         Step=0;
 								LedGreenON();
 							}
-					} 	
-                }
+				} 	
+                else if(KeyclearTime < 1)
+		       {	
+			   SetXMotor(2,5,5,2,2,1,5,2);
+		        SetMotorcm(1,50);
+				SetXMotor(2,10,20,2,2,1,1,2);
+		        SetMotorcm(1,50);
+			    SetXMotor(2,10,20,2,2,1,1,2);
+		        SetMotorcm(1,50);
+				 }
 			   else{
 			     Step =2;
 
@@ -250,7 +248,7 @@ void  CheckRun()
 						Step =8;
 			}
 			else {
-			if(ReadPowerDCIn()){ //�Զ����
+			if(ReadPowerDCIn()){ //�Զ����?
 		             AllStop();
 			}
 			else if(KeyclearTime<3)//To motor CCW   90 degree
@@ -284,7 +282,7 @@ void  CheckRun()
 					 Remote1_ReadIR.ReadCloseList[3]=1;	
 					  RunMs=0;
 			          KeyclearTime=0;
-				      Step =11;
+				      Step =12;
 				 }
 				 else{ 
 					 Remote1_ReadIR.ReadCloseList[3]=0;
@@ -307,34 +305,10 @@ void  CheckRun()
 
 		break;
 
-		case 11: 
-		         
-				 if(ReadPowerDCIn()){ //�Զ����
-		             AllStop();
-				 }
-				 else if(KeyclearTime<3)//To motor CCW   90 degree
-				  {	
-								
-					if(KeyclearTime<2){
-					  SetXMotor(1,5,5,1,2,5,5,1);
-					  SetMotorcm(4,45);//SetMotorcm(4,45);
-					  RunMs =0;
-					}
-					if(RunMs<40){
-						SetXMotor(1,5,5,1,2,5,5,1);
-					    SetMotorcm(4,45);//SetMotorcm(4,45);
-					}
-							 
-				 }
-				 RunMs=0;
-			     KeyclearTime=0;
-				 Step=12;
-				 
-
-		break;
+		
 		
 
-		case 12:  //�Ƚ�4�������ֵ��С��
+		case 12:  //�Ƚ�4�������ֵ��С��?
 		         AllStop();
 		         Delay_ms(500);
                 #if 0
@@ -344,6 +318,15 @@ void  CheckRun()
                  }
 				if(runkey !=0){
 				#endif 
+				if(Remote1_ReadIR.ReadOpenList[0]==0 && Remote1_ReadIR.ReadOpenList[1]==0&& Remote1_ReadIR.ReadOpenList[2]==0&& Remote1_ReadIR.ReadOpenList[3]==0)
+				{
+				     RunMs=0;
+					KeyclearTime=0;
+					Step =15;
+
+				}
+
+
 				if(Remote1_ReadIR.ReadOpenList[0] ==1) 
 				{
 					RunMs=0;
@@ -381,7 +364,7 @@ void  CheckRun()
 						Step =14;
 			}
 			else {
-			if(ReadPowerDCIn()){ //�Զ����
+			if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   LedGreenON();
@@ -414,7 +397,7 @@ void  CheckRun()
 			}
 	   break; 
        
-	   case 14:
+		case 14:
 	             AllStop();
 				 Delay_ms(500);
 				Remote1_ReadIR.ReadASTAR[4][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
@@ -436,6 +419,71 @@ void  CheckRun()
 				 }
        
 	  break;	
+
+	  case 15: //�ڹر��б��У�the machine how run?
+			//Back run 
+	        if(KeyclearTime < 1)
+		       {	
+			    SetXMotor(1,5,5,1,1,1,5,1);
+		        SetMotorcm(1,50);
+				SetXMotor(1,10,20,1,1,1,1,1);
+		        SetMotorcm(1,50);
+			    SetXMotor(1,10,20,1,1,1,1,1);
+		        SetMotorcm(1,50);
+				
+				
+					if(ReadPowerDCIn()){ //�Զ����?
+		              
+			               AllStop();
+						   LedGreenON();
+						  
+						
+							if(Voltage>820)
+							{
+			                     Mode=0;
+						         Step=0;
+								LedGreenON();
+							}
+					} 	
+                }
+			   else{
+			      Step =16;
+
+				}
+
+
+	  break ;
+
+	  case 16:
+                 AllStop();
+				 Delay_ms(500);
+				Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
+			    Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[0];
+				Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
+				Remote1_ReadIR.ReadASTAR[1][1]=Remote1_ReadIR.ReadIR[0];
+				Remote1_ReadIR.ReadASTAR[2][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
+				Remote1_ReadIR.ReadASTAR[3][1]=Remote1_ReadIR.ReadIR[0];
+				Remote1_ReadIR.ReadASTAR[3][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
+				
+
+
+				if(Remote1_ReadIR.ReadASTAR[0][0]==0 && Remote1_ReadIR.ReadASTAR[1][0]==0&& Remote1_ReadIR.ReadASTAR[2][0]==0&& Remote1_ReadIR.ReadASTAR[3][0]==0)
+				{
+				     RunMs=0;
+					KeyclearTime=0;
+					Step =15;
+
+				}
+				if(Remote1_ReadIR.ReadASTAR[0][0] !=0 || Remote1_ReadIR.ReadASTAR[1][0] !=0 ||Remote1_ReadIR.ReadASTAR[2][0] !=0 ||Remote1_ReadIR.ReadASTAR[3][0] !=0){
+					 RunMs=0;
+					KeyclearTime=0;
+					Step =0;
+
+
+				}
+
+	  break;
+	  
 		
 	}
 }
@@ -518,7 +566,7 @@ void CheckMode(INT8U Key)
 		  ModeBackup=0;
 	   }
 	   break;
-	   //���ֱ���ƶ� ----
+	   //���ֱ���ƶ�?----
 	   case 5:
 	   {
 		 //KeyRunTime=0;
@@ -631,7 +679,7 @@ void CheckMode(INT8U Key)
      }	   
    
    }
-   /***************�������µ�ģʽ������������е�ģʽ *************************/
+   /***************�������µ�ģʽ������������е�ģ�?*************************/
    /**************************************************************************/
     switch(Mode) ///ģʽ Mode -> step
 	{
@@ -787,7 +835,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);
 				}							
 			}
-			//�������
+			//�������?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1024,7 +1072,7 @@ void CheckMode(INT8U Key)
 //				SetEdge(0);				
 			
 			}
-			//�������
+			//�������?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1239,7 +1287,7 @@ void CheckMode(INT8U Key)
 //				SetFan(0);
 //				SetEdge(0);				
 			}
-			//�������
+			//�������?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1337,7 +1385,7 @@ void CheckMode(INT8U Key)
 		 }	   
 	  }
 	  break;
-	  //���,����س��
+	  //���?����س��
 	  case 4:
 	  {
 	    switch(Step)
@@ -1415,7 +1463,7 @@ void CheckMode(INT8U Key)
 	  {
 	    switch(Step)
 		{
-		   //������ס,�������ÿ��5����һ��������
+		   //������ס,�������ÿ��?����һ��������
 		   case 0:
 		   {
 		   	  LedRedON();
@@ -1437,7 +1485,7 @@ void CheckMode(INT8U Key)
 			  }
 		   }
 		   break;
-		   //��ɨ�����ת  �������ÿ��5��������������
+		   //��ɨ������? �������ÿ��?��������������
 
 		   case 2:
 		   {
@@ -1479,7 +1527,7 @@ void CheckMode(INT8U Key)
 			 }
 		   }
 		   break;
-		   //���������ת �������ÿ��5��������������1�����һ��������
+		   //����������?�������ÿ��?��������������1�����һ��������?
 		   case 5:
 		   {
 		   	  LedRedON();
@@ -1531,7 +1579,7 @@ void CheckMode(INT8U Key)
 		   
 		   }
 		   break;
-		   //���ȶ�ת���ߵ�����	�������ÿ��5��������������1���������������
+		   //���ȶ�ת���ߵ�����	�������ÿ��?��������������1���������������?
 		   case 9:
 		   {
 		   	  LedRedON();
