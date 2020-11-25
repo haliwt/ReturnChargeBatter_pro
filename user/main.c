@@ -114,10 +114,6 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
-	INT8U  KK;
-	static INT8U keylock;
-
-	
 	InitSysclk(1);
 
 	InitT1();
@@ -158,30 +154,8 @@ void main(void)
 	while(1)
 	{
 
-	  //CheckHandsetIR();
+	 // CheckHandsetIR();
 	  CheckRun();
-		
-		
-		
-		#if 0  //
-		if(KeyclearTime < 1)
-		{	
-					
-			     SetXMotor(2,5,5,2,2,5,5,2);
-		        SetMotorcm(1,50);
-				SetXMotor(2,10,20,2,2,0,1,2);
-		        SetMotorcm(1,50);
-			    SetXMotor(2,10,20,2,2,1,1,2);
-		        SetMotorcm(1,50);
-				
-					if(ReadPowerDCIn()){
-						
-                         AllStop();
-					}
-			}
-		if(KeyclearTime>1)
-		AllStop(); 
-		#endif 
 	
   }
 
@@ -400,13 +374,13 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 					  SendCount=1;
 					  SBUF=Usart1Send[SendCount];
 					  InterruptTime =0;
-                       Remote1_ReadIR.ReadA_Time++;
-					   Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]=Remote1_ReadIR.Interrupt_IR2;
+                      // Remote1_ReadIR.ReadA_Time++;
+					  // Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]=Remote1_ReadIR.Interrupt_IR2;
 					  
 					   Remote1_ReadIR.Interrupt_IR2=0;
 					  
 					  gui_T5Value=0;
-					  if(Remote1_ReadIR.ReadA_Time>3)Remote1_ReadIR.ReadA_Time=0;
+					//  if(Remote1_ReadIR.ReadA_Time>3)Remote1_ReadIR.ReadA_Time=0;
 					
 		    }
 		   //else Remote1_ReadIR.Interrupt_IR2 ++ ;

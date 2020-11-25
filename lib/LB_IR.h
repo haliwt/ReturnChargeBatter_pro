@@ -2,8 +2,8 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ÎÄ¼şËµÃ÷>
-version  : ¼ûÎÄ¼şÎ²¶Ë
+define   : <ï¿½Ä¼ï¿½Ëµï¿½ï¿½>
+version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 ---------------------------------------------------------------------------
 */
 #ifndef  LB_IR_h
@@ -21,7 +21,7 @@ version  : ¼ûÎÄ¼şÎ²¶Ë
 #endif
 
 
-//È«¾Ö±äÁ¿ÉùÃ÷
+//È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #ifdef  KAKA_IR_GB
 #define KAKA_IR_EXT
 #else
@@ -43,10 +43,11 @@ version  : ¼ûÎÄ¼şÎ²¶Ë
 	INT8U  ReadIRFlag;
 	INT8U  ReadIRByte;
 	    
-	INT8U  ReadIR[3];
+	INT8U  ReadIR[4];
 	INT8U  ReadIRData[12];//WT.EDIT [3]
-	INT8U  ReadASTAR[4]; //
-	INT8U  ReadCostValue[4];
+	INT8U  ReadASTAR[5][2]; //
+	INT8U  ReadOpenList[8];  //æ‰§è¡Œå¼€å‘åˆ—è¡¨çš„å€¼ï¼Œ
+	INT8U  ReadCloseList[8];  //å…³é—­åˆ—è¡¨å€¼ï¼Œä¸å†æ‰§è¡Œï¼Œè¾¹ç•Œ
 	INT8U  Runcontrol;
 	INT8U  ReadA_Time;   //WT.EDIT
 	INT8U  Interrupt_IR2;   //WT.EDIT

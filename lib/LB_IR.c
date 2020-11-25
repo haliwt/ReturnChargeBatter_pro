@@ -173,8 +173,15 @@ void Read_Remote12IR(void)
 #if  IR2
 void CheckXReadIR_IR2(ReadIRByte *P)
 {
-	INT8U temp;
+	INT8U temp,j;
 	static INT8U right,left,n;
+
+	 for(j=0;j<8;j++){
+	   	
+		  temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
+		 // temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
+     }
+		P->ReadIR[0] =temp;
 	if(P->ReadIRFlag==2){ // ir receive of Byte(8 bit)
 
         n++;
@@ -220,16 +227,16 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 	                  P->ReadIRFlag=3;
 					  right =0;
 					  left =0;
-					   n=0;
-		              Usart1Send[0]=4;
+					  n=0;
+		              Usart1Send[0]=5;
 				
-	                //  Usart1Send[1]=P->ReadIR[0];
+	                 Usart1Send[1]=P->ReadIR[0];
 				
-					 Usart1Send[1]=P->BitLow;
-				     Usart1Send[2]=P->BitHigh;
-				     Usart1Send[3]= P->ReadIR[1];
+					 Usart1Send[2]=P->BitLow;
+				     Usart1Send[3]=P->BitHigh;
+				     Usart1Send[4]= P->ReadIR[1];
 		
-					Usart1Send[4]=0x88;
+					Usart1Send[5]=0x88;
 	                SendCount=1;
 	                SBUF=Usart1Send[SendCount];
                     
@@ -268,7 +275,7 @@ INT8U CheckHandsetIR()
 	  Remote1_ReadIR.recordTime =0;//WT.EDIT
 	  
 	  
-	  KK = AutoBack_ChargeBatter();
+	 // KK = AutoBack_ChargeBatter();
 	  return (KK);
 	 
    }
@@ -301,7 +308,7 @@ void Delay_ms(INT16U fui_i)
 ********************************************************************/
 INT8U  AutoBack_ChargeBatter(void)
 {
-	static INT8U value ;
+	
 
      if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >= 0x0D){
 	 	 
@@ -335,7 +342,6 @@ INT8U  AutoBack_ChargeBatter(void)
     }
 	
 }
-
 /***************************************************************************
 	*
 	*Function Name :
@@ -362,10 +368,11 @@ INT8U max2(INT8U a , INT8U b)
 INT8U max4(INT8U a ,INT8U b ,INT8U c ,INT8U d)
 {
     INT8U res;
-    res = max2(a,b);        //??max2????????res 
-    res = max2(res,c);      //??res??c????????max2?е?a,c??????? a b?????????????res??c?е??????? 
+    res = max2(a,b);        //由max2返回赋值给res 
+    res = max2(res,c);      //将res，c的值分别传入到max2中的a,c继续比较 a b的最大值（即比较res与c中的最大值） 
     res = max2(res,d);
-    return res;             //????res?????max4???? 
+    return res;             //返回res的值给max4函数 
     
 }
+
 
