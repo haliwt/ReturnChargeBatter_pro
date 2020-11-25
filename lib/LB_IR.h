@@ -45,7 +45,8 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 	    
 	INT8U  ReadIR[3];
 	INT8U  ReadIRData[12];//WT.EDIT [3]
-	INT8U  ReadASTAR[3]; //
+	INT8U  ReadASTAR[4]; //
+	INT8U  ReadCostValue[4];
 	INT8U  Runcontrol;
 	INT8U  ReadA_Time;   //WT.EDIT
 	INT8U  Interrupt_IR2;   //WT.EDIT
@@ -74,5 +75,6 @@ KAKA_IR_EXT INT8U CheckHandsetIR();
 
 KAKA_IR_EXT void Delay_ms(unsigned int fui_i);
 KAKA_IR_EXT INT8U AutoBack_ChargeBatter(void);
+KAKA_IR_EXT INT8U max4(INT8U a ,INT8U b ,INT8U c ,INT8U d);
 
 #endif

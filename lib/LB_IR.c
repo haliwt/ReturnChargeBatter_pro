@@ -336,3 +336,36 @@ INT8U  AutoBack_ChargeBatter(void)
 	
 }
 
+/***************************************************************************
+	*
+	*Function Name :
+	*
+	*
+	*
+	*
+	*
+***************************************************************************/
+
+INT8U max2(INT8U a , INT8U b)
+{
+    if (a>b)
+    {
+        return a;
+    }
+    else
+    {
+        return b;
+    }
+    
+}
+
+INT8U max4(INT8U a ,INT8U b ,INT8U c ,INT8U d)
+{
+    INT8U res;
+    res = max2(a,b);        //??max2????????res 
+    res = max2(res,c);      //??res??c????????max2?§Ö?a,c??????? a b?????????????res??c?§Ö??????? 
+    res = max2(res,d);
+    return res;             //????res?????max4???? 
+    
+}
+
