@@ -32,7 +32,7 @@ version  : ���ļ�β��
 void  CheckRun()
 {
       
-	  static INT8U maxValue,diffopen;
+	  static INT8U maxValue,costValue;
 	  INT8U runkey=0,runkey1 =0;
 	   switch(Step){
 		case 0:
@@ -44,16 +44,11 @@ void  CheckRun()
 
 		break;
 
-		case 1:  //ֱ������
+		case 1:  // Line 
 		
 			  LedGreenON();
-			if(Remote1_ReadIR.ReadCloseList[0]==1){//不在这个方向执行运行
-                 RunMs=0;
-			     KeyclearTime=0;
-				 Step =3;           //
-			}
-			else{
-				if(ReadPowerDCIn()){ //�Զ����?
+		
+			if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   LedGreenON();
@@ -66,20 +61,17 @@ void  CheckRun()
 								LedGreenON();
 							}
 				} 	
-                else if(KeyclearTime < 1)
+                else if(RunMs < 20)
 		       {	
-			   SetXMotor(2,5,5,2,2,1,5,2);
-		        SetMotorcm(1,50);
-				SetXMotor(2,10,20,2,2,1,1,2);
-		        SetMotorcm(1,50);
-			    SetXMotor(2,10,20,2,2,1,1,2);
-		        SetMotorcm(1,50);
+				    SetXMotor(2,1,1,2,2,1,1,2);
+			        SetMotorcm(1,50);
+					
 				 }
 			   else{
 			     Step =2;
 
 				}
-			}
+			
 	    break;
 
 
@@ -87,406 +79,223 @@ void  CheckRun()
            
 				 AllStop();
 				 Delay_ms(500);
-				 Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-				 Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[0];
-				 if(Remote1_ReadIR.ReadASTAR[0][0] ==0){
-					 Remote1_ReadIR.ReadCloseList[0]= 1; //close lis '1'
-					 RunMs=0;
-			         KeyclearTime=0;
-				     Step =3;
+		         costValue ++;
+				 if(costValue==1){
+                        Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
+				  }
+				 else{
+					Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.Interrupt_IR2;
+					costValue =0;
+				 }
+				 
+				   Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[1];
+				 if(Remote1_ReadIR.ReadASTAR[0][0]   >= 0x0E && Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
+
+						    RunMs=0;
+							Step=1;
 				 }
 				 else {
-					  Remote1_ReadIR.ReadCloseList[0]= 0;
-					  Remote1_ReadIR.ReadOpenList[0] =1;
-				 
-						if(maxValue == 1){
-							RunMs=0;
-							KeyclearTime=0;
-							Step=1;
-			           }
-					   else{
-						   	RunMs=0;
-							KeyclearTime=0;
-							Step=1;
 
-					   }
-					
-				 }
-		case 3:
-				 //CCW 90 RUN 
-                if(Remote1_ReadIR.ReadCloseList[1]==1){//不在这个方向执行运行
-                        RunMs=0;
-						KeyclearTime=0;
-						Step =5;
-			    }
-				else{
-				 if(ReadPowerDCIn()){ //CCW 90 
-		             AllStop();
-				 }
 
-		         else if(KeyclearTime<3)//To motor CCW   90 degree
+                         if(Remote1_ReadIR.ReadASTAR[0][1] ==0x01 ){ //left IR 
+ 							 //CW tor RUN 
+ 							if(Remote1_ReadIR.ReadASTAR[1][0]>= Remote1_ReadIR.ReadASTAR[0][0]){
+							
+	 							 RunMs=0; 
+								 Step=3;  //CW run 
+ 							 }
+							 else {
+							 	 RunMs=0; 
+								 Step=5;  //CCW run 
+
+                             }
+						 }
+						 if(Remote1_ReadIR.ReadASTAR[0][1] ==0x02){ //right IR
+
+						      if(Remote1_ReadIR.ReadASTAR[1][0]>= Remote1_ReadIR.ReadASTAR[0][0]){
+							
+	 							 RunMs=0; 
+								 Step=5;  //CCW run 
+ 							 }
+							 else {
+							 	 RunMs=0; 
+								 Step=3;  //CW run 
+
+                             }
+						 }
+
+					}
+						
+
+        break;
+
+		case 3: //CW slow Run  //CW motor 90 degree ---˳ʱ����ת 90 ��
+		     
+				  if(RunMs<10)//To motor move to right dir 
 				  {	
-								
-					if(KeyclearTime<2){
-					  SetXMotor(1,5,5,1,2,5,5,1);
-					  SetMotorcm(4,45);//SetMotorcm(4,45);
-					  RunMs =0;
-					}
-					if(RunMs<40){
-						SetXMotor(1,5,5,1,2,5,5,1);
-					    SetMotorcm(4,45);//SetMotorcm(4,45);
-					}
-							 
-				 }
-				 Step=4;
-		
-				}
-		break; 
+						 LedRedON();
+						
+						 SetXMotor(2,1,1,1,1,1,1,1);
+						 SetMotorcm(3,45);
+							
+						
+				  }
+				  else 
+	   	          Step=4;
+				
+		break;
 
-		case 4:
+	   case 4:
                  AllStop();
 				 Delay_ms(500);
-				 Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-				 Remote1_ReadIR.ReadASTAR[1][1]=Remote1_ReadIR.ReadIR[0];
-                 if(Remote1_ReadIR.ReadASTAR[1][0]==0){
-					 Remote1_ReadIR.ReadCloseList[1]=1;	
-					  RunMs=0;
-			          KeyclearTime=0;
-				      Step =5;
-				 }
+		          costValue ++;
+				 if(costValue==1){
+                        Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
+				  }
 				 else{
-					 Remote1_ReadIR.ReadCloseList[1]=0;	
-					 Remote1_ReadIR.ReadOpenList[1] =1;
-				 
-					if(maxValue == 2 ){
-						RunMs=0;
-						KeyclearTime=0;
-						Step=13;
-						maxValue =0;
-						diffopen =2;
-		            }
-					else{
-						RunMs=0;
-						KeyclearTime=0;
-						Step =13;
-						diffopen =2;
-					}
+					Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.Interrupt_IR2;
+					costValue =0;
 				 }
+		 
+           
+				 Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[1];
+				 if(Remote1_ReadIR.ReadASTAR[0][0]   >= 0x0E && Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
 
-		break;
+						    RunMs=0;
+							Step=1;
+				 }
+				 else {
+                        if(Remote1_ReadIR.ReadASTAR[1][0]==0){
 
-		case 5:   //CCW 180 degree  180 degree 
-				if(Remote1_ReadIR.ReadCloseList[2]==1){//不在这个方向执行运行
-                        RunMs=0;
-						KeyclearTime=0;
-						Step =7;
-			    }
+						    RunMs=0; 
+							Step=5;  //CCW run 
+
+						}
+
+                        else{
+
+						   if(Remote1_ReadIR.ReadASTAR[0][1] ==0x01 ){ //left IR 
+ 							 //CW tor RUN 
+ 							if(Remote1_ReadIR.ReadASTAR[1][0]>= Remote1_ReadIR.ReadASTAR[0][0]){
+							
+	 							 RunMs=0; 
+								 Step=0;  //CW run 
+ 							 }
+							 else {
+							 	 RunMs=0; 
+								 Step=5;  //CCW run 
+
+                             }
+						 }
+						 if(Remote1_ReadIR.ReadASTAR[0][1] ==0x02){ //right IR
+
+						      if(Remote1_ReadIR.ReadASTAR[1][0]>= Remote1_ReadIR.ReadASTAR[0][0]){
+							
+	 							 RunMs=0; 
+								 Step=0;  //CCW run 
+ 							 }
+							 else {
+							 	 RunMs=0; 
+								 Step=5;  //CW run 
+
+                             }
+						 }
+                        }
+
+					}
+	    
+
+	   break;
+
+
+
+	
+
+		case 5:
+				 //CCW 90 RUN,CCW dir run  
+             
 				 if(ReadPowerDCIn()){ //CCW 90 
 		             AllStop();
 				 }
-                  else if(KeyclearTime<3)//To motor CCW   90 degree
+				 else if(RunMs <10)//To motor CCW   90 degree
 				  {	
 								
-					if(KeyclearTime<2){
-					  SetXMotor(1,5,5,1,2,5,5,1);
+					
+					  SetXMotor(1,1,1,1,2,1,1,1);
 					  SetMotorcm(4,45);//SetMotorcm(4,45);
-					  RunMs =0;
-					}
-					if(RunMs<40){
-						SetXMotor(1,5,5,1,2,5,5,1);
-					    SetMotorcm(4,45);//SetMotorcm(4,45);
-					}
+					 
 							 
 				 }
-				 else{
-				
-				 
-			      Step =6;
-				 }
-
-		break;
+				 else 
+				   Step=6;
+		
+		
+		break; 
 
 		case 6:
 			     AllStop();
 				 Delay_ms(500);
-				 Remote1_ReadIR.ReadASTAR[2][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-				 Remote1_ReadIR.ReadASTAR[2][1]=Remote1_ReadIR.ReadIR[0];
-				 if(Remote1_ReadIR.ReadASTAR[2][0]==0){
-					 Remote1_ReadIR.ReadCloseList[2]=1;	
-					  RunMs=0;
-			          KeyclearTime=0;
-				      Step =7;
-				 }
+		          costValue ++;
+				 if(costValue==1){
+                        Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
+				  }
 				 else{
-					 Remote1_ReadIR.ReadCloseList[2]=0;	
-					 Remote1_ReadIR.ReadOpenList[2] =1;
-				 
-					if(maxValue == 3){
-					RunMs=0;
-					KeyclearTime=0;
-					Step=13;
-					maxValue =0;
-					diffopen = 3;
-		
+					Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.Interrupt_IR2;
+					costValue =0;
+				 }
+		 
+           
+				 Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[1];
+				 if(Remote1_ReadIR.ReadASTAR[0][0]   >= 0x0E && Remote1_ReadIR.ReadASTAR[1][0] >= 0x0E){
+
+						    RunMs=0;
+							Step=0;
+				 }
+				 else {
+                        if(Remote1_ReadIR.ReadASTAR[1][0]==0){
+
+						    RunMs=0; 
+							Step=3;  //CCW run 
+
+						}
+
+                        else{
+
+						   if(Remote1_ReadIR.ReadASTAR[0][1] ==0x01 ){ //left IR 
+ 							 //CW tor RUN 
+ 							if(Remote1_ReadIR.ReadASTAR[1][0]>= Remote1_ReadIR.ReadASTAR[0][0]){
+							
+	 							 RunMs=0; 
+								 Step=0;  //Line run
+ 							 }
+							 else {
+							 	 RunMs=0; 
+								 Step=3;  //CW run 
+
+                             }
+						 }
+						 if(Remote1_ReadIR.ReadASTAR[0][1] ==0x02){ //right IR
+
+						      if(Remote1_ReadIR.ReadASTAR[1][0]>= Remote1_ReadIR.ReadASTAR[0][0]){
+							
+	 							 RunMs=0; 
+								 Step=0;  //Line
+ 							 }
+							 else {
+							 	 RunMs=0; 
+								 Step=3;  //CW run 
+
+                             }
+						 }
+                        }
+
 					}
-					else{
-					diffopen =3;
-					RunMs=0;
-					KeyclearTime=0;
-					Step =13;
-					}
-				 }
-		break;
+	    
 
-
-		case 7:  //CCW 270 degree
-			 
-			//������ ��90
-			if(Remote1_ReadIR.ReadCloseList[3]==1){//不在这个方向执行运行
-                        RunMs=0;
-						KeyclearTime=0;
-						Step =8;
-			}
-			else {
-			if(ReadPowerDCIn()){ //�Զ����?
-		             AllStop();
-			}
-			else if(KeyclearTime<3)//To motor CCW   90 degree
-			 { 
-						   
-			   if(KeyclearTime<2){
-				 SetXMotor(1,5,5,1,2,5,5,1);
-				 SetMotorcm(4,45);//SetMotorcm(4,45);
-				 RunMs =0;
-			   }
-			   if(RunMs<40){
-				   SetXMotor(1,5,5,1,2,5,5,1);
-				   SetMotorcm(4,45);//SetMotorcm(4,45);
-			   }
-						
-			}
-			else {
-		
-			 
-			 Step =8;
-
-			}
-			}
-		break;
-		case 8:
-				 AllStop();
-				 Delay_ms(500);
-				   Remote1_ReadIR.ReadASTAR[3][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-			       Remote1_ReadIR.ReadASTAR[3][1]=Remote1_ReadIR.ReadIR[0];
-				   if(Remote1_ReadIR.ReadASTAR[3][0]==0){
-					 Remote1_ReadIR.ReadCloseList[3]=1;	
-					  RunMs=0;
-			          KeyclearTime=0;
-				      Step =12;
-				 }
-				 else{ 
-					 Remote1_ReadIR.ReadCloseList[3]=0;
-					 Remote1_ReadIR.ReadOpenList[3] =1;
-				 }
-				  if(maxValue == 4){
-                  RunMs=0;
-			      KeyclearTime=0;
-				  Step=13;
-				  maxValue =0;
-				  diffopen =4;
-    
-				 }
-				 else{
-					 RunMs=0;
-					 KeyclearTime=0;
-					 Step =13;
-					 diffopen =4;
-				 }
 
 		break;
 
-		
-		
-
-		case 12:  //�Ƚ�4�������ֵ��С��?
-		         AllStop();
-		         Delay_ms(500);
-                #if 0
-		        runkey=max4(Remote1_ReadIR.ReadASTAR[0][0],Remote1_ReadIR.ReadASTAR[1][0] ,Remote1_ReadIR.ReadASTAR[2][0],Remote1_ReadIR.ReadASTAR[3][0]);
-		        if(runkey ==0){
-					runkey1=max4(Remote1_ReadIR.ReadASTAR[0][1],Remote1_ReadIR.ReadASTAR[1][1] ,Remote1_ReadIR.ReadASTAR[2][1],Remote1_ReadIR.ReadASTAR[3][1]);
-                 }
-				if(runkey !=0){
-				#endif 
-				if(Remote1_ReadIR.ReadOpenList[0]==0 && Remote1_ReadIR.ReadOpenList[1]==0&& Remote1_ReadIR.ReadOpenList[2]==0&& Remote1_ReadIR.ReadOpenList[3]==0)
-				{
-				     RunMs=0;
-					KeyclearTime=0;
-					Step =15;
-
-				}
-
-
-				if(Remote1_ReadIR.ReadOpenList[0] ==1) 
-				{
-					RunMs=0;
-					KeyclearTime=0;
-					Step =2;
-					maxValue = 1;
-				}
-				else if(runkey ==Remote1_ReadIR.ReadASTAR[0][1]){
-						Step =3; //the first turn on 90 degree then run line.13
-						RunMs=0;
-					    KeyclearTime=0;
-						maxValue =2;
-				} 
-				else if(runkey ==Remote1_ReadIR.ReadASTAR[0][2]) {
-					Step =6; //������
-					RunMs=0;
-					KeyclearTime=0;
-					maxValue =3;
-				}
-				else if(runkey ==Remote1_ReadIR.ReadASTAR[0][3]){
-					Step =8; //������
-					RunMs=0;
-					KeyclearTime=0;
-					maxValue = 4;
-				} 
-				
-				else Step =0;
-		break;
-        
-		case 13 :
-		      
-			  if(Remote1_ReadIR.ReadCloseList[4]==1){//不在这个方向执行运行
-                        RunMs=0;
-						KeyclearTime=0;
-						Step =14;
-			}
-			else {
-			if(ReadPowerDCIn()){ //�Զ����?
-		              
-			               AllStop();
-						   LedGreenON();
-						  
-						
-							if(Voltage>820)
-							{
-			                     Mode=0;
-						         Step=0;
-								LedGreenON();
-							}
-			} 	
-			  
-			else if(KeyclearTime < 1)
-		       {	
-			   SetXMotor(2,5,5,2,2,5,5,2);
-		        SetMotorcm(1,50);
-				SetXMotor(2,10,20,2,2,5,5,2);
-		        SetMotorcm(1,50);
-			    SetXMotor(2,10,20,2,2,1,1,2);
-		        SetMotorcm(1,50);
-				
-				
-					
-                }
-			   else{
-			     Step =14;
-
-				}
-			}
-	   break; 
-       
-		case 14:
-	             AllStop();
-				 Delay_ms(500);
-				Remote1_ReadIR.ReadASTAR[4][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-			    Remote1_ReadIR.ReadASTAR[4][1]=Remote1_ReadIR.ReadIR[0];
-				   if(Remote1_ReadIR.ReadASTAR[4][0]==0){
-					 Remote1_ReadIR.ReadCloseList[4]=1;	
-					  RunMs=0;
-			          KeyclearTime=0;
-				      Step =15;
-				 }
-				 else{ 
-					 Remote1_ReadIR.ReadCloseList[4]=0;
-					 Remote1_ReadIR.ReadOpenList[4] =1;
-				 }
-				 if(diffopen == 2 || diffopen ==3 || diffopen ==4){
-                  RunMs=0;
-			      KeyclearTime=0;
-				  Step=13;
-				 }
-       
-	  break;	
-
-	  case 15: //�ڹر��б��У�the machine how run?
-			//Back run 
-	        if(KeyclearTime < 1)
-		       {	
-			    SetXMotor(1,5,5,1,1,5,5,1);
-		        SetMotorcm(1,50);
-				SetXMotor(1,5,5,1,1,5,5,1);
-		        SetMotorcm(1,50);
-			    SetXMotor(1,5,5,1,1,5,5,1);
-		        SetMotorcm(1,50);
-				
-				
-					if(ReadPowerDCIn()){ //�Զ����?
-		              
-			               AllStop();
-						   LedGreenON();
-						  
-						
-							if(Voltage>820)
-							{
-			                     Mode=0;
-						         Step=0;
-								LedGreenON();
-							}
-					} 	
-                }
-			   else{
-			      Step =16;
-
-				}
-
-
-	  break ;
-
-	  case 16:
-                 AllStop();
-				 Delay_ms(500);
-				Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-			    Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.ReadIR[0];
-				
-	            Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-				Remote1_ReadIR.ReadASTAR[1][1]=Remote1_ReadIR.ReadIR[0];
-				
-	            Remote1_ReadIR.ReadASTAR[2][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-				
-	            
-				Remote1_ReadIR.ReadASTAR[3][0]=Remote1_ReadIR.Interrupt_IR2;//����1 ��
-				Remote1_ReadIR.ReadASTAR[3][1]=Remote1_ReadIR.ReadIR[0];
-
-
-				if(Remote1_ReadIR.ReadASTAR[0][0]==0 && Remote1_ReadIR.ReadASTAR[1][0]==0&& Remote1_ReadIR.ReadASTAR[2][0]==0&& Remote1_ReadIR.ReadASTAR[3][0]==0)
-				{
-				     RunMs=0;
-					KeyclearTime=0;
-					Step =15;
-
-				}
-				if(Remote1_ReadIR.ReadASTAR[0][0] !=0 || Remote1_ReadIR.ReadASTAR[1][0] !=0 ||Remote1_ReadIR.ReadASTAR[2][0] !=0 ||Remote1_ReadIR.ReadASTAR[3][0] !=0){
-					 RunMs=0;
-					KeyclearTime=0;
-					Step =0;
-
-
-				}
-
-	  break;
-	  
+	
 		
 	}
 }

@@ -154,7 +154,7 @@ void main(void)
 	while(1)
 	{
 
-	 // CheckHandsetIR();
+	  CheckHandsetIR();
 	  CheckRun();
 	
   }
