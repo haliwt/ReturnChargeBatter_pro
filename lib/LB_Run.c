@@ -32,7 +32,7 @@ version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 void  CheckRun()
 {
       
-	  static INT8U irL,irR,irLR,costValue;
+	  static INT8U irL,irR,irLR,iLine_r,iLine_l ,costValue;
 	  INT8U runkey=0,runkey1 =0;
 	   switch(Step){
 		case 0:
@@ -94,45 +94,68 @@ void  CheckRun()
 					costValue =0;
 				 }
 
-                if(Remote1_ReadIR.ReadASTAR[0][1]==0){
+
+				 if(iLine_l >3 || iLine_r >3){
+                     iLine_l =0;
+					 iLine_r=0;
+				      RunMs=0;
+					  Step=0;
+
+				 }
+				
+                else if(Remote1_ReadIR.ReadASTAR[0][1]==0){
 
 				       Remote1_ReadIR.ReadCloseList[2]=1;
 					        RunMs=0;
 							Step=3;
 
 				 }
-                 else if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0B){
+				
+                 else if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0D){
 
 						    RunMs=0;
 							Step=0;
 							Remote1_ReadIR.ReadCloseList[2]=0;
+							iLine_l =0;
+							iLine_r=0;
 				           
 				 }
-			   else if(Remote1_ReadIR.ReadASTAR[0][1] >=Remote1_ReadIR.ReadASTAR[0][0] ){
-								Step =0;
-								RunMs=0;
-				            
-								 Remote1_ReadIR.ReadCloseList[2]=0;
+			   else {
 
-			   	}
-                else{
+							iLine_l ++;
+						 if(iLine_l ==1){
+				    
+							if(Remote1_ReadIR.ReadASTAR[0][1] >=Remote1_ReadIR.ReadASTAR[0][0] ){
+												Step =0;
+												RunMs=0;
+								            
+												 Remote1_ReadIR.ReadCloseList[2]=0;
+												 
+							}
+						 }
+							
 
+					  
 						if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1] >0x10 ){ //left IR 
  							
  								
 						                 RunMs=0; 
 										 Step=5;  //CCW run 
 										
-		 				 }
-						   
+						    }
+					   
                           if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1] >0x10){ //right IR
 						      
 							  
 						         RunMs=0; 
 								 Step=3;  //CCW run 
 								 
- 							   }
-						}
+ 						  }
+
+						  
+				}
+
+			   	
 				break;
 
 		case 3: //CW slow Run  //CW motor 90 degree ---Ë³Ê±ÕëÐý×ª 90 ¶È
@@ -167,17 +190,11 @@ void  CheckRun()
                  AllStop();
 				 Delay_ms(500);
 	             Remote1_ReadIR.ReadCloseList[2]=0;
-		          irR ++;
-				 if(irL==1){
-                        Remote1_ReadIR.ReadASTAR[2][0]=Remote1_ReadIR.Interrupt_IR2;
-						Remote1_ReadIR.ReadASTAR[3][0]=Remote1_ReadIR.ReadIR[0];
-				  }
-				 
-				 else{
+		  
+				
 					Remote1_ReadIR.ReadASTAR[2][1]=Remote1_ReadIR.Interrupt_IR2;
 					Remote1_ReadIR.ReadASTAR[3][1]=Remote1_ReadIR.ReadIR[0];
-					irR =0;
-				 }
+			
 		 
 
 				 
@@ -202,21 +219,18 @@ void  CheckRun()
 							
 				 }
 				 
-				 else if(Remote1_ReadIR.ReadASTAR[2][1] >= Remote1_ReadIR.ReadASTAR[0][1] ){
+				 else if(Remote1_ReadIR.ReadASTAR[2][1] >= Remote1_ReadIR.ReadASTAR[0][1]    ){
 				 	        RunMs=0;
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[0]=0; 
+							iLine_l =0;
 							
 
 				 }
 				 else {
 
-				    if(Remote1_ReadIR.ReadASTAR[2][1] < Remote1_ReadIR.ReadASTAR[0][1]){
-
-						   
-						     RunMs=0; 
-							 Step=5;  //CCW run
-					     }
+				        RunMs=0; 
+					    Step=5;  //CCW run
                  }
 
 					
@@ -263,17 +277,10 @@ void  CheckRun()
 				 Delay_ms(500);
 		         Remote1_ReadIR.ReadCloseList[2]=0;
 		
-		          irL ++;
-				 if(irL==1){
-                        Remote1_ReadIR.ReadASTAR[4][0]=Remote1_ReadIR.Interrupt_IR2;
-						 Remote1_ReadIR.ReadASTAR[5][0]=Remote1_ReadIR.ReadIR[0];
-				  }
-				 else{
+		      
 					Remote1_ReadIR.ReadASTAR[4][1]=Remote1_ReadIR.Interrupt_IR2;
-					 Remote1_ReadIR.ReadASTAR[5][1]=Remote1_ReadIR.ReadIR[0];
-					irL =0;
-				 }
-		 
+				    Remote1_ReadIR.ReadASTAR[5][1]=Remote1_ReadIR.ReadIR[0];
+				
 
 				if(Remote1_ReadIR.ReadASTAR[4][1]==0){ //CloseList =1
 
@@ -304,27 +311,15 @@ void  CheckRun()
 							RunMs=0;
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[1]=0;
-				           
+				            iLine_l =0;
 
 				 }
 				 else {
 							
-					    if(Remote1_ReadIR.ReadASTAR[4][1]   < Remote1_ReadIR.ReadASTAR[0][1] ){
-                       
- 							   
-                                irLR ++ ;
-								if(irLR ==1){
-									RunMs=0; 
-									Step=0;  //CCW run 
-
-								}
-								else{
-									RunMs=0; 
-									Step=3;  //CCW run 
-									irLR =0 ;
-								}
+					    RunMs=0; 
+						Step=3;  //CCW run 
 								
-						   }
+						   
 				}
 	    
 
