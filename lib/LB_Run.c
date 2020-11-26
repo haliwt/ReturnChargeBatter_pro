@@ -32,7 +32,7 @@ version  : 锟斤拷锟侥硷拷尾锟斤拷
 void  CheckRun()
 {
       
-	  static INT8U irL,irR,irLR,iLine_r,iLine_l ,costValue;
+	  static INT8U irL,iLine_l,cw,ccw,costValue;
 	  INT8U runkey=0,runkey1 =0;
 	   switch(Step){
 		case 0:
@@ -83,6 +83,8 @@ void  CheckRun()
 				 Remote1_ReadIR.ReadCloseList[1]=0;
 				 Remote1_ReadIR.ReadCloseList[0]=0;
 		         costValue ++;
+				 cw=0;
+				 ccw=0;
 				
 				 if(costValue==1){
                         Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
@@ -94,16 +96,7 @@ void  CheckRun()
 					costValue =0;
 				 }
 
-
-				 if(iLine_l >3 || iLine_r >3){
-                     iLine_l =0;
-					 iLine_r=0;
-				      RunMs=0;
-					  Step=0;
-
-				 }
-				
-                else if(Remote1_ReadIR.ReadASTAR[0][1]==0){
+			  if(Remote1_ReadIR.ReadASTAR[0][1]==0){
 
 				       Remote1_ReadIR.ReadCloseList[2]=1;
 					        RunMs=0;
@@ -116,39 +109,29 @@ void  CheckRun()
 						    RunMs=0;
 							Step=0;
 							Remote1_ReadIR.ReadCloseList[2]=0;
-							iLine_l =0;
-							iLine_r=0;
+							
 				           
 				 }
 			   else {
 
-							iLine_l ++;
+						 iLine_l ++;
 						 if(iLine_l ==1){
-				    
 							if(Remote1_ReadIR.ReadASTAR[0][1] >=Remote1_ReadIR.ReadASTAR[0][0] ){
 												Step =0;
 												RunMs=0;
 								            
 												 Remote1_ReadIR.ReadCloseList[2]=0;
-												 
 							}
 						 }
 							
-
-					  
-						if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1] >0x10 ){ //left IR 
- 							
- 								
-						                 RunMs=0; 
+						if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1]  ){ //left IR 
+										RunMs=0; 
 										 Step=5;  //CCW run 
 										
-						    }
-					   
-                          if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1] >0x10){ //right IR
-						      
-							  
+						   }
+					     if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1] ){ //right IR
 						         RunMs=0; 
-								 Step=3;  //CCW run 
+								 Step=3;  //CW run 
 								 
  						  }
 
@@ -229,8 +212,24 @@ void  CheckRun()
 				 }
 				 else {
 
-				        RunMs=0; 
-					    Step=5;  //CCW run
+						cw++;
+						if(ccw==1){
+							RunMs=0; 
+						    Step=3;  //CCW run,运行两次。
+						    ccw =0;
+
+						}
+						else if(ccw=2){
+							RunMs=0; 
+						    Step=0;  //CCW run,运行两次。
+						    ccw =0;
+
+						}
+						else{
+							RunMs=0; 
+						    Step=5;  //CCW run
+						    
+						}
                  }
 
 					
@@ -316,8 +315,25 @@ void  CheckRun()
 				 }
 				 else {
 							
-					    RunMs=0; 
-						Step=3;  //CCW run 
+                        ccw++;
+						if(cw==1){
+							
+						    RunMs=0;
+							Step=5;
+						    cw=0;
+
+						}
+						if(cw==2){
+                			RunMs=0;
+							Step=0;
+						    cw =0;
+						
+						}
+						else {
+							
+							RunMs=0; 
+							Step=3;  //CCW run 
+						}
 								
 						   
 				}
