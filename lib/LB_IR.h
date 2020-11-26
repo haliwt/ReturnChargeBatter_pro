@@ -45,7 +45,7 @@ version  : ���ļ�β��
 	    
 	INT8U  ReadIR[4];
 	INT8U  ReadIRData[12];//WT.EDIT [3]
-	INT8U  ReadASTAR[5][2]; //
+	INT8U  ReadASTAR[6][2]; //
 	INT8U  ReadOpenList[8];  //执行开发列表的值，
 	INT8U  ReadCloseList[8];  //关闭列表值，不再执行，边界
 	INT8U  Runcontrol;

@@ -128,9 +128,6 @@ void Remote12_Count(void)
 }
 #endif
 
-
-
-
 /**************************************************************
 	*
 	*Function Name:void Read_Remote11IR(void)
