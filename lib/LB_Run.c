@@ -32,7 +32,7 @@ version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 void  CheckRun()
 {
       
-	  static INT8U irL,iLine_l,cw,ccw,costValue;
+	  static INT8U iLine_l,cw,ccw,noIR_L,noIR_R,costValue;
 	  INT8U runkey=0,runkey1 =0;
 	   switch(Step){
 		case 0:
@@ -83,6 +83,8 @@ void  CheckRun()
 				 Remote1_ReadIR.ReadCloseList[1]=0;
 				 Remote1_ReadIR.ReadCloseList[0]=0;
 		         costValue ++;
+				 noIR_L =0;
+				 noIR_R =0;
 				 cw=0;
 				 ccw=0;
 				
@@ -109,6 +111,7 @@ void  CheckRun()
 						    RunMs=0;
 							Step=0;
 							Remote1_ReadIR.ReadCloseList[2]=0;
+							 noIR_R =0;
 							
 				           
 				 }
@@ -121,12 +124,14 @@ void  CheckRun()
 												RunMs=0;
 								            
 												 Remote1_ReadIR.ReadCloseList[2]=0;
+												
 							}
 						 }
 							
 						if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1]  ){ //left IR 
 										RunMs=0; 
 										 Step=5;  //CCW run 
+										  
 										
 						   }
 					     if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1] ){ //right IR
@@ -148,12 +153,7 @@ void  CheckRun()
 						   Step =20 ;
 						   LedGreenON();
 				} 	
-              //  else if(Remote1_ReadIR.ReadCloseList[0] == 1   && Remote1_ReadIR.ReadCloseList[2]==0){
-				  	  //   RunMs =0;
-					  //   Step=5;
-
-				 // }
-				  else{
+               else{
 					  if(RunMs<10)//To motor move to right dir 
 					  {	
 							 LedRedON();
@@ -181,14 +181,28 @@ void  CheckRun()
 		 
 
 				 
-				 if(Remote1_ReadIR.ReadASTAR[2][1]==0){
+				 if(Remote1_ReadIR.ReadASTAR[2][1]==0){//don't detect IR signal
 				 	         
-					   Remote1_ReadIR.ReadCloseList[0]=1;
-					   
+						Remote1_ReadIR.ReadCloseList[0]=1;
 
-				        
-								RunMs=0; 
-								Step=5;  //CCW run
+							noIR_R ++ ;
+				            if(noIR_L ==1){
+								if(noIR_R > 3){
+									RunMs=0;
+									Step=3; //¼ÌÐøÌ½²â IR 3´Î
+									
+									
+								}
+								else{
+									RunMs=0; 
+							        Step=5;  //CCW run
+							        noIR_L++;
+									}
+							     }
+								if(noIR_R ==1){  //ÔËÐÐÁ½´Î
+								   RunMs=0; 
+								   Step=5;  //CCW run
+								}
 					   		
 					  Remote1_ReadIR.ReadCloseList[1]=0;
 						
@@ -199,6 +213,7 @@ void  CheckRun()
 						    RunMs=0;
 							Step=0;
 				           Remote1_ReadIR.ReadCloseList[0]=0; 
+						    noIR_R =0;
 							
 				 }
 				 
@@ -207,6 +222,7 @@ void  CheckRun()
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[0]=0; 
 							iLine_l =0;
+							 noIR_R =0;
 							
 
 				 }
@@ -283,26 +299,37 @@ void  CheckRun()
 
 				if(Remote1_ReadIR.ReadASTAR[4][1]==0){ //CloseList =1
 
-						
-						 if(Remote1_ReadIR.ReadCloseList[0]==1)
-						 {
-							Remote1_ReadIR.ReadCloseList[1]=0;
-							RunMs=0;
-							Step=5;
+						noIR_L ++;
+						if(noIR_R ==1){
 							
-						 }
-				         else{ 
-						 	   Remote1_ReadIR.ReadCloseList[1]=1;
-								RunMs=0; 
-								Step=3;  //CCW run
-				         }
-			   }
+                           RunMs=0;
+						   Step=3; 
+       
+						}
+						else {
+							if(noIR_R > 1){
+	                           if(noIR_L < 8){
+							      RunMs =0;
+								  Step=5; 
+								 
+	                           	}
+							   else {
+	                              RunMs =0;
+								  Step=10;   //Back run
+								  noIR_L ++; 
+							   }
 
-				else  if(Remote1_ReadIR.ReadASTAR[4][1]   >= 0x0D ){
+							}
+						}
+
+						
+			   }
+               else  if(Remote1_ReadIR.ReadASTAR[4][1]   >= 0x0D ){
 
 						    RunMs=0;
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[1]=0;
+							noIR_L =0;
 							
 				 }
 				 else if(Remote1_ReadIR.ReadASTAR[4][1]   > Remote1_ReadIR.ReadASTAR[0][1] ){
@@ -311,6 +338,7 @@ void  CheckRun()
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[1]=0;
 				            iLine_l =0;
+							noIR_L =0;
 
 				 }
 				 else {
@@ -339,6 +367,30 @@ void  CheckRun()
 				}
 	    
 
+
+		break;
+
+
+		case 10 :
+
+		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		              
+			             AllStop();
+						 Step =20 ;
+						 LedGreenON();
+			 }
+
+            else if(RunMs < 20)
+		    {	
+				    SetXMotor(1,1,1,1,1,1,1,1);
+			        SetMotorcm(1,50);
+					
+				 }
+			   else{
+			     Step =0;
+
+				}
+			
 
 		break;
 
