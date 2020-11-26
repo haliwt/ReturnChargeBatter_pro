@@ -93,8 +93,13 @@ void  CheckRun()
 
 						    RunMs=0;
 							Step=1;
+				            Remote1_ReadIR.ReadCloseList[1]=0;
+							Remote1_ReadIR.ReadCloseList[0]=0;
 				 }
 				 else {
+						 
+						 Remote1_ReadIR.ReadCloseList[1]=0;
+						Remote1_ReadIR.ReadCloseList[0]=0;
 
 
                          if(Remote1_ReadIR.ReadASTAR[0][1] ==0x01 ){ //left IR 
