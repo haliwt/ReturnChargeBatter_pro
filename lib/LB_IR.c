@@ -54,8 +54,8 @@ void Init_IR()
     #if 1
 	P1M6 = 0x62;//0x68;			        	//P1_6设置为带SMT(施密特功能)上拉输入
 
- 	// PITS3 |= 0x00;						//INT14,外部中断电平选择,红外接收头，上升沿中断
-	 PITS3 |=(1<<4);   //01 下降沿出发
+ 	 PITS3 |= 0x00;						//INT14,外部中断电平选择,红外接收头，上升沿中断
+	 //PITS3 |=(1<<4);   //01 下降沿出发
 	//PITS3 &=~(1<<5); //set 0 
 	
 	PINTE1 |= 0x40;						//使能INT14
@@ -80,36 +80,47 @@ void Init_IR()
 
 void Remote12_Count(void)
 {
-   
-     INT8U keylock;
-	 keylock =0;
+     
+	 static INT16U rtime;
+	 static INT8U timelong;
+	 rtime++;
+	 
 	if(Remote1_ReadIR.ReadIRFlag==1) //IR_gpio 中断中置 1
 	{
 		   
-		//if(P1_6 ==1)
-		     Remote1_ReadIR.Nowcount++ ;
-			Remote1_ReadIR.Inttime  ++;
+		   rtime =0;
+		   Remote1_ReadIR.Nowcount++ ;
+		   if(Remote1_ReadIR.Nowcount==1)Remote1_ReadIR.Inttime  ++;
+		   if( Remote1_ReadIR.Nowcount==2){
+		   	     timelong =Remote1_ReadIR.Inttime; 
+				 Remote1_ReadIR.Nowcount=0;
+		        Remote1_ReadIR.Inttime=0;
+		  	}
+			
 		   
-				if(P1_6 ==1 && keylock !=1)//if(Remote1_ReadIR.Inttime >=0x27)//if(Remote1_ReadIR.Nowcount>=0x20)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
+				if(timelong >4)//if(Remote1_ReadIR.Inttime >=0x27)//if(Remote1_ReadIR.Nowcount>=0x20)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
 				{
 					
 					Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
 					Remote1_ReadIR.Inttime =0;
                     Remote1_ReadIR.BitHigh++;
-					keylock =1;
+				
 					
 				}
-				else if(keylock !=1) {
+				else  {
 					 
 					   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0 ;
 					   Remote1_ReadIR.Inttime =0;
 					   Remote1_ReadIR.BitLow++;
-					   keylock =1;
+					  
 			  
 	            }
 	  
 		    }
-	
+	if(P1_6==1 && rtime >20){
+		Remote1_ReadIR.ReadIRFlag=2;
+
+	}
     if(Remote1_ReadIR.ReadIRBit ==11 ){
    	    Remote1_ReadIR.ReadIRFlag=2;
 	}
@@ -155,10 +166,15 @@ void Read_Remote12IR(void)
 		
       
 		 Remote1_ReadIR.ReadIRBit++; //bit numbers add 
+        if(Remote1_ReadIR.ReadIRBit>10)
+			Remote1_ReadIR.ReadIRFlag=2;
+		 
 		
 		
 	}
-		}
+	
+
+	}
 }
 #endif
 
@@ -173,54 +189,22 @@ void Read_Remote12IR(void)
 #if  IR2
 void CheckXReadIR_IR2(ReadIRByte *P)
 {
+	
 	INT8U temp,j;
 	static INT8U right,left,n;
 
-	 for(j=0;j<8;j++){
-	   	
-		  temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
-		 // temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
-     }
-		P->ReadIR[0] =temp;
+	
 	if(P->ReadIRFlag==2){ // ir receive of Byte(8 bit)
 
-        n++;
-          
-	    if(n<12){
-               if(P->BitLow >= 0xA7){  //Left IR1 
-				    if(P->BitHigh < 0xF0 && P->BitHigh >0XCF ) right++;
-					else if(P->BitHigh < 0x6F && P->BitHigh > 0x30) left++;
-					else if(P->BitHigh > 0x3F && P->BitHigh < 0x5F )left++;
-					else if(P->BitHigh >0x6F && P->BitHigh < 0xA1)right++;
-					else if(P->BitHigh >0xB0 && P->BitHigh < 0xe0)left++;
-	            }
-			    else if(P->BitLow < 0xA7 && P->BitLow > 0xA5 ){
-					left++;
-					
-				}
-				else if(P->BitLow < 0xA5 && P->BitLow > 0xA1 ){
-					if(P->BitHigh > 0x40 && P->BitHigh <0x5f)right++;
-					
-				}
-				else if(P->BitLow < 0xA1 && P->BitLow > 0x8F){
-					      if(P->BitHigh >= 0x9F && P->BitHigh <=0x9F)left++;
-						  else right++;
-
-				}
-			   else if(P->BitLow < 0x7F  && P->BitLow >0x40){
-					          left++;
-			   }
-			}
-			if(n > 10){
-				if(left > right) P->ReadIR[1] = 1; //left IR
-				
-				else if(left < right )P->ReadIR[1] =2;  //right IR
-			
-			}
-			#endif 
-		    if(n > 10) P->ReadIRFlag=4;
+      
+		  for(j=0;j<8;j++){
+	   	
+		  temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
+		     // temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
+          }
+		   P->ReadIR[0] =temp;
 		   
-		 
+		 P->ReadIRFlag=4;
 	}
 		
     if( P->ReadIRFlag==4){
@@ -232,19 +216,21 @@ void CheckXReadIR_IR2(ReadIRByte *P)
 				
 	                 Usart1Send[1]=P->ReadIR[0];
 				
-					 Usart1Send[2]=P->BitLow;
-				     Usart1Send[3]=P->BitHigh;
-				     Usart1Send[4]= P->ReadIR[1];
+					
 		
-					Usart1Send[5]=0x88;
+					Usart1Send[2]=0x88;
 	                SendCount=1;
 	                SBUF=Usart1Send[SendCount];
                     
 					
 					
 				
-				}
-	}
+		}
+
+
+
+
+}
 	
 	
 #endif 
@@ -267,13 +253,16 @@ INT8U CheckHandsetIR()
 
   if(Remote1_ReadIR.ReadIRFlag==3)
    {
-      KeyclearTime=0;
+   
+	//  KeyclearTime=0;
      Remote1_ReadIR.ReadIRFlag=0;
+	
 	 Remote1_ReadIR.BitHigh=0;
 	 Remote1_ReadIR.BitLow =0 ;
 	 Remote1_ReadIR.ReadIRBit=0; 
 	  Remote1_ReadIR.recordTime =0;//WT.EDIT
-	  
+	  Remote1_ReadIR.Inttime=0;
+
 	  
 	 // KK = AutoBack_ChargeBatter();
 	  return (KK);

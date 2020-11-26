@@ -38,8 +38,10 @@ KAKA_Run_EXT  idata  INT16U InterruptTime; //WT.EDIT
 KAKA_Run_EXT  idata  INT16U RecoderTime; //WT.EDIT 
 
 
+
 KAKA_Run_EXT  idata INT8U FanPersent;
 KAKA_Run_EXT  idata INT8U EdgePersent;
+KAKA_Run_EXT  idata INT8U ReadTimeOver;//WT.EDIT
 
 
 

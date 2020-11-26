@@ -228,8 +228,8 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   	t_10ms=0;
 	t_100ms++;
 	t_1s++;
-	
-	InterruptTime ++ ;
+	 ReadTimeOver++;
+	InterruptTime ++ ; //10ms
 	  RunMs++;
  	  CheckLeftMotorSpeed();
 	  CheckRightMotorSpeed();

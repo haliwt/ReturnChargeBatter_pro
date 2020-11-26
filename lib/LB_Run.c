@@ -192,12 +192,13 @@ void  CheckRun()
 				 
 				 if(Remote1_ReadIR.ReadASTAR[0][1]==0){
 				 	         
-					     Remote1_ReadIR.ReadCloseList[0]=1; 
+					   Remote1_ReadIR.ReadCloseList[0]=1; 
 
 				        
 								RunMs=0; 
 								Step=5;  //CCW run
-						Remote1_ReadIR.ReadCloseList[1]=0;
+					   		
+					  Remote1_ReadIR.ReadCloseList[1]=0;
 						
 				}
 
@@ -291,14 +292,19 @@ void  CheckRun()
 				if(Remote1_ReadIR.ReadASTAR[0][1]==0){ //CloseList =1
 
 						
-						
-				        Remote1_ReadIR.ReadCloseList[1]=1;
-						RunMs=0; 
-						Step=3;  //CCW run
-						Remote1_ReadIR.ReadCloseList[0]=0;
+						 if(Remote1_ReadIR.ReadCloseList[0]==1)
+						 {
+							Remote1_ReadIR.ReadCloseList[1]=0;
+							RunMs=0;
+							Step=5;
 							
-						
-			    }
+						 }
+				         else{ 
+						 	   Remote1_ReadIR.ReadCloseList[1]=1;
+								RunMs=0; 
+								Step=3;  //CCW run
+				         }
+			   }
 
 				else  if(Remote1_ReadIR.ReadASTAR[0][1]   >= 0x0E ){
 
