@@ -50,19 +50,17 @@ void  CheckRun()
 		
 			if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
-			               AllStop();
-						   LedGreenON();
-						  
-						
-							if(Voltage>820)
-							{
-			                     Mode=0;
-						         Step=0;
-								LedGreenON();
-							}
-				} 	
-                else if(RunMs < 20)
-		       {	
+			             AllStop();
+						 Step =20 ;
+						 LedGreenON();
+			 }
+			else if(Remote1_ReadIR.ReadCloseList[2]==1){
+	                     RunMs=0;
+						 Step=3;			  
+
+			}
+            else if(RunMs < 20)
+		    {	
 				    SetXMotor(2,1,1,2,2,1,1,2);
 			        SetMotorcm(1,50);
 					
@@ -80,6 +78,7 @@ void  CheckRun()
 				 AllStop();
 				 Delay_ms(500);
 		         costValue ++;
+				
 				 if(costValue==1){
                         Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
 						Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.ReadIR[1];
@@ -89,9 +88,25 @@ void  CheckRun()
 					Remote1_ReadIR.ReadASTAR[1][1]=Remote1_ReadIR.ReadIR[1];
 					costValue =0;
 				 }
-				 
+
+               
+
 				   
-				 if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0E){
+
+				   if(Remote1_ReadIR.ReadASTAR[0][1]==0){
+
+				         irL++;
+						 if(irL>2){
+							Remote1_ReadIR.ReadCloseList[2]=1;
+							RunMs=0;
+							Step=3;
+							irL=0;
+								
+						 }
+
+                  }
+
+                 else if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0E){
 
 						    RunMs=0;
 							Step=1;
@@ -118,10 +133,7 @@ void  CheckRun()
 						                 RunMs=0; 
 										 Step=3;  //CW run 
 										
-		 							 
-									 
-								
-							 }
+		 					}
 						   
                           if(Remote1_ReadIR.ReadASTAR[1][0] ==0x02 && Remote1_ReadIR.ReadASTAR[1][1] ==0x02){ //right IR
 						      
@@ -130,9 +142,7 @@ void  CheckRun()
 	 							 RunMs=0; 
 								 Step=5;  //CCW run 
 								 irR=0;
- 							    
-							
-							 }
+ 							   }
 						 }
 						  
                   }
@@ -146,15 +156,8 @@ void  CheckRun()
 		         if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
+						   Step =20 ;
 						   LedGreenON();
-						  
-						
-							if(Voltage>820)
-							{
-			                     Mode=0;
-						         Step=0;
-								LedGreenON();
-							}
 				} 	
 
                else if(Remote1_ReadIR.ReadCloseList[0] == 1){
@@ -178,9 +181,10 @@ void  CheckRun()
 				
 		break;
 
-	   case 4:
+	   case 4:  //CW run adjust Ref
                  AllStop();
 				 Delay_ms(500);
+	             Remote1_ReadIR.ReadCloseList[2]=0;
 		          costValue ++;
 				 if(costValue==1){
                         Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
@@ -192,7 +196,8 @@ void  CheckRun()
 					costValue =0;
 				 }
 		 
-           
+
+				 
 				 if(Remote1_ReadIR.ReadASTAR[0][1]==0){
 
 							Remote1_ReadIR.ReadCloseList[0]=1;
@@ -205,42 +210,29 @@ void  CheckRun()
 
 						    RunMs=0;
 							Step=0;
+				            Remote1_ReadIR.ReadCloseList[2]=0;
 				 }
 				 else if(Remote1_ReadIR.ReadASTAR[0][1] >= Remote1_ReadIR.ReadASTAR[0][0]){
 				 	        RunMs=0;
 							Step=0;
+				            Remote1_ReadIR.ReadCloseList[2]=0;
 
 				 }
 				 else {
 						
 
-						if(Remote1_ReadIR.ReadASTAR[0][1]==0){
-
-							Remote1_ReadIR.ReadCloseList[0]=1;
-							RunMs=0; 
-							Step=5;  //CCW run 
-
-						}
-
-                        else{
-								
-						     
-						  
-						 if(Remote1_ReadIR.ReadASTAR[0][0] ==0x02 && Remote1_ReadIR.ReadASTAR[1][1] ==0x02){ //right IR
+					if(Remote1_ReadIR.ReadASTAR[0][0] ==0x02 && Remote1_ReadIR.ReadASTAR[1][1] ==0x02){ //right IR
 							  
-							 
-							     
-	 							 RunMs=0; 
-								 Step=5;  //CCW run 
+													 
+						RunMs=0; 
+						Step=5;  //CCW run 
 							   	
- 						}
-						else {
-							 RunMs=0; 
-							 Step=5;  //CCW run
-							 
+ 					}
+					else{
 
-						     }
-                        }
+						 RunMs=0; 
+						 Step=5;  //CCW run
+					}
                  }
 
 					
@@ -254,15 +246,8 @@ void  CheckRun()
 			    if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
+						   Step =20 ;
 						   LedGreenON();
-						  
-						
-							if(Voltage>820)
-							{
-			                     Mode=0;
-						         Step=0;
-								LedGreenON();
-							}
 				} 	
 				else if(Remote1_ReadIR.ReadCloseList[1]==1){
 					RunMs =0;
@@ -292,6 +277,7 @@ void  CheckRun()
 		case 6:
 			     AllStop();
 				 Delay_ms(500);
+		          Remote1_ReadIR.ReadCloseList[2]=0;
 		          costValue ++;
 				 if(costValue==1){
                         Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
@@ -304,11 +290,12 @@ void  CheckRun()
 				 }
 		 
 
-				if(Remote1_ReadIR.ReadASTAR[0][1]==0){
+				if(Remote1_ReadIR.ReadASTAR[0][1]==0){ //CloseList =1
 
-							Remote1_ReadIR.ReadCloseList[1]=1;
-							RunMs=0; 
-							Step=3;  //CCW run 
+						Remote1_ReadIR.ReadCloseList[1]=1;
+						RunMs=0; 
+						Step=3;  //CCW run 
+							
 
 				}
 
@@ -316,28 +303,19 @@ void  CheckRun()
 
 						    RunMs=0;
 							Step=0;
+				            Remote1_ReadIR.ReadCloseList[2]=0;
 				 }
 				 else if(Remote1_ReadIR.ReadASTAR[0][1]   >= Remote1_ReadIR.ReadASTAR[0][0] ){
 
 							RunMs=0;
 							Step=0;
+				           
 
 				 }
 				 else {
 							
-						if(Remote1_ReadIR.ReadASTAR[0][1]==0){
-
-                            Remote1_ReadIR.ReadCloseList[1]=1;
-							RunMs=0; 
-							Step=3;  //CCW run 
-
-						}
-                        else{
-
-						   
-						
-
-						   if(Remote1_ReadIR.ReadASTAR[1][0] ==0x01 && Remote1_ReadIR.ReadASTAR[1][1]== 0x01){ //left IR 
+					
+                        if(Remote1_ReadIR.ReadASTAR[1][0] ==0x01 && Remote1_ReadIR.ReadASTAR[1][1]== 0x01){ //left IR 
  							 //CW tor RUN 
  							  
 							      
@@ -357,14 +335,38 @@ void  CheckRun()
 						   }
 						
 
-					}
+					
 				 }
 	    
 
 
 		break;
 
-	
+		case 20:
+
+		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		              
+			               AllStop();
+						   Step =20 ;
+						   LedGreenON();
+			               Delay_ms(500);
+						   LedGreenOff();
+							Delay_ms(500);
+						   LedGreenON();
+			               Delay_ms(500);
+						   Step =20;
+						
+							if(Voltage>820)
+							{
+			                     Mode=0;
+						         Step=0;
+								LedGreenON();
+								Step=20;
+							}
+		 }
+		else Step =0;
+
+	   break;
 		
 	}
 }
@@ -1532,5 +1534,7 @@ void CheckMode(INT8U Key)
 		}
 	  }
 	  break;
+
+	  
 	}
 }
