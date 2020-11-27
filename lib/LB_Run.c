@@ -61,9 +61,9 @@ void  CheckRun()
 
 			}
 			#endif 
-            else if(RunMs < 5)
+            else if(RunMs < 10)
 		    {	
-				    SetXMotor(2,1,1,2,2,1,1,2);
+				    SetXMotor(2,5,5,2,2,5,5,2);
 			        SetMotorcm(1,50);
 					
 				 }
@@ -140,11 +140,11 @@ void  CheckRun()
 						   LedGreenON();
 				} 	
                else{
-					  if(RunMs<2)//To motor move to right dir 
+					  if(RunMs<5)//To motor move to right dir 
 					  {	
 							 LedRedON();
 							
-							 SetXMotor(2,1,1,1,1,1,1,1);
+							 SetXMotor(2,5,5,1,1,5,5,1);
 							 SetMotorcm(3,45);
 					   }
 					  else 
@@ -249,9 +249,9 @@ void  CheckRun()
 				 if(ReadPowerDCIn()){ //CCW 90 
 		             AllStop();
 				 }
-				 else if(RunMs <2)//To motor CCW   90 degree
+				 else if(RunMs <5)//To motor CCW   90 degree
 				  {	
-					  SetXMotor(1,1,1,1,2,1,1,1);
+					  SetXMotor(1,5,5,1,2,5,5,1);
 					  SetMotorcm(4,45);//SetMotorcm(4,45);
 					 
 				  }
