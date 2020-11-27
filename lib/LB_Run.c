@@ -32,23 +32,22 @@ version  : О©╫О©╫О©╫д╪О©╫н╡О©╫О©╫
 void  CheckRun()
 {
       
-	  static INT8U iLine_l,cw,ccw,noIR_L,noIR_R,costValue;
-	  INT8U runkey=0,runkey1 =0;
+	  static INT8U left_ccw,right_cw,line ,costValue,cw_3,ccw_5,compareValue_1;
+	  static INT8U compareValue_2;
+	
 	   switch(Step){
 		case 0:
                  LedRedON();// 
 				 RunMs=0;
 				 KeyclearTime=0;
 				 Step =1;
-	             
-
-		break;
+	    break;
 
 		case 1:  // Line 
 		
 			  LedGreenON();
 		
-			if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©?
+			if(ReadPowerDCIn()){ //Be charged detect GPIO
 		              
 			             AllStop();
 						 Step =20 ;
@@ -62,7 +61,7 @@ void  CheckRun()
 
 			}
 			#endif 
-            else if(RunMs < 20)
+            else if(RunMs < 5)
 		    {	
 				    SetXMotor(2,1,1,2,2,1,1,2);
 			        SetMotorcm(1,50);
@@ -75,94 +74,79 @@ void  CheckRun()
 			
 	    break;
 
-
-		case 2: //Adjust line run condition
+        case 2: //Adjust line run condition
            
 				 AllStop();
-				 Delay_ms(500);
+				 Delay_ms(10);
+				right_cw =0;
+				left_ccw = 0;
+				ccw_5=0;
+				cw_3=0;	
 				 Remote1_ReadIR.ReadCloseList[1]=0;
 				 Remote1_ReadIR.ReadCloseList[0]=0;
-		         costValue ++;
-				 noIR_L =0;
-				 noIR_R =0;
-				 cw=0;
-				 ccw=0;
-				
-				 if(costValue==1){
-                        Remote1_ReadIR.ReadASTAR[0][0]=Remote1_ReadIR.Interrupt_IR2;
-						Remote1_ReadIR.ReadASTAR[1][0]=Remote1_ReadIR.ReadIR[0];
-				  }
-				 else{
-					Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.Interrupt_IR2;//
-					Remote1_ReadIR.ReadASTAR[1][1]=Remote1_ReadIR.ReadIR[0];
-					costValue =0;
-				 }
+		       
+			    costValue++;
+			
+				Remote1_ReadIR.ReadASTAR[0][1]=Remote1_ReadIR.Interrupt_IR2;//
+				Remote1_ReadIR.ReadASTAR[1][1]=Remote1_ReadIR.ReadIR[0];
+				if(costValue ==1)compareValue_1 = Remote1_ReadIR.ReadASTAR[0][1];
+				else {
+					compareValue_2 = Remote1_ReadIR.ReadASTAR[0][1];
+					costValue =0 ;
+				}
 
-			  if(Remote1_ReadIR.ReadASTAR[0][1]==0){
+				
+				 
+				if(Remote1_ReadIR.ReadASTAR[0][1]==0){//don't be tetected IR signal
 
 				       Remote1_ReadIR.ReadCloseList[2]=1;
 					        RunMs=0;
 							Step=3;
 
 				 }
-				
-                 else if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0D){
+			    else if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0E){
 
 						    RunMs=0;
 							Step=0;
 							Remote1_ReadIR.ReadCloseList[2]=0;
-							 noIR_R =0;
 							
-				           
-				 }
+					}
 			   else {
-
-						 iLine_l ++;
-						 if(iLine_l ==1){
-							if(Remote1_ReadIR.ReadASTAR[0][1] >=Remote1_ReadIR.ReadASTAR[0][0] ){
-												Step =0;
-												RunMs=0;
-								            
-												 Remote1_ReadIR.ReadCloseList[2]=0;
+                           
+					
+						//Г⌡╢Г╨©Х║▄Х╣╟О╪▄Е│▐Г╕╩Д╨├Г⌡╝Ф═┤
+						 if(compareValue_1 < compareValue_2  ){
 												
+							if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1]  ){ //left IR 
+								RunMs=0; 
+								Step=5;  //CCW run 
 							}
-						 }
-							
-						if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1]  ){ //left IR 
-										RunMs=0; 
-										 Step=5;  //CCW run 
-										  
-										
-						   }
-					     if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1] ){ //right IR
-						         RunMs=0; 
-								 Step=3;  //CW run 
-								 
- 						  }
-
-						  
+						    else  if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1]){ //right IR
+								
+									RunMs=0; 
+									Step=3;  //CCW run 
+									
+							}
+			            }
 				}
+			break;
 
-			   	
-				break;
-
-		case 3: //CW slow Run  //CW motor 90 degree ---кЁй╠уКпЩв╙ 90 ╤х
-		         if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©?
+		case 3: //CW slow Run  //CW motor 90 degree ---кЁй╠О©╫О©╫О©╫О©╫в╙ 90 О©╫О©╫
+		          LedRedON();// 
+		         if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©╫?
 		              
 			               AllStop();
 						   Step =20 ;
 						   LedGreenON();
 				} 	
                else{
-					  if(RunMs<10)//To motor move to right dir 
+					  if(RunMs<2)//To motor move to right dir 
 					  {	
 							 LedRedON();
 							
 							 SetXMotor(2,1,1,1,1,1,1,1);
 							 SetMotorcm(3,45);
-								
-							
-					  }
+					   }
 					  else 
 		   	          Step=4;
 				  }
@@ -171,125 +155,115 @@ void  CheckRun()
 
 	   case 4:  //CW run adjust Ref
                  AllStop();
-				 Delay_ms(500);
+				 Delay_ms(10);
 	             Remote1_ReadIR.ReadCloseList[2]=0;
 		  
 				
 					Remote1_ReadIR.ReadASTAR[2][1]=Remote1_ReadIR.Interrupt_IR2;
 					Remote1_ReadIR.ReadASTAR[3][1]=Remote1_ReadIR.ReadIR[0];
 			
-		 
-
-				 
-				 if(Remote1_ReadIR.ReadASTAR[2][1]==0){//don't detect IR signal
+		           if(Remote1_ReadIR.ReadASTAR[2][1]==0){//close list value 
 				 	         
-						Remote1_ReadIR.ReadCloseList[0]=1;
-
-							noIR_R ++ ;
-				            if(noIR_L ==1){
-								if(noIR_R > 3){
-									RunMs=0;
-									Step=3; //╪лпЬл╫╡Б IR 3╢н
-									
-									
-								}
-								else{
-									RunMs=0; 
-							        Step=5;  //CCW run
-							        noIR_L++;
+					   Remote1_ReadIR.ReadCloseList[0]=1;
+					   
+                                right_cw++;
+							   if(left_ccw==2){
+							   if(right_cw<5){
+										RunMs=0; 
+										Step=3;  //CCW run Ф┴╖Х║▄4Ф╛║
 									}
-							     }
-								if(noIR_R ==1){  //ткппа╫╢н
-								   RunMs=0; 
-								   Step=5;  //CCW run
-								}
+							   }
+							   else if(right_cw==1){
+                                    RunMs =0;
+									Step =3;  //Ф┴╖Х║▄Г╛╛Д╨▄Ф╛║
+
+							   }
+							   else if(right_cw==2){
+
+                                    RunMs=0;
+									Step=5;
+							   }
+							   else {
+								   	line = 0;
+									RunMs=0; 
+									Step=0;  //Х╞∙Ф▌╒Х╣╟Д╦─Ф╜╔
+							   }
+							   
 					   		
 					  Remote1_ReadIR.ReadCloseList[1]=0;
 						
 				}
 
-                else if(Remote1_ReadIR.ReadASTAR[2][1] >= 0x0D){
+                else if(Remote1_ReadIR.ReadASTAR[2][1] >= 0x0E){
 
 						    RunMs=0;
 							Step=0;
 				           Remote1_ReadIR.ReadCloseList[0]=0; 
-						    noIR_R =0;
+						   right_cw =0;
+						   left_ccw = 0;
 							
 				 }
 				 
-				 else if(Remote1_ReadIR.ReadASTAR[2][1] >= Remote1_ReadIR.ReadASTAR[0][1]    ){
+				 else if(Remote1_ReadIR.ReadASTAR[2][1] >= Remote1_ReadIR.ReadASTAR[0][1]){
 				 	        RunMs=0;
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[0]=0; 
-							iLine_l =0;
-							 noIR_R =0;
-							
-
+							line =0;
+							right_cw =0;
+						    left_ccw = 0;
 				 }
-				 else {
+				 else if(Remote1_ReadIR.ReadASTAR[2][1] < Remote1_ReadIR.ReadASTAR[0][1]){
 
-						cw++;
-						if(ccw==1){
-							RunMs=0; 
-						    Step=3;  //CCW run,ткппа╫╢н║ё
-						    ccw =0;
+				        cw_3++;
+						if(ccw_5 ==1)
+						{
+                           if(cw_3==1){
+								RunMs =0;
+								Step=3;  //Е├█Х©░Х║▄Д╦─Ф╛║
+						   }
+						   else if(cw_3==2){
+							    RunMs=0;
+								Step=0;
+								
+						   }
+						}
+						else if(cw_3==1){
+                           RunMs=0; 
+					       Step=5;  //CCW run
+						}
 
-						}
-						else if(ccw=2){
-							RunMs=0; 
-						    Step=0;  //CCW run,ткппа╫╢н║ё
-						    ccw =0;
-
-						}
-						else{
-							RunMs=0; 
-						    Step=5;  //CCW run
-						    
-						}
+					   
                  }
 
-					
+			break;
 
-	   break;
-
-
-
-	   case 5:
+            case 5:
 				 //CCW 90 RUN,CCW dir run 
-			    if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©?
+			    if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©╫?
 		              
 			               AllStop();
 						   Step =20 ;
 						   LedGreenON();
 				} 	
-			//	else if(Remote1_ReadIR.ReadCloseList[1]==1 && Remote1_ReadIR.ReadCloseList[2] ==0){
-				//	RunMs =0;
-				//	Step = 3;
-				 
-				//}
 				else{
 				 if(ReadPowerDCIn()){ //CCW 90 
 		             AllStop();
 				 }
-				 else if(RunMs <10)//To motor CCW   90 degree
+				 else if(RunMs <2)//To motor CCW   90 degree
 				  {	
-								
-					
 					  SetXMotor(1,1,1,1,2,1,1,1);
 					  SetMotorcm(4,45);//SetMotorcm(4,45);
 					 
-							 
-				 }
+				  }
 				 else 
 				   Step=6;
 				}
-		
-		
-		break; 
+	    break; 
 
 		case 6:
 			     AllStop();
-				 Delay_ms(500);
+
+				 Delay_ms(10);
 		         Remote1_ReadIR.ReadCloseList[2]=0;
 		
 		      
@@ -299,104 +273,78 @@ void  CheckRun()
 
 				if(Remote1_ReadIR.ReadASTAR[4][1]==0){ //CloseList =1
 
-						noIR_L ++;
-						if(noIR_R ==1){
-							
-                           RunMs=0;
-						   Step=3; 
-       
-						}
-						else {
-							if(noIR_R > 1){
-	                           if(noIR_L < 8){
-							      RunMs =0;
-								  Step=5; 
-								 
-	                           	}
-							   else {
-	                              RunMs =0;
-								  Step=10;   //Back run
-								  noIR_L ++; 
+
+						   left_ccw++;
+						   if(right_cw==2){
+							   if(left_ccw<5){
+										RunMs=0; 
+										Step=5;  //CCW run Ф┴╖Х║▄4Ф╛║
+									}
 							   }
+							   else if(left_ccw==1){
+                                    RunMs =0;
+									Step =5;  //Ф┴╖Х║▄Г╛╛Д╨▄Ф╛║
 
-							}
-						}
+							   }
+							   else if(left_ccw==2){
 
-						
-			   }
-               else  if(Remote1_ReadIR.ReadASTAR[4][1]   >= 0x0D ){
+                                    RunMs=0;
+									Step=3;   //to Step3
+							   }
+							   else {
+								
+									RunMs=0; 
+									Step=0;  //Х╞∙Ф▌╒Х╣╟Д╦─Ф╜╔
+							   }
+				}
+
+				else  if(Remote1_ReadIR.ReadASTAR[4][1]   >= 0x0E ){
 
 						    RunMs=0;
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[1]=0;
-							noIR_L =0;
+							right_cw=0;
+							left_ccw=0;
+							ccw_5=0;
+							cw_3=0;	
 							
-				 }
-				 else if(Remote1_ReadIR.ReadASTAR[4][1]   > Remote1_ReadIR.ReadASTAR[0][1] ){
+				}
+				else if(Remote1_ReadIR.ReadASTAR[4][1]   > Remote1_ReadIR.ReadASTAR[0][1] ){
 
 							RunMs=0;
 							Step=0;
 				            Remote1_ReadIR.ReadCloseList[1]=0;
-				            iLine_l =0;
-							noIR_L =0;
+				            line=0;
+							right_cw=0;
+							left_ccw=0;
+							ccw_5=0;
+							cw_3=0;	
 
 				 }
 				 else {
-							
-                        ccw++;
-						if(cw==1){
-							
-						    RunMs=0;
-							Step=5;
-						    cw=0;
-
-						}
-						if(cw==2){
-                			RunMs=0;
-							Step=0;
-						    cw =0;
-						
-						}
-						else {
-							
-							RunMs=0; 
-							Step=3;  //CCW run 
-						}
+						ccw_5++ ;	
+					    if(cw_3 ==1)
+						{
+                           if(ccw_5==1){
+								RunMs =0;
+								Step=5;  //Е├█Х©░Х║▄Д╦─Ф╛║
+						   }
+						   else if(ccw_5==2){
+							    RunMs=0;
+								Step=0;
 								
-						   
-				}
-	    
-
-
-		break;
-
-
-		case 10 :
-
-		if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©?
-		              
-			             AllStop();
-						 Step =20 ;
-						 LedGreenON();
-			 }
-
-            else if(RunMs < 20)
-		    {	
-				    SetXMotor(1,1,1,1,1,1,1,1);
-			        SetMotorcm(1,50);
-					
-				 }
-			   else{
-			     Step =0;
-
-				}
-			
-
-		break;
+						   }
+						}
+						else if(ccw_5==1){
+                           RunMs=0; 
+					       Step=3;  //CCW run
+						}
+					}
+	        break;
 
 		case 20:
 
-		if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©?
+		if(ReadPowerDCIn()){ //О©╫т╤О©╫О©╫О©╫О©╫?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -501,7 +449,7 @@ void CheckMode(INT8U Key)
 		  ModeBackup=0;
 	   }
 	   break;
-	   //О©╫О©╫О©╫ж╠О©╫О©╫О©╫ф╤О©?----
+	   //О©╫О©╫О©╫ж╠О©╫О©╫О©╫ф╤О©╫?----
 	   case 5:
 	   {
 		 //KeyRunTime=0;
@@ -614,7 +562,7 @@ void CheckMode(INT8U Key)
      }	   
    
    }
-   /***************О©╫О©╫О©╫О©╫О©╫О©╫О©╫б╣О©╫дёй╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫п╣О©╫дёй?*************************/
+   /***************О©╫О©╫О©╫О©╫О©╫О©╫О©╫б╣О©╫дёй╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫п╣О©╫дёО©╫?*************************/
    /**************************************************************************/
     switch(Mode) ///дёй╫ Mode -> step
 	{
@@ -770,7 +718,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);
 				}							
 			}
-			//О©╫О©╫О©╫О©╫О©╫О©╫О©?
+			//О©╫О©╫О©╫О©╫О©╫О©╫О©╫?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1007,7 +955,7 @@ void CheckMode(INT8U Key)
 //				SetEdge(0);				
 			
 			}
-			//О©╫О©╫О©╫О©╫О©╫О©╫О©?
+			//О©╫О©╫О©╫О©╫О©╫О©╫О©╫?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1222,7 +1170,7 @@ void CheckMode(INT8U Key)
 //				SetFan(0);
 //				SetEdge(0);				
 			}
-			//О©╫О©╫О©╫О©╫О©╫О©╫О©?
+			//О©╫О©╫О©╫О©╫О©╫О©╫О©╫?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1320,7 +1268,7 @@ void CheckMode(INT8U Key)
 		 }	   
 	  }
 	  break;
-	  //О©╫О©╫О©?О©╫О©╫О©╫О©╫ьЁО©╫О©╫
+	  //О©╫О©╫О©╫?О©╫О©╫О©╫О©╫ьЁО©╫О©╫
 	  case 4:
 	  {
 	    switch(Step)
@@ -1398,7 +1346,7 @@ void CheckMode(INT8U Key)
 	  {
 	    switch(Step)
 		{
-		   //О©╫О©╫О©╫О©╫О©╫О©╫в║,О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©?О©╫О©╫О©╫О©╫р╩О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
+		   //О©╫О©╫О©╫О©╫О©╫О©╫в║,О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©╫?О©╫О©╫О©╫О©╫р╩О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 		   case 0:
 		   {
 		   	  LedRedON();
@@ -1420,7 +1368,7 @@ void CheckMode(INT8U Key)
 			  }
 		   }
 		   break;
-		   //О©╫О©╫и╗О©╫О©╫О©╫О©╫О©╫в? О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©?О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
+		   //О©╫О©╫и╗О©╫О©╫О©╫О©╫О©╫О©╫? О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©╫?О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 
 		   case 2:
 		   {
@@ -1462,7 +1410,7 @@ void CheckMode(INT8U Key)
 			 }
 		   }
 		   break;
-		   //О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫в?О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©?О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫1О©╫О©╫О©╫О©╫О©╫р╩О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©?
+		   //О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫?О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©╫?О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫1О©╫О©╫О©╫О©╫О©╫р╩О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫?
 		   case 5:
 		   {
 		   	  LedRedON();
@@ -1514,7 +1462,7 @@ void CheckMode(INT8U Key)
 		   
 		   }
 		   break;
-		   //О©╫О©╫О©╫х╤О©╫в╙О©╫О©╫О©╫ъ╣О©╫О©╫О©╫О©╫О©╫	О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©?О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫1О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©?
+		   //О©╫О©╫О©╫х╤О©╫в╙О©╫О©╫О©╫ъ╣О©╫О©╫О©╫О©╫О©╫	О©╫О©╫О©╫О©╫О©╫О©╫О©╫ц©О©╫О©╫?О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫1О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫?
 		   case 9:
 		   {
 		   	  LedRedON();
