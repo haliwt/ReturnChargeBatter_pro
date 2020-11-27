@@ -61,15 +61,15 @@ void  CheckRun()
 
 			}
 			#endif 
-            else if(RunMs < 40 && conline ==1)
+            else if(RunMs < 50 && conline ==1)
 		    {	
-				    SetXMotor(2,5,5,2,2,5,5,2);
+				    SetXMotor(2,10,15,2,2,10,15,2);
 			        SetMotorcm(1,50);
 					conline=0;
 					
 			}
 			else if(RunMs < 10 && conline ==2 ){
-					SetXMotor(2,1,1,2,2,1,1,2);
+					SetXMotor(2,5,5,2,2,5,5,2);
 			        SetMotorcm(1,50);
 					conline =0;
 					
@@ -107,7 +107,13 @@ void  CheckRun()
 					costValue =0 ;
 				}
 
-			
+			   if(line > 9){
+				   	RunMs =0;
+					Step =10;
+					line=0;
+
+			   }
+			   {
 			  if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0A){
 
 					      conline =1;
@@ -189,7 +195,7 @@ void  CheckRun()
 								}
 						  }
 			            }
-						
+			    }	
 				
 			break;
 
@@ -275,19 +281,21 @@ void  CheckRun()
 							line =0;
 							right_cw =0;
 						    left_ccw = 0;
+							conline=0;
 				 }
 				 else if(Remote1_ReadIR.ReadASTAR[2][1] < Remote1_ReadIR.ReadASTAR[0][1]){
 
 				        cw_3++;
 						if(ccw_5 ==1)
 						{
-                           if(cw_3==1){
+                           if(cw_3 < 4){ //WT.EDIT 
 								RunMs =0;
-								Step=3;  //再运行一次
+								Step=3;  //再运行 4次 
 						   }
-						   else if(cw_3==2){
+						   else if(cw_3==4){
 							    RunMs=0;
 								Step=0;
+								conline=0;
 								
 						   }
 						}
@@ -384,6 +392,7 @@ void  CheckRun()
 							left_ccw=0;
 							ccw_5=0;
 							cw_3=0;	
+							conline=0;
 
 				 }
 				 else {
@@ -417,45 +426,17 @@ void  CheckRun()
 			} 	
             else{
             	
-	             if(RunMs < 5)
+	             if(RunMs < 10)
 			    {	
 					    SetXMotor(1,5,5,1,1,5,5,1); 
 				        SetMotorcm(1,50);
 						
 				 }
+				 else Step =0;
 
-				RunMs=0;  
+				
               
-	            if(runcw ==0){
-		            if(RunMs<3)//To motor move to right dir 
-					 {	
-									
-						 LedRedON();
-						 runcw=1;
-						 SetXMotor(2,1,1,1,1,1,1,1);
-						 SetMotorcm(3,45);
-							   
-					 }
-					 else{
-					 	 RunMs=0;
-					     Step =0;
-				   	 }
-			   	}
-			   	else if(runcw = 2){
-
-	                  if(RunMs <2)//To motor CCW   90 degree
-					  {	
-						  runcw = 3;
-						  SetXMotor(1,1,1,1,2,1,1,1);
-						  SetMotorcm(4,45);//SetMotorcm(4,45);
-						 
-					  }
-					  else{
-					 	 RunMs=0;
-					     Step =0;
-				   	  }
-
-			   	}
+	            
 
 			}  
 
