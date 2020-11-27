@@ -33,7 +33,7 @@ void  CheckRun()
 {
       
 	  static INT8U left_ccw,right_cw,line ,costValue,cw_3,ccw_5,compareValue_1;
-	  static INT8U compareValue_2;
+	  static INT8U compareValue_2,runcw=0,compareValue_3;
 	
 	   switch(Step){
 		case 0:
@@ -61,9 +61,9 @@ void  CheckRun()
 
 			}
 			#endif 
-            else if(RunMs < 10)
+            else if(RunMs < 5)
 		    {	
-				    SetXMotor(2,5,5,2,2,5,5,2);
+				    SetXMotor(2,1,1,2,2,1,1,2);
 			        SetMotorcm(1,50);
 					
 				 }
@@ -95,39 +95,73 @@ void  CheckRun()
 					costValue =0 ;
 				}
 
-				
-				 
-				if(Remote1_ReadIR.ReadASTAR[0][1]==0){//don't be tetected IR signal
+			
+			  if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0A){
 
-				       Remote1_ReadIR.ReadCloseList[2]=1;
-					        RunMs=0;
-							Step=3;
+					      RunMs =0 ;
+						  Step =0;
+                         
+						 
 
-				 }
-			    else if(Remote1_ReadIR.ReadASTAR[0][1] >= 0x0E){
-
-						    RunMs=0;
-							Step=0;
-							Remote1_ReadIR.ReadCloseList[2]=0;
-							
 					}
 			   else {
-                           
+                         
+
 					
 						//直线行走，偏离了目标
-						 if(compareValue_1 < compareValue_2  ){
-												
-							if(Remote1_ReadIR.ReadASTAR[1][1]  >0x15 && Remote1_ReadIR.ReadASTAR[1][1]  ){ //left IR 
-								RunMs=0; 
-								Step=5;  //CCW run 
-							}
-						    else  if(Remote1_ReadIR.ReadASTAR[1][1] < 0X16 && Remote1_ReadIR.ReadASTAR[1][1]){ //right IR
-								
+						// if(Remote1_ReadIR.ReadASTAR[0][1]< compareValue_2  ){
+						{
+							#if 0
+						 	 if(runcw==0){
+	                              RunMs=0;
+								  Step=10;
+							  }
+							  if(runcw==1){
+                                 runcw =2;
+                                 RunMs=0;
+                                 Step =10;
+							  } 
+                             else
+							 #endif 
+							 {
+								// left IR > right IR
+								if(Remote1_ReadIR.ReadASTAR[4][1] >Remote1_ReadIR.ReadASTAR[2][1] ){
+
 									RunMs=0; 
-									Step=3;  //CCW run 
-									
-							}
+									Step=5;  //CCW run 
+								}	
+								else if(Remote1_ReadIR.ReadASTAR[4][1] < Remote1_ReadIR.ReadASTAR[2][1]){
+
+										RunMs=0; 
+										Step=3;  //CCW run 
+											
+								}
+								else{
+									if(Remote1_ReadIR.ReadASTAR[0][1] < Remote1_ReadIR.ReadASTAR[2][1]  ){ // CW  IR 
+										RunMs=0; 
+										Step=3;  //CCW run 
+									}
+									else if(Remote1_ReadIR.ReadASTAR[0][1] > Remote1_ReadIR.ReadASTAR[2][1] &&  Remote1_ReadIR.ReadASTAR[2][1] !=0) {
+											RunMs=0; 
+											Step=0;  //CCW run 
+
+									}
+
+									else if(Remote1_ReadIR.ReadASTAR[0][1] < Remote1_ReadIR.ReadASTAR[4][1] ){ //right IR
+										
+											RunMs=0; 
+											Step=5;  //CCW run 
+											
+									}
+									else if(Remote1_ReadIR.ReadASTAR[0][1] > Remote1_ReadIR.ReadASTAR[4][1] &&  Remote1_ReadIR.ReadASTAR[4][1] !=0) {
+											RunMs=0; 
+											Step=0;  //CCW run 
+
+									}
+								}
+						  }
 			            }
+						
 				}
 			break;
 
@@ -144,7 +178,7 @@ void  CheckRun()
 					  {	
 							 LedRedON();
 							
-							 SetXMotor(2,5,5,1,1,5,5,1);
+							 SetXMotor(2,1,1,1,1,1,1,1);
 							 SetMotorcm(3,45);
 					   }
 					  else 
@@ -155,7 +189,7 @@ void  CheckRun()
 
 	   case 4:  //CW run adjust Ref
                  AllStop();
-				 Delay_ms(10);
+				 Delay_ms(1);
 	             Remote1_ReadIR.ReadCloseList[2]=0;
 		  
 				
@@ -251,7 +285,7 @@ void  CheckRun()
 				 }
 				 else if(RunMs <5)//To motor CCW   90 degree
 				  {	
-					  SetXMotor(1,5,5,1,2,5,5,1);
+					  SetXMotor(1,1,1,1,2,1,1,1);
 					  SetMotorcm(4,45);//SetMotorcm(4,45);
 					 
 				  }
@@ -341,6 +375,60 @@ void  CheckRun()
 						}
 					}
 	        break;
+
+        case 10://Back run
+
+             if(ReadPowerDCIn()){ //�Զ����?
+		              
+			               AllStop();
+						   Step =20 ;
+						   LedGreenON();
+			} 	
+            else{
+            	
+	             if(RunMs < 5)
+			    {	
+					    SetXMotor(1,5,5,1,1,5,5,1); 
+				        SetMotorcm(1,50);
+						
+				 }
+
+				RunMs=0;  
+              
+	            if(runcw ==0){
+		            if(RunMs<3)//To motor move to right dir 
+					 {	
+									
+						 LedRedON();
+						 runcw=1;
+						 SetXMotor(2,1,1,1,1,1,1,1);
+						 SetMotorcm(3,45);
+							   
+					 }
+					 else{
+					 	 RunMs=0;
+					     Step =0;
+				   	 }
+			   	}
+			   	else if(runcw = 2){
+
+	                  if(RunMs <2)//To motor CCW   90 degree
+					  {	
+						  runcw = 3;
+						  SetXMotor(1,1,1,1,2,1,1,1);
+						  SetMotorcm(4,45);//SetMotorcm(4,45);
+						 
+					  }
+					  else{
+					 	 RunMs=0;
+					     Step =0;
+				   	  }
+
+			   	}
+
+			}  
+
+        break; 
 
 		case 20:
 
