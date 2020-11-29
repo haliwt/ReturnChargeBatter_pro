@@ -54,7 +54,7 @@ void Init_IR()
     #if 1
 	P1M6 = 0x62;//0x68;			        	//P1_6����Ϊ��SMT(ʩ���ع���)��������
 
- 	  PITS3 |= 0x01;						//INT14,�ⲿ�жϵ�ƽѡ��,�������ͷ���������ж�
+ 	  PITS3 |= 0x30;						//INT14,�ⲿ�жϵ�ƽѡ��,�������ͷ���������ж�
 	 //PITS3 |=(2<<4);   //01 �½��س���
 	//PITS3 &=~(1<<5); //set 0 
 	
@@ -81,47 +81,13 @@ void Init_IR()
 void Remote12_Count(void)
 {
      
-	 static INT16U rtime;
-	 static INT8U timelong;
-	 rtime++;
-	 
-	if(Remote1_ReadIR.ReadIRFlag==1) //IR_gpio �ж����� 1
+  if(Remote1_ReadIR.ReadIRFlag==1)
 	{
-		   
-		   rtime =0;
-		   Remote1_ReadIR.Nowcount++ ;
-		   Remote1_ReadIR.Inttime  ++;
-		
-		   
-				if(P1_6==1)//if(Remote1_ReadIR.Inttime >=0x27)//if(Remote1_ReadIR.Nowcount>=0x20)//WT.EDIT 57ms if(Remote1_ReadIR.Nowcount>200)
-				{
-					if(Remote1_ReadIR.Inttime >=0x27){
-						Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =1 ;
-						Remote1_ReadIR.Inttime =0;
-						Remote1_ReadIR.BitHigh++;
-					}
-					else {
-					   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0 ;
-					   Remote1_ReadIR.Inttime =0;
-					   Remote1_ReadIR.BitLow++;
-
-					}
-				
-					
-				}
-				else  {
-					 
-					   Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit] =0 ;
-					   Remote1_ReadIR.Inttime =0;
-					   Remote1_ReadIR.BitLow++;
-					  
-			  
-	            }
-	  
-	}
-    else if(P1_6==1 && rtime >30){
-		Remote1_ReadIR.ReadIRFlag=2;
-
+		Remote1_ReadIR.Nowcount++;
+		if(Remote1_ReadIR.Nowcount>600)//if(Remote1_ReadIR.Nowcount>200)//WT.EDIT 
+		{
+			Remote1_ReadIR.ReadIRFlag=2;
+		}
 	}
 
 }
@@ -139,38 +105,39 @@ void Remote12_Count(void)
 
 void Read_Remote12IR(void)
 {
-
-	Remote1_ReadIR.NowVoltage=P1_6; //remotoe receive GPIO
-	if(Remote1_ReadIR.ReadIRBit!=11){
-    if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))//input interrupt program
+	Remote1_ReadIR.NowVoltage=P1_6;
+	if(
+	    (Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0)
+	)
 	{
 		Remote1_ReadIR.ReadIRFlag=1;
 		Remote1_ReadIR.Nowcount=0;
 		Remote1_ReadIR.ReadIRBit=0;
-	    Remote1_ReadIR.Inttime =0;
-		Remote1_ReadIR.BitLow=0;
-		Remote1_ReadIR.BitHigh =0;
-		Remote1_ReadIR.recordTime =0;//WT.EDIT
-		
-		
 	}
-    else if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==1))
+	else if(
+	    (Remote1_ReadIR.NowVoltage==1)&&(Remote1_ReadIR.ReadIRFlag==1)
+	)
 	{
+	   SBUF=Remote1_ReadIR.Nowcount;
 		Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
-		Remote1_ReadIR.Runcontrol=Remote1_ReadIR.Nowcount;
 		Remote1_ReadIR.Nowcount=0;
-		
-      
-		 Remote1_ReadIR.ReadIRBit++; //bit numbers add 
-        if(Remote1_ReadIR.ReadIRBit>7)
+		Remote1_ReadIR.ReadIRBit++;
+		if(Remote1_ReadIR.ReadIRBit>32)//if(Remote1_ReadIR.ReadIRBit>80) //WT.EDIT
 			Remote1_ReadIR.ReadIRFlag=2;
-		 
-		
-		
-	}
-	
 
 	}
+	else if(
+	    (Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==1)
+	)
+	{
+	   //SBUF=Remote1_ReadIR.Nowcount;
+		Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
+		Remote1_ReadIR.Nowcount=0;
+		Remote1_ReadIR.ReadIRBit++;
+		if(Remote1_ReadIR.ReadIRBit>32)//WT.EDIT //if(Remote1_ReadIR.ReadIRBit>80)
+			Remote1_ReadIR.ReadIRFlag=2;
+	}
+	
 }
 #endif
 
@@ -186,37 +153,62 @@ void Read_Remote12IR(void)
 void CheckXReadIR_IR2(ReadIRByte *P)
 {
 	
-	INT8U temp,j;
-	static INT8U right,left,n;
+	INT8U k;
 
-	
-	if(P->ReadIRFlag==2){ // ir receive of Byte(8 bit)
+	{
+		if(P->ReadIRFlag==2)
+		{
+			{
 
-      
-		  for(j=0;j<8;j++){
-	   	
-		  temp= temp | (Remote1_ReadIR.ReadIRData[(7-j)]<< j);
-		     // temp= temp | (Remote1_ReadIR.ReadIRData[j]<< j);
-          }
-		   P->ReadIR[0] =temp;
-		   
-		  P->ReadIRFlag=3;
+				P->ReadIR[0]=0;
+
+				k=0;
+				P->ReadIRByte=0;
+				for(P->AABit=0; P->AABit<16;)
+				{
+					if(
+					    (P->ReadIRData[P->AABit]>10)&&(P->ReadIRData[P->AABit]<40)
+					)
+					{
+						P->ReadIRByte<<=1;
+						P->ReadIRByte|=1;
+						P->AABit+=2;
+
+						k++;
+						if(k>7)
+						{
+
+							P->ReadIR[0]=P->ReadIRByte;
+							k=0;
+
+							P->ReadIRByte=0;
+
+						}
+					}
+					else
+					{
+						P->AABit+=2;
+						P->ReadIRByte<<=1;
+						k++;
+						if(k>7)
+						{
+
+							P->ReadIR[0]=P->ReadIRByte;
+							k=0;
+
+							P->ReadIRByte=0;
+							//P->AABit++;
+						}
+					}
+
+				}
+				for(P->AABit=0; P->AABit<20; P->AABit++)
+					P->ReadIRData[P->AABit]=0;
+			}
+
+			P->ReadIRFlag=3;
+		}
 	}
-	#if 1	
-    if(  P->ReadIRFlag==3){
-	                  P->ReadIRFlag=3;
-					
-		              Usart1Send[0]=2;
-		            // Usart1Send[1]=0xAB ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
-                     //Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
-				
-	                 Usart1Send[2]=P->ReadIR[0];
-				
-				   // Usart1Send[3]=0x88;
-	                SendCount=1;
-	                SBUF=Usart1Send[SendCount];
-                }
-    #endif 
 }
 	
 	
@@ -237,6 +229,16 @@ INT8U CheckHandsetIR()
 	INT8U M=0;
 	
 	CheckXReadIR_IR2(&Remote1_ReadIR);
+	#if 1
+				Usart1Send[0]=5;
+				Usart1Send[1]=Remote1_ReadIR.ReadIR[0];
+				Usart1Send[2]=Remote1_ReadIR.ReadIR[1];
+				Usart1Send[3]=Remote1_ReadIR.ReadIR[2];
+				Usart1Send[4]=Remote1_ReadIR.ReadIR[3];
+				Usart1Send[5]=0x88;
+				SendCount=1;
+				SBUF=Usart1Send[SendCount];
+			#endif 
 
   if(Remote1_ReadIR.ReadIRFlag==3)
    {
@@ -251,19 +253,61 @@ INT8U CheckHandsetIR()
 	  Remote1_ReadIR.Inttime=0;
 
 	  
-	 // KK = AutoBack_ChargeBatter();
 	  return (KK);
 	 
    }
    
   return(KK);
 }
+/******************************************************************************
+ * *
+ * Function Name: void CheckRechargeIR()
+ * Function :Sample machine be used to Mide IR be charged 
+ * 
+ * 
+ * 
+******************************************************************************/
+void CheckRechargeIR()
+{
+  // CheckXReadIR(&Left_ReadIR);
+  // CheckXReadIR(&Right_ReadIR);
+//   CheckXReadIR(&Remote1_ReadIR);
+#if 0
+	if(Remote1_ReadIR.ReadIRFlag==3)
+	{
+			//SBUF=Remote1_ReadIR.ReadIR[0];
+			if((Remote1_ReadIR.ReadIR[0]&0XF4)==0XF4)
+				MidIR.Right++;
+			else if((Remote1_ReadIR.ReadIR[0]&0XF2)==0XF2)
+				MidIR.Mid++;			
+			else if((Remote1_ReadIR.ReadIR[0]&0XF8)==0XF8)
+				MidIR.Left++;
+			else if((Remote1_ReadIR.ReadIR[0]&0XF1)==0XF1)
+				MidIR.Top++;
 
+			else if(Remote1_ReadIR.ReadIR[0]!=0)
+				MidIR.Err++;
+#endif 
+			Remote1_ReadIR.ReadIR[0]=0;
+			Remote1_ReadIR.ReadIRFlag=0;
+			#if 1
+				Usart1Send[0]=5;
+				Usart1Send[1]=Remote1_ReadIR.ReadIR[0];
+				Usart1Send[2]=Remote1_ReadIR.ReadIR[1];
+				Usart1Send[3]=Remote1_ReadIR.ReadIR[2];
+				Usart1Send[4]=Remote1_ReadIR.ReadIR[3];
+				Usart1Send[5]=0x88;
+				SendCount=1;
+				SBUF=Usart1Send[SendCount];
+			#endif 
+
+	}
 /*******************************************************
-  * @?|��???  	?��?��o?��o?����oy
-  * @2?��oy  	fui_i : ?��?��o?����o?��??
-  * @?��|��???|�� ?T
-  * @?��?�� 	Fcpu = 16MHz?��?fui_i = 1��o?��?��??��?��o?����o?��?????a1Ms
+  * 
+  * Function Name:void Delay_ms(INT16U fui_i)
+  * Function :
+  *           Fcpu = 16MHz delay 1ms
+  * 
 **************************************************************/
 void Delay_ms(INT16U fui_i)
 {
@@ -274,50 +318,7 @@ void Delay_ms(INT16U fui_i)
 		;
 	}
 }
-/********************************************************************
-	*
-	*Function Name:AutoBack_ChargeBatter(void)
-	*Function : To cheded ir of value
-	*Input Ref: NO
-	*Return Ref: NO 
-	*
-********************************************************************/
-INT8U  AutoBack_ChargeBatter(void)
-{
-	
 
-     if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] >= 0x0D){
-	 	 
-		     return (3); //5ֱ������
-
-	 }
-	  if(Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] < 0x0D && Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time] > 0x0A){
-	 	
-		 Remote1_ReadIR.Timelock=0;
-		 return (4); //5ֱ������
-	 }
-    else{
-	      if(Remote1_ReadIR.ReadIR[1]==1) //left IR �����
-		 	{
-
-				return (1);
-			   
-		 	}
-			else if(Remote1_ReadIR.ReadIR[1]==2){ //right IR
-
-	          
-			    
-				  return (2);
-			  
-	              
-			} //right IR ���ұ�
-		         
-
-	      
-	
-    }
-	
-}
 /***************************************************************************
 	*
 	*Function Name :

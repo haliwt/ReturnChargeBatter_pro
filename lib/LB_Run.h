@@ -2,8 +2,8 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ÎÄ¼þËµÃ÷>
-version  : ¼ûÎÄ¼þÎ²¶Ë
+define   : <ï¿½Ä¼ï¿½Ëµï¿½ï¿½>
+version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 ---------------------------------------------------------------------------
 */
 #ifndef  LB_Run_h
@@ -21,7 +21,7 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #endif
 
 
-//È«¾Ö±äÁ¿ÉùÃ÷
+//È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #ifdef  KAKA_Run_GB
 #define KAKA_Run_EXT
 #else
@@ -80,17 +80,10 @@ KAKA_Run_EXT idata INT16U TestSecond;
 
 
 
-
-
-
-
-
-
-
-
-
 KAKA_Run_EXT  void  CheckRun();
 KAKA_Run_EXT  INT8U  LowVoltageFlag;
 KAKA_Run_EXT  void CheckMode(INT8U Key);
+
+KAKA_Run_EXT  void AutoCharge(void); //WT.EDIT
 
 #endif
