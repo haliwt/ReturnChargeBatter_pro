@@ -45,7 +45,7 @@ typedef struct
 	INT32S  LastPulsed;
 	INT32S  MovePulsed;	               //¨¦?¡ä???3?¨ºy
 
-	INT8U   Flag;              //right and left pulse don't difference value 
+	INT8U   Flag;
 	INT16S  RunCm;	
 	INT16S  SetCm;		
 

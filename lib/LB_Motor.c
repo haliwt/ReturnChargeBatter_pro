@@ -272,14 +272,8 @@ void AllStop()
 	RightMoveMotorData.MotorMode=0;
 }
 
-/************************************************************************
-	*
-	*Function Name: void ReadLeftPulsed(void)
-	*Funciton : 
-	*Input Ref:NO
-	*Return Ref: NO 
-	*
-************************************************************************/
+
+
  void ReadLeftPulsed(void)
 {
 
@@ -289,10 +283,10 @@ void AllStop()
 		if(LeftMoveMotorData.NowPulsed>=(LeftMoveMotorData.MovePulsed+80))
 		{
 			LeftMoveMotorData.MovePulsed+=80;
-			LeftMoveMotorData.RunCm++; //
+			LeftMoveMotorData.RunCm++;
 			if(LeftMoveMotorData.SetCm<=LeftMoveMotorData.RunCm)
 			{
-				LeftMoveMotorData.Flag=1; //左右马达运行不匹配，标志符
+				LeftMoveMotorData.Flag=1;
 				LeftStop();
 			}
 		}
@@ -313,14 +307,6 @@ void AllStop()
 		}
 	}
 }
- /************************************************************************
-	*
-	*Function Name: void ReadRightPulsed(void)
-	*Funciton : 
-	*Input Ref:NO
-	*Return Ref: NO 
-	*
-************************************************************************/
 void ReadRightPulsed(void)
 {
 	if((RightMoveMotorData.MotorMode&0x03)==1)
@@ -333,7 +319,7 @@ void ReadRightPulsed(void)
 			RightMoveMotorData.MovePulsed+=80;
 			if(RightMoveMotorData.SetCm<=RightMoveMotorData.RunCm)
 			{
-				RightMoveMotorData.Flag=1; //motor setup distance don't diff  
+				RightMoveMotorData.Flag=1;
 				RightStop();
 			}
 		}

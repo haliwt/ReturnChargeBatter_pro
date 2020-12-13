@@ -32,7 +32,7 @@ void Delay_2us(unsigned int fui_i)
 void InitADIO(void)
 {
 	P0M2 = 0x02;				        //P02设置为模拟输入
-	//P0M3 = 0x02;				        //P03设置为模拟输入 //WT.EDIT 
+	P0M3 = 0x02;				        //P03设置为模拟输入
 	P0M4 = 0x02;				        //P04设置为模拟输入
 	P0M5 = 0x02;				        //P05设置为模拟输入
 	P0M6 = 0x02;				        //P06设置为模拟输入
@@ -40,8 +40,7 @@ void InitADIO(void)
 	P2M4 = 0x02;				        //P24设置为模拟输入
 	P2M5 = 0x02;				        //P25设置为模拟输入
 
-	//P0M1 = 0X80;  --IR_PWM OUTPUT 
-	 P0M3 = 0x80;  // --IR PMW 0UTPUT ,NewBoard WT.EDIT 
+	P0M1 = 0X80;
 
 	LCurrentAD[0]=0;
 	LCurrentAD[2]=0;
@@ -72,31 +71,14 @@ void SetADINT(void)
     EA = 1;
 }
 
-/*************************************************************
-	*
-	*Function Name:void  SetAD(INT8U ADChanel)
-	*Function : L_IR_WALL = P04/AN4 ,R_IR_WALL = P05/AN5
-	*           
-    *Input Ref: NO
-	*Return Ref: NO
-	*
-*************************************************************/
+
 void  SetAD(INT8U ADChanel)
 {
-  code INT8U ADCC[8]={2,3,4,5,6,7,12,13}; //ADC[2]=AN4 ,ADC[3]=AN5
+  code INT8U ADCC[8]={2,3,4,5,6,7,12,13};
   SeleADChanel(ADCC[ADChanel]);
   SetADINT();
   StartAD();
 }
-/*************************************************************
-	*
-	*Function Name:void  void ReadAD5ms()
-	*Function : 红外线PWM 调整 P0_3 
-	*           
-    *Input Ref: NO
-	*Return Ref: NO
-	*
-*************************************************************/
 void ReadAD5ms()
 {
   static INT8U i=0;
@@ -115,20 +97,20 @@ void ReadAD5ms()
 	   {
 	   if(ADFlag)
 	   {
-		 P0_3 =1 ; //WT.EDIT //P0_1 = 1;
+		 P0_1 = 1;
 		 ADFlag=0;
 		 ADFlashFlag=1;
 	   }
 	  else
 	  {
-		 P0_3 =0; //WT.EDIT //P0_1 = 0;
+		 P0_1 = 0;
 		 ADFlag=1;
 		 ADFlashFlag=1;
 	  }
 	  }
 	  else
 	  {
-	  	 P0_3 =0 ; //WT.EDIT //P0_1 = 0;
+	  	 P0_1 = 0;
 	  }
 	 chanel=0;
 	 }
@@ -138,15 +120,6 @@ void ReadAD5ms()
   	 SetAD(chanel);
   }
 }
-/*************************************************************
-	*
-	*Function Name:INT8U ReadGroundDp(INT8U *p)
-	*Function : 
-	*           
-    *Input Ref: NO
-	*Return Ref: NO
-	*
-*************************************************************/
 INT8U ReadGroundDp(INT8U *p)
 {
   INT8U i;
@@ -173,14 +146,7 @@ INT8U ReadGroundDp(INT8U *p)
   
   return(temp/8);
 }
-/*************************************************************
-	*
-	*Function Name:void CheckGround()
-	*Function :妫�娴?纰版挒绾㈠绾跨殑鍊糀DC 鍊?
-    *Input Ref: NO
-	*Return Ref: NO
-	*
-*************************************************************/
+
 void CheckGround()
 {
  if(ADFlashFlag)

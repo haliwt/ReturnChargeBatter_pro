@@ -2,8 +2,8 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ï¿½Ä¼ï¿½Ëµï¿½ï¿½>
-version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
+define   : <ÎÄ¼þËµÃ÷>
+version  : ¼ûÎÄ¼þÎ²¶Ë
 ---------------------------------------------------------------------------
 */
 #ifndef  LB_Run_h
@@ -21,18 +21,13 @@ version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 #endif
 
 
-//È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//È«¾Ö±äÁ¿ÉùÃ÷
 #ifdef  KAKA_Run_GB
 #define KAKA_Run_EXT
 #else
 #define  KAKA_Run_EXT extern
 #endif
 #define  GroundMin 12
-
-
-typedef INT8U uint8_t;
-typedef INT8S int8_t;
-typedef INT16U  uint16_t;
 
 KAKA_Run_EXT  idata  INT16U RunMs;
 KAKA_Run_EXT  idata  INT16U EdgeErrordelayTime;
@@ -82,14 +77,20 @@ KAKA_Run_EXT idata INT16U NoImpSecond;
 
 KAKA_Run_EXT idata INT16U SysSecond;
 KAKA_Run_EXT idata INT16U TestSecond;
-KAKA_Run_EXT  INT8U  LowVoltageFlag;
+
+
+
+
+
+
+
+
+
+
 
 
 KAKA_Run_EXT  void  CheckRun();
-
+KAKA_Run_EXT  INT8U  LowVoltageFlag;
 KAKA_Run_EXT  void CheckMode(INT8U Key);
-
-
-KAKA_Run_EXT  void AutoCharge(void); //WT.EDIT
 
 #endif

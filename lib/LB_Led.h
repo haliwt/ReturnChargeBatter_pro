@@ -30,13 +30,9 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 
 #define BatterCharge    P2_1 
 
-
-
 KAKA_Led_EXT  INT8U  ImpStatus;
 KAKA_Led_EXT  INT8U  BuzzerFlag;
 KAKA_Led_EXT  INT8U  BuzzerTime;
-
-
 
 KAKA_Led_EXT  void InitLed(void);
 KAKA_Led_EXT  void LedGreenON() ;
@@ -61,8 +57,7 @@ KAKA_Led_EXT void BuzzerON();
 KAKA_Led_EXT void BuzzerOff();
 KAKA_Led_EXT void SetBuzzerTime(INT8U time);
 KAKA_Led_EXT void CheckBuzzer();
-KAKA_Led_EXT void KeyInit(void); //WT.EDIT 
-KAKA_Led_EXT void ReChargeBatter_Init(void); //WT.EDIT 
+KAKA_Led_EXT void ReChargeBatter_Init(void);//WT.EDIT
 
 
 #endif
