@@ -66,11 +66,10 @@ KAKA_IR_EXT void Iint_T5(void);
 
 //KAKA_IR_EXT void Remote1_Count(void);
 //KAKA_IR_EXT void Remote11_Count(void); //WT.EIDT
-KAKA_IR_EXT void Remote12_Count(void); //WT.EIDT
+KAKA_IR_EXT void Remote1_Count(void);
 
-//KAKA_IR_EXT void Read_Remote1IR();
-//KAKA_IR_EXT void Read_Remote11IR(); //WT.EDIT
-KAKA_IR_EXT void Read_Remote12IR(); //WT.EDIT
+
+KAKA_IR_EXT void Read_Remote1IR(void);
 
 KAKA_IR_EXT INT8U CheckHandsetIR();
 

@@ -224,19 +224,10 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	}
 
 	#if 1
-	if(PINTF1&0x40)						//�ж�INT14�жϱ�־λ--IR
+	if(PINTF1&0x40)		//Interrupt 14 P1_6
 	{
-		PINTF1 &=~ 0x40;	//���INT14�жϱ�־λ	
-		#if IR3
-		    Read_Remote1IR();  //ir3
-		#endif 
-		#if IR1
-		   Read_Remote11IR(); //ir1
-		#endif 
-		#if IR2
-		   Read_Remote12IR(); //ir2
-		   
-		  #endif 
+		PINTF1 &=~ 0x40;	//Interrupt occur 
+		Read_Remote1IR();
 	}
    #endif
 	
@@ -257,9 +248,8 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U t_1s;
   t_10ms++;
   ReadAD5ms();
- // Remote1_Count(); //ir3
- // Remote11_Count();//ir1
-   Remote12_Count(); //ir2
+  Remote1_Count();//IR count
+
   if(t_10ms>99) //10ms
   {
   	t_10ms=0;
