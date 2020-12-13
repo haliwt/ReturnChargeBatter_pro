@@ -79,7 +79,7 @@ void  CheckRun()
 		case 2: //Adjust line run condition
            
 				 AllStop();
-				 Delay_ms(500);
+				 Delay_ms(50);
 				 Remote1_ReadIR.ReadCloseList[1]=0;
 				 Remote1_ReadIR.ReadCloseList[0]=0;
 		         costValue ++;

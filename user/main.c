@@ -378,19 +378,19 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 	}
 	#endif 
     if(InterruptTime >10){  //>6
+		              #if 0
 					  Usart1Send[0]=2;
 					  Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
                       Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
 					  SendCount=1;
 					  SBUF=Usart1Send[SendCount];
 					  InterruptTime =0;
-                      // Remote1_ReadIR.ReadA_Time++;
-					  // Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]=Remote1_ReadIR.Interrupt_IR2;
-					  
-					   Remote1_ReadIR.Interrupt_IR2=0;
+		              #endif 
+                     
+					  Remote1_ReadIR.Interrupt_IR2=0;
 					  
 					  gui_T5Value=0;
-					//  if(Remote1_ReadIR.ReadA_Time>3)Remote1_ReadIR.ReadA_Time=0;
+					
 					
 		    }
 		   //else Remote1_ReadIR.Interrupt_IR2 ++ ;
