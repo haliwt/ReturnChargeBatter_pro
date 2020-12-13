@@ -21,18 +21,110 @@ version  : ���ļ�β��
 #include "LB_Led.h"
 #include "LB_IR.h"
 #endif
+void InitPowerIn(void)
+{
+  P1M7 = 0x60; //P17 input GPIO PULL  UP =charge_sata 
+  P1M0 = 0x50;     
+   //P10 input GPIO PULL DOWN =DC detected ,outside charge batter connector
+   P1_0 =1;
+}
+/****************************************************************
+ 	* * *
+ 	* Function Name:INT8U ReadKey(void)
+ 	* Function: Touch key of define function 
+ 	* Input Ref: NO
+ 	* Return Ref: KEY VALUE 
+ 	* 
+ ***************************************************************/
+uint8_t  ReadKey(void)
+{
+
+  static INT8U  K1temp,K2temp,K12temp;
+  INT8U t_Key;
+  t_Key=0;
+
+  if(P0_1 ==1 && P0_0 ==1){
+
+      if(K12temp<200){
+   	   K12temp++;
+	   BuzzerON();
+
+	  }
+	  else {
+	     K12temp=0;
+		BuzzerOff();
+	  
+	  }
+	  
+	 if(K12temp==190)
+	  {
+	    K12temp=201;
+	    return(3);
+	  }
+	  
+	  
+
+
+  }
+  else {
+
+  if(P0_1==1)  //right key 
+  {
+    if(K1temp<200)
+   	 K1temp++;
+	 BuzzerON();
+  }
+  else	
+  {	  
+
+   	K1temp=0;
+	BuzzerOff();
+  }
+
+  if(P0_0==0)   //Left key 
+  {
+    if(K2temp<200)
+   	 K2temp++;
+	 BuzzerON();
+  }
+  else	
+  {	  
+
+   	K2temp=0;
+	BuzzerOff();
+  }
+
+
+  if(K1temp==190)
+  {
+    K1temp=201;
+   //return(1);
+	t_Key =1;  //Left key  -- Power on 
+  }
+  if(K2temp==190)
+  {
+    K2temp=201;
+   //return(1);
+	t_Key =2;  //right key --Power On and Power down
+  }
+  return(t_Key);  
+}
+
+}
+
 /***************************************************************************
 	*
 	*Function Name:void AutoCharge(void)
 	*Function :robot auto look for route be charged batter
-	*
+	*Intput Ref:No
+	*Output Ref: No 
 	*
 ***************************************************************************/
 void AutoCharge(void)
 {
       
 	  static INT8U left_ccw,right_cw,line ,costValue,cw_3,ccw_5,compareValue_1;
-	  static INT8U compareValue_2,runcw=0,conline=0;
+	  static INT8U compareValue_2,conline=0;
 	
 	   switch(Step){
 		case 0:
@@ -200,7 +292,7 @@ void AutoCharge(void)
 
 		case 3: //CW slow Run  //CW motor 90 degree ---˳ʱ����ת 90 ��
 		          LedRedON();// 
-		         if(ReadPowerDCIn()){ //�Զ����?
+		         if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -238,12 +330,12 @@ void AutoCharge(void)
 							   if(left_ccw==2){
 							   if(right_cw<5){
 										RunMs=0; 
-										Step=3;  //CCW run 执行4次
+										Step=3;  //CCW run 执行4�?
 									}
 							   }
 							   else if(right_cw==1){
                                     RunMs =0;
-									Step =3;  //执行第二次
+									Step =3;  //执行第二�?
 
 							   }
 							   else if(right_cw==2){
@@ -254,7 +346,7 @@ void AutoCharge(void)
 							   else {
 								   	line = 0;
 									RunMs=0; 
-									Step=0;  //试探走一步
+									Step=0;  //试探走一�?
 							   }
 							   
 					   		
@@ -289,7 +381,7 @@ void AutoCharge(void)
 						{
                            if(cw_3 < 4){ //WT.EDIT 
 								RunMs =0;
-								Step=3;  //再运行 4次 
+								Step=3;  //再运�?4�?
 						   }
 						   else if(cw_3==4){
 							    RunMs=0;
@@ -310,7 +402,7 @@ void AutoCharge(void)
 
             case 5:
 				 //CCW 90 RUN,CCW dir run 
-			    if(ReadPowerDCIn()){ //�Զ����?
+			    if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -349,12 +441,12 @@ void AutoCharge(void)
 						   if(right_cw==2){
 							   if(left_ccw<5){
 										RunMs=0; 
-										Step=5;  //CCW run 执行4次
+										Step=5;  //CCW run 执行4�?
 									}
 							   }
 							   else if(left_ccw==1){
                                     RunMs =0;
-									Step =5;  //执行第二次
+									Step =5;  //执行第二�?
 
 							   }
 							   else if(left_ccw==2){
@@ -365,7 +457,7 @@ void AutoCharge(void)
 							   else {
 								
 									RunMs=0; 
-									Step=0;  //试探走一步
+									Step=0;  //试探走一�?
 							   }
 				}
 
@@ -400,7 +492,7 @@ void AutoCharge(void)
 						{
                            if(ccw_5==1){
 								RunMs =0;
-								Step=5;  //再运行一次
+								Step=5;  //再运行一�?
 						   }
 						   else if(ccw_5==2){
 							    RunMs=0;
@@ -417,7 +509,7 @@ void AutoCharge(void)
 
         case 10://Back run
 
-             if(ReadPowerDCIn()){ //�Զ����?
+             if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -438,7 +530,7 @@ void AutoCharge(void)
 
 		case 20:
 
-		if(ReadPowerDCIn()){ //�Զ����?
+		if(ReadPowerDCIn()){ //�Զ����?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -471,30 +563,6 @@ void AutoCharge(void)
 	*
 	*
 ***************************************************************************/
-/*
-
----------- file information -----------------------------------------------
-file name: 
-define   : <ÎÄ¼þËµÃ÷>
-version  : ¼ûÎÄ¼þÎ²¶Ë
----------------------------------------------------------------------------
-*/
-
-//È«¾Ö±äÁ¿ÉùÃ÷
-#define  KAKA_Run_GB
-
-#ifdef   CodeC_Includes
-#include "PJ_Includes.h"
-#else
-//#include "LB_hc89f003_IO.h"
-#include "..\include\PJ_TypeRedefine.h"
-#include "LB_Motor.h"
-#include "LB_Run.h"
-#include "LB_AD.h"
-#include "LB_Led.h"
-#include "LB_IR.h"
-#endif
- 
 void  CheckRun()
 {
 
@@ -506,9 +574,9 @@ void  CheckRun()
 		}
 		break;
 
-		case 0x0D:
+		case 0x0D://RunStep =0x0d, stop be adjust status 
 		{
-
+			//motor run status wheel setup left wheel and right wheel differece
 			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
 			{
 				ImpSecond=0;
@@ -524,6 +592,7 @@ void  CheckRun()
 				RunMs=0;
 				RunStep=0;
 			}
+			//��ת ������--����
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
@@ -533,14 +602,14 @@ void  CheckRun()
 			}
 			else if(ImpStatus==1)
 			{
-				SetXMotor(2,10,20,1,2,10,20,1);
+				SetXMotor(2,10,20,1,2,10,20,1); //Back run 
 				SetMotorcm(2,10);
 				RunMs=0;
 				RunStep=0;
 			}
 		}
 		break;
-		case 0x0c:
+		case 0x0c: //RunStep =0x0c;
 		{
 			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
 			{
@@ -575,10 +644,10 @@ void  CheckRun()
 		}
 		break;
 
-		case 1:
+		case 1: //RunStep =1 ;
 		{
 			ImpSecond=0;
-			SetXMotor(1,10,15,1,1,10,15,1);
+			SetXMotor(1,10,15,1,1,10,15,1);  //line run 
 			SetMotorcm(1,1000);
 			RunStep=2;
 			RunMs=0;
@@ -2374,21 +2443,49 @@ void  CheckRun()
 void CheckMode(INT8U Key)
 {
 
-	 if(KeydelayTime>3)
-     {
-	   	   	   //����
-	   if(Key>0)
-	   {
-		 KeydelayTime=0;
-//	     SBUF=Key;
-	   }
+    static INT8U keylock =0;
+	
    switch(Key)  //��������ֵ��ѡ��ģʽ�����в�����
    {
      
 
-	   case 1:
+       case 0:
+
+
+	   break; 
+	   //
+	   case 1: //riight key  --works mode 
+	       RunStep =1;
 	   	        
-				 
+	   break; 
+
+	   case 2 :   //left key  power dwon and power on 
+
+	   keylock = keylock ^ 0x01;
+	   if(keylock ==1){
+          RunStep =1;
+
+
+	   }
+	   else {
+
+          AllStop();
+
+	   }
+	   
+	   break; 
+
+	   case 3: //ReCharge Mode ;
+	   
+			AutoCharge();
+
+	   break;
+
+   	}
+}
+
+
+#if 0
 	   case 4:
 	   {
 	    if(Mode!=2)
@@ -2442,7 +2539,7 @@ void CheckMode(INT8U Key)
 		  ModeBackup=0;
 	   }
 	   break;
-	   //���ֱ���ƶ�?----
+	   //���ֱ���ƶ�?----
 	   case 5:
 	   {
 		 //KeyRunTime=0;
@@ -2711,7 +2808,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);
 				}							
 			}
-			//�������?
+			//�������?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -2948,7 +3045,7 @@ void CheckMode(INT8U Key)
 //				SetEdge(0);				
 			
 			}
-			//�������?
+			//�������?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -3163,7 +3260,7 @@ void CheckMode(INT8U Key)
 //				SetFan(0);
 //				SetEdge(0);				
 			}
-			//�������?
+			//�������?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -3261,7 +3358,7 @@ void CheckMode(INT8U Key)
 		 }	   
 	  }
 	  break;
-	  //���?����س��
+	  //���?����س��
 	  case 4:
 	  {
 	    switch(Step)
@@ -3339,7 +3436,7 @@ void CheckMode(INT8U Key)
 	  {
 	    switch(Step)
 		{
-		   //������ס,�������ÿ��?����һ��������
+		   //������ס,�������ÿ��?����һ��������
 		   case 0:
 		   {
 		   	  LedRedON();
@@ -3361,7 +3458,7 @@ void CheckMode(INT8U Key)
 			  }
 		   }
 		   break;
-		   //��ɨ������? �������ÿ��?��������������
+		   //��ɨ������? �������ÿ��?��������������
 
 		   case 2:
 		   {
@@ -3403,7 +3500,7 @@ void CheckMode(INT8U Key)
 			 }
 		   }
 		   break;
-		   //����������?�������ÿ��?��������������1�����һ��������?
+		   //����������?�������ÿ��?��������������1�����һ��������?
 		   case 5:
 		   {
 		   	  LedRedON();
@@ -3455,7 +3552,7 @@ void CheckMode(INT8U Key)
 		   
 		   }
 		   break;
-		   //���ȶ�ת���ߵ�����	�������ÿ��?��������������1���������������?
+		   //���ȶ�ת���ߵ�����	�������ÿ��?��������������1���������������?
 		   case 9:
 		   {
 		   	  LedRedON();
@@ -3531,3 +3628,5 @@ void CheckMode(INT8U Key)
 	  
 	}
 }
+#endif 
+

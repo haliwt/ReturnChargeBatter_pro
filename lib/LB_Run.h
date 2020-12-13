@@ -29,6 +29,9 @@ version  : ���ļ�β��
 #endif
 #define  GroundMin 12
 
+
+typedef INT8U uint8_t ;
+
 KAKA_Run_EXT  idata  INT16U RunMs;
 KAKA_Run_EXT  idata  INT16U EdgeErrordelayTime;
 KAKA_Run_EXT  idata  INT16U KeydelayTime;
@@ -77,12 +80,13 @@ KAKA_Run_EXT idata INT16U NoImpSecond;
 
 KAKA_Run_EXT idata INT16U SysSecond;
 KAKA_Run_EXT idata INT16U TestSecond;
-
+KAKA_Run_EXT  INT8U  LowVoltageFlag;
 
 
 KAKA_Run_EXT  void  CheckRun();
-KAKA_Run_EXT  INT8U  LowVoltageFlag;
+
 KAKA_Run_EXT  void CheckMode(INT8U Key);
+KAKA_Run_EXT  INT8U  ReadKey(void);
 
 KAKA_Run_EXT  void AutoCharge(void); //WT.EDIT
 

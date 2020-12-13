@@ -253,11 +253,11 @@ INT8U CheckHandsetIR()
 	  Remote1_ReadIR.Inttime=0;
 
 	  
-	  return (KK);
+	 
 	 
    }
    
-  return(KK);
+  return(0XFF);
 }
 /******************************************************************************
  * *
