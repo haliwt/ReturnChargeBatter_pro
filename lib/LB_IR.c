@@ -67,11 +67,10 @@ void Init_IR()
 {
 
    
-	P1M6 = 0x62;//0x68;			        	//P1_6����Ϊ��SMT(ʩ���ع���)��������
+	P1M6 = 0x68;			        	//P1_6����Ϊ��SMT(ʩ���ع���)��������
 
- 	  PITS3 |= 0x30;						//INT14,�ⲿ�жϵ�ƽѡ��,�������ͷ���������ж�
-	 //PITS3 |=(2<<4);   //01 �½��س���
-	//PITS3 &=~(1<<5); //set 0 
+ 	PITS3= 0x10 ; // down edge occur // PITS3 |= 0x30;						//INT14,�ⲿ�жϵ�ƽѡ��,�������ͷ���������ж�
+
 	
 	PINTE1 |= 0x40;						//ʹ��INT14
 
@@ -87,7 +86,7 @@ void Remote1_Count(void)
 	if(Remote1_ReadIR.ReadIRFlag==1)
 	{
 		Remote1_ReadIR.Nowcount++;
-		if(Remote1_ReadIR.Nowcount>200)
+		if(Remote1_ReadIR.Nowcount>145)
 		{
 			Remote1_ReadIR.ReadIRFlag=2;
 		}
@@ -99,34 +98,58 @@ void Remote1_Count(void)
 	*
 	*Function Name:void Read_Remote1IR(void)
 	*Function :the function run in interrupt program
-	*
+	*           GPIO intrrupt program 
 	*
 	*
 *************************************************************/
 void Read_Remote1IR(void)
 {
-   						
+   					
 	Remote1_ReadIR.NowVoltage=P1_6;
 
-	if(
-	    (Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0)
-	)
+	if((Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==0))
 	{
 		Remote1_ReadIR.ReadIRFlag=1;
 		Remote1_ReadIR.Nowcount=0;
 		Remote1_ReadIR.ReadIRBit=0;
 	}
-    else if(
-	    (Remote1_ReadIR.NowVoltage==0)&&(Remote1_ReadIR.ReadIRFlag==1)
-	)
+    else if((P1_6==0)&&(Remote1_ReadIR.ReadIRFlag==1))
 	{
 		Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
 		Remote1_ReadIR.Runcontrol=Remote1_ReadIR.Nowcount;
+		SBUF = Remote1_ReadIR.Runcontrol;
+
 		Remote1_ReadIR.Nowcount=0;
-        Remote1_ReadIR.ReadIRBit++;
-		if(Remote1_ReadIR.ReadIRBit>80)
+
+//	  Usart1Send[0]=1;
+//	  Usart1Send[1]=Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
+//	  SendCount=1;
+//	  SBUF=Usart1Send[SendCount];
+
+		 Remote1_ReadIR.ReadIRBit++;
+		 SBUF = Remote1_ReadIR.ReadIRBit;
+		if(Remote1_ReadIR.ReadIRBit>8)
 			Remote1_ReadIR.ReadIRFlag=2;
+   
+    }
+	else if((P1_6==1)&&(Remote1_ReadIR.ReadIRFlag==1)){
+
+        Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit]=Remote1_ReadIR.Nowcount;
+		Remote1_ReadIR.Runcontrol=Remote1_ReadIR.Nowcount;
+		SBUF = Remote1_ReadIR.Runcontrol;
+		 Remote1_ReadIR.Nowcount=0;
+	 
+	     Remote1_ReadIR.ReadIRBit++;
+		 SBUF = Remote1_ReadIR.ReadIRBit;
+		
+		if(Remote1_ReadIR.ReadIRBit>8)
+			Remote1_ReadIR.ReadIRFlag=2;
+
+
 	}
+	
+
+	
 }
 /*************************************************************
 	*
@@ -147,11 +170,11 @@ void  CheckXReadIR(ReadIRByte *P)
 	{		
 		P->ReadIRByte=0;
 		k=0;
-		if(P->ReadIRData[P->AABit]>120)
+		//if(P->ReadIRData[P->AABit]>60)//if(P->ReadIRData[P->AABit]>120)
 		{
 			for(P->AABit=1; P->AABit<P->ReadIRBit;P->AABit++)
 			{				     
-					 if((P->ReadIRData[P->AABit]>0)&&(P->ReadIRData[P->AABit]<=14))
+					if((P->ReadIRData[P->AABit]>20)&&(P->ReadIRData[P->AABit]<38))// if((P->ReadIRData[P->AABit]>0)&&(P->ReadIRData[P->AABit]<=14)) //14 * 0.1ms =1.4ms
 					 {
 					 	P->ReadIRByte<<=1;
 					    k++;
@@ -164,7 +187,7 @@ void  CheckXReadIR(ReadIRByte *P)
 
 					    }
 					 }
-					 if((P->ReadIRData[P->AABit]>14)&&(P->ReadIRData[P->AABit]<28))
+					 if((P->ReadIRData[P->AABit]>68)&&(P->ReadIRData[P->AABit]<120))//if((P->ReadIRData[P->AABit]>14)&&(P->ReadIRData[P->AABit]<28))
 					 {
 					 	P->ReadIRByte<<=1;
 						P->ReadIRByte|=1;
@@ -177,14 +200,12 @@ void  CheckXReadIR(ReadIRByte *P)
 							P->ReadIRFlag=3;
 					    }
 					 }
-					 if(ReadIR_cnt==4)
+					 if(ReadIR_cnt=1)
 					 {
 			    	    #if 1
-						 Usart1Send[0]=4;
-	                    Usart1Send[1]=P->ReadIR[0];
-						Usart1Send[2]=P->ReadIR[1];
-						Usart1Send[3]=P->ReadIR[2];
-						Usart1Send[4]=P->ReadIR[3];
+						 Usart1Send[0]=2;
+	                    Usart1Send[3]=P->ReadIR[0];
+						Usart1Send[4]=0xAF;
 	                    SendCount=1;
 	                    SBUF=Usart1Send[SendCount];
 						#endif 
@@ -199,6 +220,7 @@ void  CheckXReadIR(ReadIRByte *P)
 			}
 		}
 	    }
+		#if 0
 		else if((P->ReadIRData[P->AABit]>105)&&(P->ReadIRData[P->AABit]<115))
 		{
 			P->ReadIRFlag=3;
@@ -210,7 +232,8 @@ void  CheckXReadIR(ReadIRByte *P)
 			{
 			     P->ReadIRData[P->AABit]=0;
 			}
-		}		
+		}
+      #endif 		
 	}
 }
 	
@@ -221,21 +244,27 @@ void  CheckXReadIR(ReadIRByte *P)
 INT8U CheckHandsetIR()
 {
 	INT8U KK=0,irr;
+
+	
     
-
+#if 1
     CheckXReadIR(&Remote1_ReadIR);
+	if(Remote1_ReadIR.ReadIRFlag==3){
+		Remote1_ReadIR.ReadIRFlag=1;
+		Remote1_ReadIR.Nowcount=0;
+		Remote1_ReadIR.ReadIRBit=0;
 
-   if(irr ==5){
-        
+	 Usart1Send[0]=2;
+    Usart1Send[1]=Remote1_ReadIR.ReadIR[0];
+	
+	
+	Usart1Send[2]=0xBE;
+    SendCount=1;
+    SBUF=Usart1Send[SendCount];
+	}
+#endif
 
-  	   return(5); //left
-   }
-   else if(irr==4){
-     
-     return(4); //right 
-   }
-   else 
-      return(KK);
+  
 }
 
 

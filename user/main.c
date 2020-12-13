@@ -132,6 +132,7 @@ void main(void)
 	InitBuzzer();
 	SetBuzzerTime(2);
 	//InitIMP();
+	ReChargeBatter_Init();//WT.EDIT 
 	ReChargeBatter_Init();//WT.EDIT 2020.12.13
 	Init_MotorSpeedIR();
 	ADCtl=1;
@@ -155,10 +156,13 @@ void main(void)
 	Mode=1;
 	Step=0;
     RunStep =0 ;
+	 LedGreenON();
 	
 	while(1)
 	{
 		 
+	
+
 		if(BatterCharge ==1){
             LedGreenOff();
 			Delay_ms(500);
@@ -192,8 +196,9 @@ void main(void)
 			LedRedON();
 		 
 			
-		  }
-	     #endif 
+		 	}
+
+		#endif 
 	   }
 
 }
@@ -396,11 +401,11 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 	#endif 
 
     if(InterruptTime >10){  //>6
-					//  Usart1Send[0]=2;
-					//  Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
-                    //  Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
-					//  SendCount=1;
-					//  SBUF=Usart1Send[SendCount];
+					  Usart1Send[0]=2;
+					 Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
+                     Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
+					 SendCount=1;
+				    SBUF=Usart1Send[SendCount];
 					  InterruptTime =0;
                       // Remote1_ReadIR.ReadA_Time++;
 					  // Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]=Remote1_ReadIR.Interrupt_IR2;
