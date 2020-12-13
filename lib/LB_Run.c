@@ -2454,30 +2454,32 @@ void CheckMode(INT8U Key)
 
 	   break; 
 	   //
-	   case 1: //riight key  --works mode 
+	   case 1: //left  key  ---power on	   
 	       RunStep =1;
-	   	        
+	   	   LedGreenON();
+	       LedRedOff();
 	   break; 
 
-	   case 2 :   //left key  power dwon and power on 
-
+	   case 2 :   //right  key  ---works mode
 	   keylock = keylock ^ 0x01;
 	   if(keylock ==1){
-          RunStep =1;
-
-
-	   }
+            RunStep =1;
+		    LedRedON();
+		 }
 	   else {
 
           AllStop();
-
-	   }
+		  LedRedON();
+		  LedGreenOff();
+        }
 	   
 	   break; 
 
 	   case 3: //ReCharge Mode ;
 	   
 			AutoCharge();
+			LedGreenON();
+	        LedRedON();
 
 	   break;
 

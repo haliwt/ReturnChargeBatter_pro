@@ -92,7 +92,7 @@ void AllLedOff()
 
 void InitIMP(void)
 {
-  P2M1 = 0x60;                        //P01����Ϊʩ�������ִ���������
+ // P2M1 = 0x60;                        //P01����Ϊʩ�������ִ���������
   P2M0 = 0xC2;                        //P21
   P2_0=0;
   //P2_1=0;
@@ -108,12 +108,26 @@ void SetIMPOutOn()
   P2_0=0;
 }
 
+/****************************************************************
+	*
+	*Function Name : ReChargeBatter()
+	*Function :
+	*
+	*
+	*
+****************************************************************/
+void ReChargeBatter_Init(void)
+{
+     P2M1 = 0X51 ; //input SMT pull down
+     P2_1 =0; 
+
+}
 void ReadIMP(void)
 {
-  if(P2_1)
-  ImpStatus=1;
-  else
-  ImpStatus=0;
+ // if(P2_1)
+ // ImpStatus=1;
+ // else
+ // ImpStatus=0;
 }
 
 

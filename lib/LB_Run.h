@@ -30,7 +30,9 @@ version  : ���ļ�β��
 #define  GroundMin 12
 
 
-typedef INT8U uint8_t ;
+typedef INT8U uint8_t;
+typedef INT8S int8_t;
+typedef INT16U  uint16_t;
 
 KAKA_Run_EXT  idata  INT16U RunMs;
 KAKA_Run_EXT  idata  INT16U EdgeErrordelayTime;

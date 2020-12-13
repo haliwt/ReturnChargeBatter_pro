@@ -131,7 +131,8 @@ void main(void)
 	Init_IR();
 	InitBuzzer();
 	SetBuzzerTime(2);
-	InitIMP();
+	//InitIMP();
+	ReChargeBatter_Init();//WT.EDIT 2020.12.13
 	Init_MotorSpeedIR();
 	ADCtl=1;
 	KeyInit(); //WT.KEY inti
@@ -158,20 +159,41 @@ void main(void)
 	while(1)
 	{
 		 
-		 //CheckGround();
-		//CheckRun();
+		if(BatterCharge ==1){
+            LedGreenOff();
+			Delay_ms(500);
+		    LedGreenON();
+			Delay_ms(500);
+		    LedGreenOff();
+			Delay_ms(500);
+		    LedGreenON();
+
+		}
+       else{
+		 CheckGround();
+		 CheckRun();
 		 KK=ReadKey();
-		 if(KK==1){ //left key 
+		 CheckMode(KK);
+       	}
+		 #if 0
+		 if(KK==3){
+		 	LedGreenON();
+			LedRedON();
+		    
+		  
+		 }
+		 else if(KK==1){ //left key 
 		    LedRedOff();
 			LedGreenON();
-			 KK=0;
+			
 		 }
 		 else if(KK==2){ //right Key
 		    LedGreenOff();
 			LedRedON();
-			 KK=0;
-		   }
-	     //CheckMode(KK);
+		 
+			
+		  }
+	     #endif 
 	   }
 
 }
