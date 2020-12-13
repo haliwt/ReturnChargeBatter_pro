@@ -171,6 +171,10 @@ void main(void)
 		    LedGreenOff();
 			Delay_ms(500);
 		    LedGreenON();
+			 AllStop();
+			Step =20 ;
+			 LedGreenON();
+			
 
 		}
        else{

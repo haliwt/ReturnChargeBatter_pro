@@ -56,7 +56,7 @@ void AutoCharge(void)
 		
 			  LedGreenON();
 		
-			if(ReadPowerDCIn()){ //Be charged detect GPIO
+			if(BatterCharge ==1){ //Be charged detect GPIO
 		              
 			             AllStop();
 						 Step =20 ;
@@ -72,14 +72,14 @@ void AutoCharge(void)
 			#endif 
             else if(RunMs < 50 && conline ==1)
 		    {	
-				    SetXMotor(1,10,15,1,1,10,15,1);//SetXMotor(2,10,15,2,2,10,15,2);
-			        SetMotorcm(1,50);
+				    SetXMotor(1,1,1,1,1,1,1,1);//SetXMotor(2,10,15,2,2,10,15,2);
+			        SetMotorcm(1,10);
 					conline=0;
 					
 			}
 			else if(RunMs < 10 && conline ==2 ){
-					SetXMotor(1,5,5,1,1,5,5,1);//SetXMotor(2,5,5,2,2,5,5,2);
-			        SetMotorcm(1,50);
+					SetXMotor(1,1,1,1,1,1,1,1);//SetXMotor(2,5,5,2,2,5,5,2);
+			        SetMotorcm(1,10);
 					conline =0;
 					
             }
@@ -210,7 +210,7 @@ void AutoCharge(void)
 
 		case 3: //CW slow Run  //CW motor 90 degree ---Ë³Ê±ï¿½ï¿½ï¿½ï¿½×ª 90 ï¿½ï¿½
 		          LedRedON();// 
-		         if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		         if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -320,14 +320,14 @@ void AutoCharge(void)
 
             case 5:
 				 //CCW 90 RUN,CCW dir run 
-			    if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+			    if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
 						   Step =20 ;
 						   LedGreenON();
 				} 	
 				else{
-				 if(ReadPowerDCIn()){ //CCW 90 
+				 if(BatterCharge ==1){ //CCW 90 
 		             AllStop();
 				 }
 				 else if(RunMs <5)//To motor CCW   90 degree
@@ -427,7 +427,7 @@ void AutoCharge(void)
 
         case 10://Back run
 
-             if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+             if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
 						   Step =20 ;
@@ -437,7 +437,7 @@ void AutoCharge(void)
             	
 	             if(RunMs < 10)
 			    {	
-					   SetXMotor(2,5,5,2,2,5,5,2); // SetXMotor(1,5,5,1,1,5,5,1); 
+					   SetXMotor(2,1,1,2,2,1,1,2); // SetXMotor(1,5,5,1,1,5,5,1); 
 				        SetMotorcm(1,50);
 						
 				 }
@@ -448,7 +448,7 @@ void AutoCharge(void)
 
 		case 20:
 
-		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
 						   Step =20 ;
