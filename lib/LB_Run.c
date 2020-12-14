@@ -639,7 +639,7 @@ void CheckMode(INT8U Key)
 			break; 
 			case 2:
 			{
-			   if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			   if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin))//if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
 			   {
 				   GroundSecond=0;
 			   }

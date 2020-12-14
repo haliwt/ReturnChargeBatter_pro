@@ -155,7 +155,7 @@ INT8U  ReadKey(void)
   }
   else {
 
-  if(P0_1==1)  //right key Works 
+  if(P0_1==1)  //right key Works SW1 
   {
     if(K1temp<200)
    	 K1temp++;
@@ -168,7 +168,7 @@ INT8U  ReadKey(void)
 	BuzzerOff();
   }
 
-  if(P0_0==0)   //Left key Power ON 
+  if(P0_0==0)   //Left key Power ON SW2
   {
     if(K2temp<200)
    	 K2temp++;
@@ -186,7 +186,7 @@ INT8U  ReadKey(void)
   {
     K1temp=201;
    //return(1);
-	t_Key =1;  //Left key  -- Power on 
+	t_Key =10;  //woks Mode 
   }
   if(K2temp==190)
   {

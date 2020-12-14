@@ -114,8 +114,8 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
-	INT8U KK;
-	 static INT8U keylock;
+	INT8U KK,KEY;
+	static INT8U ikey;
 	InitSysclk(1);
 
 	InitT1();
@@ -170,21 +170,12 @@ void main(void)
 	  else{
 
 		  KK=ReadKey();
-         // CheckHandsetIR();
-		  
+          //CheckHandsetIR();
 		
 		  CheckMode(KK);
-		    CheckRun();
+		  CheckRun();
 		  CheckGround();
-		  if(KK==1){
-		  
-		   LedRedON();
-			LedGreenON();
-		  }
-		  if(KK==2){
-		       LedRedOff();
-			LedGreenOff();
-		  }
+		
 	     
 		 }
 
