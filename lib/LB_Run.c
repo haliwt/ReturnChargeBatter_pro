@@ -50,7 +50,7 @@ void InitPowerIn(void)
 ******************************************************************/
 void CheckMode(INT8U Key)
  {
-      #if 0
+    
 		if(KeydelayTime>3)
 		{
 				  //定点
@@ -60,16 +60,14 @@ void CheckMode(INT8U Key)
    		SBUF=Key;
 		  }
 	  }
-	 #endif 
+	
 	  switch(Key)
 	  {
 		
-          case 0:
+          case 1:
 
 
-		  break; 
-		 
-		  case 4:
+	      case 4:
 		  {
 		   if(Mode!=2)
 		   {
@@ -269,10 +267,12 @@ void CheckMode(INT8U Key)
 		  }
 		  break;
 		}	  
-	  
-	  
-  
-	   switch(Mode)
+/****************************************************/
+	 //初始化值 ： Mode=1; Step=0;ImpStatus=0;
+      // RunStep=0; modeBackup =0 ; 
+      //Mode =2 start
+/****************************************************/
+       switch(Mode)
 	   {
 		 //暂停
 		 case 0:
@@ -361,6 +361,12 @@ void CheckMode(INT8U Key)
 		  }
 		 }
 		 break;
+		 /****************Mode = 0 END*******************/
+		 /**************************************************/
+		  //初始化值 ： Mode=1; Step=0;ImpStatus=0;
+          // RunStep=0; modeBackup =0 ; 
+          //Mode =2 start****************************/
+		 /***********************************************/
 		 //弓形
 		 case 1:
 		 {
@@ -2398,6 +2404,7 @@ void  CheckRun()
 				Imp2Time++;
 				Enter3=2;
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -2409,6 +2416,7 @@ void  CheckRun()
 				Imp2Time++;
 				Enter3=3;
 			}
+			#endif 
 			else   
 			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
 			{
@@ -2538,6 +2546,7 @@ void  CheckRun()
 				RunMs=0;
 				Enter3=14;
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -2548,7 +2557,7 @@ void  CheckRun()
 				RunMs=0;
 				Enter3=15;
 			}
-
+  			#endif 
 
 			break;
 		case 7:
@@ -2602,6 +2611,7 @@ void  CheckRun()
 				RunMs=0;
 				Imp2Time++;
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -2612,6 +2622,7 @@ void  CheckRun()
 				RunMs=0;
 				Imp2Time++;
 			}
+			#endif 
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
 
@@ -2716,6 +2727,7 @@ void  CheckRun()
 				RunMs=0;
 				Enter3=17;
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -2726,6 +2738,7 @@ void  CheckRun()
 				RunMs=0;
 				Enter3=18;
 			}
+			#endif 
 
 			break;
 		case 11:
@@ -2759,6 +2772,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -2769,6 +2783,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 			break;
 		case 0x12:
 		{
@@ -2931,6 +2946,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 				Imp2Time++;
@@ -2941,7 +2957,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-
+           #endif 
 			break;
 		case 0x17:
 		{
@@ -2995,6 +3011,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 				Imp2Time++;
@@ -3005,6 +3022,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
 				CurrentMax++;
@@ -3075,6 +3093,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 				Imp2Time++;
@@ -3085,6 +3104,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 
 			break;
 		case 0x1b:
@@ -3118,6 +3138,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 				Imp2Time++;
@@ -3128,7 +3149,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-
+			#endif 
 			break;
 			//沿墙
 		case 0x20:
@@ -3213,6 +3234,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -3223,6 +3245,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 		}
 		break;
 		case 0x24:
@@ -3268,6 +3291,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -3278,6 +3302,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
 				CurrentMax++;
@@ -3319,6 +3344,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -3329,6 +3355,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
 				CurrentMax++;
@@ -3415,7 +3442,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3460,7 +3487,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3505,7 +3532,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3550,7 +3577,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3596,7 +3623,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3674,7 +3701,7 @@ void  CheckRun()
 				SetXMotor(2,10,10,1,1,10,10,1);
 				SetMotorcm(3,360);
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3707,7 +3734,7 @@ void  CheckRun()
 				SetXMotor(2,10,10,1,1,10,10,1);
 				SetMotorcm(3,360);
 			}
-			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3854,6 +3881,7 @@ void  CheckRun()
 					SetMotorcm(3,45);
 				}
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -3884,6 +3912,7 @@ void  CheckRun()
 					SetMotorcm(4,45);
 				}
 			}
+			#endif 
 			else
 			if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
@@ -4030,6 +4059,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#if 0
 			else if(GroundDp[2]<GroundMin)
 			{
 
@@ -4040,6 +4070,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
+			#endif 
 			break;
 		case 0x56:
 			if(RunMs>50)

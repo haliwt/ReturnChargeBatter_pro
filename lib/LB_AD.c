@@ -200,7 +200,7 @@ void CheckGround()
    {
    	   GroundAD[0][1]=(AD5ms[3]>>4);
 	   GroundAD[1][1]=(AD5ms[2]>>4);
-	   //GroundAD[2][1]=(AD5ms[1]>>4);
+	 //  GroundAD[2][1]=(AD5ms[1]>>4);// GroundDp[2]
 	   ADFlashFlag=0;
    }
 

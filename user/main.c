@@ -333,19 +333,20 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  GroundSecond++;
 	  ImpSecond++;
 	  
-      /*
-	  Usart1Send[0]=8;
-	  Usart1Send[1]=Voltage/100;
-	  Usart1Send[2]=Voltage%100;
-	  Usart1Send[3]=GroundDp[0];
-	  Usart1Send[4]=GroundDp[1];
-	  Usart1Send[5]=GroundDp[2];
-	  Usart1Send[6]=LCurrent;
-	  Usart1Send[7]=RCurrent;
-	  Usart1Send[8]=RunStep;
+      
+	  Usart1Send[0]=3;
+	 // Usart1Send[1]=Voltage/100;
+	 // Usart1Send[2]=Voltage%100;
+	  Usart1Send[1]=GroundDp[0];  //left 
+	  Usart1Send[2]=GroundDp[1];  //right 
+	  //Usart1Send[3]=GroundDp[2];
+	   Usart1Send[3]=0x88;
+	 // Usart1Send[6]=LCurrent;
+	 // Usart1Send[7]=RCurrent;
+	 // Usart1Send[8]=RunStep;
 	  SendCount=1;
 	  SBUF=Usart1Send[SendCount];
-	  */
+	  
 	  /*
 	  Usart1Send[0]=13;
 	  Usart1Send[1]=LeftIR.Left;
