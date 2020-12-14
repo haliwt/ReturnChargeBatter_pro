@@ -48,7 +48,7 @@ void  CheckRun()
 		
 			  LedGreenON();
 		
-			if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+			if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			             AllStop();
 						 Step =20 ;
@@ -373,7 +373,7 @@ void  CheckRun()
 
 		case 10 :
 
-		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			             AllStop();
 						 Step =20 ;
@@ -396,7 +396,7 @@ void  CheckRun()
 
 		case 20:
 
-		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		if(BatterCharge ==1){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
 						   Step =20 ;
