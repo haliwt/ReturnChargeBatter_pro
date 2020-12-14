@@ -77,14 +77,7 @@ void AllLedOff()
   P2_3=1;
 }
 
-void InitKey(void)
-{
-  P0M0 = 0x60;                        //P00设置为施密特数字带上拉输入
-  P3M2 = 0x60;                        //P32设置为施密特数字带上拉输入
-  P0_0=1;
-  P3_2=1;
 
-}
 
 void InitIMP(void)
 {
@@ -112,13 +105,58 @@ void ReadIMP(void)
   ImpStatus=0;
 }
 
-INT8U ReadKey(void)
+/*********************************************************************/
+void KeyInit(void)
+{
+   P0M0=0X51; //杈撳叆 SMT 
+   P0M1=0X51;
+   P0_0=0;
+   P0_1=0;
+
+}
+/*************************************************************************/
+
+/****************************************************************
+ 	* * *
+ 	* Function Name:INT8U ReadKey(void)
+ 	* Function: Touch key of define function 
+ 	* Input Ref: NO
+ 	* Return Ref: KEY VALUE 
+ 	* 
+ ***************************************************************/
+INT8U  ReadKey(void)
 {
 
-  static INT8U  K1temp,K2temp;
+  static INT8U  K1temp,K2temp,K12temp;
   INT8U t_Key;
   t_Key=0;
-  if(P3_2==0)
+
+  if(P0_1 ==1 && P0_0 ==1){
+
+      if(K12temp<200){
+   	   K12temp++;
+	   BuzzerON();
+
+	  }
+	  else {
+	     K12temp=0;
+		BuzzerOff();
+	  
+	  }
+	  
+	 if(K12temp==190)
+	  {
+	    K12temp=201;
+	    return(3);
+	  }
+	  
+	  
+
+
+  }
+  else {
+
+  if(P0_1==1)  //right key 
   {
     if(K1temp<200)
    	 K1temp++;
@@ -131,7 +169,7 @@ INT8U ReadKey(void)
 	BuzzerOff();
   }
 
-  if(P0_0==0)
+  if(P0_0==0)   //Left key 
   {
     if(K2temp<200)
    	 K2temp++;
@@ -149,23 +187,19 @@ INT8U ReadKey(void)
   {
     K1temp=201;
    //return(1);
-	t_Key|=1;
+	t_Key =1;  //Left key  -- Power on 
   }
   if(K2temp==190)
   {
     K2temp=201;
    //return(1);
-	t_Key|=2;
+	t_Key =2;  //right key --Power On and Power down
   }
   return(t_Key);  
 }
-void InitPowerIn(void)
-{
-  P1M7 = 0x60; 
-  P1M0 = 0x50;                        //P10设置为施密特数字带上拉输入
-  P1_0=1;                  //输入充电输入接口----检测，有12V输入
 
 }
+
 
 
  INT8U ReadPowerDCIn(void)

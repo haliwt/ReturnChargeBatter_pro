@@ -58,6 +58,7 @@ KAKA_Led_EXT void BuzzerOff();
 KAKA_Led_EXT void SetBuzzerTime(INT8U time);
 KAKA_Led_EXT void CheckBuzzer();
 KAKA_Led_EXT void ReChargeBatter_Init(void);//WT.EDIT
+KAKA_Led_EXT  void KeyInit(void); //WT.EDIT
 
 
 #endif

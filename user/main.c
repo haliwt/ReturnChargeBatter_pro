@@ -114,6 +114,7 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
+	INT8U KK;
 	InitSysclk(1);
 
 	InitT1();
@@ -125,12 +126,13 @@ void main(void)
 	//InitMotorForward();
 	InitFanEdgeIO();
 	InitLed();
-	InitKey();
+	
 	InitPowerIn();
 	Init_IR();
 	InitBuzzer();
 	SetBuzzerTime(2);
 	//InitIMP();
+	 KeyInit(); //WT.EDIT 
 	ReChargeBatter_Init();//WT.EDIT 
 	Init_MotorSpeedIR();
 	ADCtl=1;
@@ -154,7 +156,9 @@ void main(void)
 	ModeBackup=0;
 	while(1)
 	{
-      if(BatterCharge ==1){
+       KK=ReadKey();
+
+	  if(BatterCharge ==1){
 	     AllStop();
 		 LedGreenON();
 		 Delay_ms(500);
@@ -163,13 +167,26 @@ void main(void)
 	  
 	  }
 	  else{
-		  CheckHandsetIR();
-		  CheckRun();
+		 // CheckHandsetIR();
+		 // CheckRun();
+
+		 if(KK==1){ //left key 
+		    LedRedOff();
+			LedGreenON();
+			 KK=0;
+		 }
+		 else if(KK==2){ //right Key
+		    LedGreenOff();
+			LedRedON();
+			 KK=0;
+		   }
+	     //CheckMode(KK);
+	   }
 	  }
 	
   }
 
-}
+
 /************************************************************
 	*
 	*Function Name:void INT8_17_Rpt() interrupt INT8_17_VECTOR 
