@@ -64,7 +64,7 @@ void  CheckRun()
 			#endif 
             else if(RunMs < 20)
 		    {	
-				    SetXMotor(2,1,1,2,2,1,1,2);
+				    SetXMotor(2,5,10,2,2,5,10,2);
 			        SetMotorcm(1,50);
 					
 				 }
@@ -79,7 +79,7 @@ void  CheckRun()
 		case 2: //Adjust line run condition
            
 				 AllStop();
-				 Delay_ms(500);
+				 Delay_ms(50);
 				 Remote1_ReadIR.ReadCloseList[1]=0;
 				 Remote1_ReadIR.ReadCloseList[0]=0;
 		         costValue ++;
@@ -158,7 +158,7 @@ void  CheckRun()
 					  {	
 							 LedRedON();
 							
-							 SetXMotor(2,1,1,1,1,1,1,1);
+							 SetXMotor(2,5,10,1,1,5,10,1);
 							 SetMotorcm(3,45);
 								
 							
@@ -171,7 +171,7 @@ void  CheckRun()
 
 	   case 4:  //CW run adjust Ref
                  AllStop();
-				 Delay_ms(500);
+				 Delay_ms(50);
 	             Remote1_ReadIR.ReadCloseList[2]=0;
 		  
 				
@@ -275,7 +275,7 @@ void  CheckRun()
 				  {	
 								
 					
-					  SetXMotor(1,1,1,1,2,1,1,1);
+					  SetXMotor(1,5,10,1,2,5,10,1);
 					  SetMotorcm(4,45);//SetMotorcm(4,45);
 					 
 							 
@@ -373,7 +373,7 @@ void  CheckRun()
 
 		case 10 :
 
-		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		if(BatterCharge ==1){//if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			             AllStop();
 						 Step =20 ;
@@ -382,7 +382,7 @@ void  CheckRun()
 
             else if(RunMs < 20)
 		    {	
-				    SetXMotor(1,1,1,1,1,1,1,1);
+				    SetXMotor(1,5,10,1,1,5,10,1);
 			        SetMotorcm(1,50);
 					
 				 }
@@ -396,7 +396,7 @@ void  CheckRun()
 
 		case 20:
 
-		if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
+		if(BatterCharge ==1){//if(ReadPowerDCIn()){ //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿?
 		              
 			               AllStop();
 						   Step =20 ;
