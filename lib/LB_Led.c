@@ -81,20 +81,22 @@ void AllLedOff()
 
 void InitIMP(void)
 {
-  P2M1 = 0x60;                        //P01设置为施密特数字带上拉输入
-  P2M0 = 0xC2;                        //P21
-  P2_0=0;
+  //P2M1 = 0x60;                        //P2_1设置为施密特数字带上拉输入
+  //P2M0 = 0xC2;                        //P21
+  //P2_0=0;
   //P2_1=0;
+  P3M4 = 0x52;                       //P3_4 = 输入下啦
+  P3M5 = 0x52 ;
 
 }
 void SetIMPOutOn()
 {
-  P2_0=1;
+  //P2_0=1;
 }
 
  void SetIMPOutOff()
 {
-  P2_0=0;
+  //P2_0=0;
 }
 
 void ReadIMP(void)
@@ -143,16 +145,13 @@ INT8U  ReadKey(void)
 	 if(K12temp==190)
 	  {
 	    K12temp=201;
-	    return(3);
+	    return(0x32);
 	  }
 	  
-	  
-
-
   }
   else {
 
-  if(P0_1==1)  //right key 
+  if(P0_1==1)  //right key Works 
   {
     if(K1temp<200)
    	 K1temp++;
@@ -165,7 +164,7 @@ INT8U  ReadKey(void)
 	BuzzerOff();
   }
 
-  if(P0_0==0)   //Left key 
+  if(P0_0==0)   //Left key Power ON 
   {
     if(K2temp<200)
    	 K2temp++;

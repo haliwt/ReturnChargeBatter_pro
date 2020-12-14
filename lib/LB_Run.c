@@ -60,11 +60,23 @@ void CheckMode(INT8U Key)
    		SBUF=Key;
 		  }
 	  }
-	
+	  	
+		//Enter3=0;RunStep=0;
+		//Mode=1;
+		//Step=0;
 	  switch(Key)
 	  {
 		
-          case 1:
+
+		 case 0:  
+
+		       Mode =0 ;      
+
+
+		 break; 
+
+         //
+		  case 1:
 
 
 	      case 4:
@@ -270,7 +282,7 @@ void CheckMode(INT8U Key)
 /****************************************************/
 	 //初始化值 ： Mode=1; Step=0;ImpStatus=0;
       // RunStep=0; modeBackup =0 ; 
-      //Mode =2 start
+      
 /****************************************************/
        switch(Mode)
 	   {
@@ -365,7 +377,7 @@ void CheckMode(INT8U Key)
 		 /**************************************************/
 		  //初始化值 ： Mode=1; Step=0;ImpStatus=0;
           // RunStep=0; modeBackup =0 ; 
-          //Mode =2 start****************************/
+          /**********Mode =1 start***********************/
 		 /***********************************************/
 		 //弓形
 		 case 1:
@@ -379,8 +391,8 @@ void CheckMode(INT8U Key)
 			   ADCtl=1;
    //		   LedGreenON();
 			   AllStop();
-			   SetIMPOutOn();
-			   MotorSpeedIRON();
+			   SetIMPOutOn();   //红外碰撞开启
+			  // MotorSpeedIRON();
 			   IMPTime=0;
 			}
 			break;
@@ -388,16 +400,16 @@ void CheckMode(INT8U Key)
 			{
 			   if(RunSecond>1)
 			   {
-				 Step=2;
+				    Step=2;
 				   SetFan(255);
 				   SetEdge(200);
-				 RunStep=1;
+				   RunStep=1;
 			   }
 			}
 			break;
 			case 2:
 			{
-			   if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			   if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin))//if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
 			   {
 				   GroundSecond=0;
 			   }
@@ -600,7 +612,11 @@ void CheckMode(INT8U Key)
 		  } 	 
 		 }
 		 break;
+		 /******************Mode =1 END *****************/
+		 /************************************************************/
+		 /************************************************************/
 		 //定点
+		 //Mode =2 start 
 		 case 2:
 		 {	
 		   switch(Step)
@@ -817,7 +833,11 @@ void CheckMode(INT8U Key)
 			}		  
 		 }
 		 break;
+		 /**********************Mode =3 END**************************/
+		 /***********************************************************/
+		 /**********************************************************/
 		 //沿边
+		 //Mode =3 
 		 case 3:
 		 {
 		   switch(Step)
@@ -1033,8 +1053,13 @@ void CheckMode(INT8U Key)
    
 			}	  
 		 }
+		 /********************Mode =3 END***************************/
+		 /**********************************************************/
+		 /**********************************************************/
+		 /*********************************************************/
 		 break;
 		 //充电
+		 //Mode =4 start 
 		 case 4:
 		 {
 		   switch(Step)

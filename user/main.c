@@ -152,14 +152,12 @@ void main(void)
 	EdgeCurrentCount2=0;
 	Gong_Step=0;
 	Enter3=0;
-	//Mode=1;
-	Mode =0 ;//WT.EDIT 
+	Mode=1;
 	Step=0;
 	ModeBackup=0;
-	LedGreenON();
 	while(1)
 	{
-       KK=ReadKey();
+      
 
 	  if(BatterCharge ==1|| P1_0 ==1){
 	     AllStop();
@@ -170,11 +168,16 @@ void main(void)
 	  
 	  }
 	  else{
-		 // CheckHandsetIR();
-		 // CheckRun();
-		 CheckGround();
-		 CheckRun();
-	     CheckMode(KK);
+
+		  KK=ReadKey();
+          CheckHandsetIR();
+		  CheckGround();
+		  CheckRun();
+		  CheckMode(KK);
+	     
+		 }
+
+		 #if 0
 
 		 if(KK==1){ //left key 
 			 keylock = keylock ^ 0x01 ;
@@ -195,6 +198,7 @@ void main(void)
 		   }
 	     //CheckMode(KK);
 	   }
+	   #endif 
 	  }
 	
   }
@@ -333,7 +337,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  GroundSecond++;
 	  ImpSecond++;
 	  
-      
+      #if 0
 	  Usart1Send[0]=3;
 	 // Usart1Send[1]=Voltage/100;
 	 // Usart1Send[2]=Voltage%100;
@@ -346,6 +350,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	 // Usart1Send[8]=RunStep;
 	  SendCount=1;
 	  SBUF=Usart1Send[SendCount];
+	  #endif 
 	  
 	  /*
 	  Usart1Send[0]=13;
