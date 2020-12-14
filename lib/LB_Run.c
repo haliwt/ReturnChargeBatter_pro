@@ -57,17 +57,17 @@ void  CheckRun()
 			#if 1
 			else if(Remote1_ReadIR.ReadCloseList[2]==1){
 						
-						 RunMs=0;
-						 Step=3;			  
+				 RunMs=0;
+				 Step=2;	//WT.EDIT 		  
 
 			}
 			#endif 
             else if(RunMs < 20)
 		    {	
-				    SetXMotor(2,5,10,2,2,5,10,2);
-			        SetMotorcm(1,50);
+			    SetXMotor(2,5,10,2,2,5,10,2);
+		        SetMotorcm(1,50);
 					
-				 }
+			}
 			   else{
 			     Step =2;
 
@@ -246,6 +246,7 @@ void  CheckRun()
 						    Step=5;  //CCW run
 						    
 						}
+					
                  }
 
 					
@@ -268,10 +269,8 @@ void  CheckRun()
 				 
 				//}
 				else{
-				 if(BatterCharge ==1){//if(ReadPowerDCIn()){ //CCW 90 
-		             AllStop();
-				 }
-				 else if(RunMs <10)//To motor CCW   90 degree
+				
+				 if(RunMs <10)//To motor CCW   90 degree
 				  {	
 								
 					
