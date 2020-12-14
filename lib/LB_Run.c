@@ -68,13 +68,7 @@ void CheckMode(INT8U Key)
 	  {
 		
 
-		 case 0:  
-
-		       Mode =0 ;      
-
-
-		 break; 
-
+	
          //
 		  case 1:
 

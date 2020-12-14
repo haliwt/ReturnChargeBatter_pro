@@ -170,10 +170,21 @@ void main(void)
 	  else{
 
 		  KK=ReadKey();
-          CheckHandsetIR();
-		  CheckGround();
-		  CheckRun();
+         // CheckHandsetIR();
+		  
+		
 		  CheckMode(KK);
+		    CheckRun();
+		  CheckGround();
+		  if(KK==1){
+		  
+		   LedRedON();
+			LedGreenON();
+		  }
+		  if(KK==2){
+		       LedRedOff();
+			LedGreenOff();
+		  }
 	     
 		 }
 
