@@ -32,15 +32,17 @@ void Delay_2us(unsigned int fui_i)
 void InitADIO(void)
 {
 	P0M2 = 0x02;				        //P02设置为模拟输入
-	P0M3 = 0x02;				        //P03设置为模拟输入
+	//P0M3 = 0x02;				        //P03设置为模拟输入
+
 	P0M4 = 0x02;				        //P04设置为模拟输入
 	P0M5 = 0x02;				        //P05设置为模拟输入
 	P0M6 = 0x02;				        //P06设置为模拟输入
 	P0M7 = 0x02;				        //P07设置为模拟输入
-	P2M4 = 0x02;				        //P24设置为模拟输入
-	P2M5 = 0x02;				        //P25设置为模拟输入
 
-	P0M1 = 0X80;
+	P2M4 = 0x02;				        //P24设置为模拟输入 FAN
+	P2M5 = 0x02;				        //P25设置为模拟输入 Edge brush
+
+	P0M3 = 0X80 ; //IR_ PWM_OUT //P0M1 = 0X80;
 
 	LCurrentAD[0]=0;
 	LCurrentAD[2]=0;
@@ -74,7 +76,7 @@ void SetADINT(void)
 
 void  SetAD(INT8U ADChanel)
 {
-  code INT8U ADCC[8]={2,3,4,5,6,7,12,13};
+  code INT8U ADCC[8]={2,3,4,5,6,7,12,13}; //AN4_ L AN5 _ R
   SeleADChanel(ADCC[ADChanel]);
   SetADINT();
   StartAD();
@@ -97,20 +99,20 @@ void ReadAD5ms()
 	   {
 	   if(ADFlag)
 	   {
-		 P0_1 = 1;
+		 P0_3 = 1; //New MainBoard WT.EDIT //P0_1 = 1;
 		 ADFlag=0;
 		 ADFlashFlag=1;
 	   }
 	  else
 	  {
-		 P0_1 = 0;
+		 P0_3 = 0; //WT.EDIT MAIN //P0_1 = 0;
 		 ADFlag=1;
 		 ADFlashFlag=1;
 	  }
 	  }
 	  else
 	  {
-	  	 P0_1 = 0;
+	  	P0_3 =0 ; //WT.EDIT // P0_1 = 0;
 	  }
 	 chanel=0;
 	 }
@@ -155,7 +157,7 @@ void CheckGround()
    {
    	   GroundAD[0][0]=(AD5ms[3]>>4);
 	   GroundAD[1][0]=(AD5ms[2]>>4);
-	   GroundAD[2][0]=(AD5ms[1]>>4);
+	  // GroundAD[2][0]=(AD5ms[1]>>4);
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
     if(GroundAD[0][1]>GroundAD[0][0])
@@ -198,7 +200,7 @@ void CheckGround()
    {
    	   GroundAD[0][1]=(AD5ms[3]>>4);
 	   GroundAD[1][1]=(AD5ms[2]>>4);
-	   GroundAD[2][1]=(AD5ms[1]>>4);
+	   //GroundAD[2][1]=(AD5ms[1]>>4);
 	   ADFlashFlag=0;
    }
 

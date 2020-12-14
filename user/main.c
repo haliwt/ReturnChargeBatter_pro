@@ -114,6 +114,8 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
+	INT8U KK;
+	 static INT8U keylock;
 	InitSysclk(1);
 
 	InitT1();
@@ -125,12 +127,13 @@ void main(void)
 	//InitMotorForward();
 	InitFanEdgeIO();
 	InitLed();
-	InitKey();
+	
 	InitPowerIn();
 	Init_IR();
 	InitBuzzer();
 	SetBuzzerTime(2);
 	//InitIMP();
+	KeyInit(); //WT.EDIT 
 	ReChargeBatter_Init();//WT.EDIT 
 	Init_MotorSpeedIR();
 	ADCtl=1;
@@ -149,12 +152,16 @@ void main(void)
 	EdgeCurrentCount2=0;
 	Gong_Step=0;
 	Enter3=0;
-	Mode=1;
+	//Mode=1;
+	Mode =0 ;//WT.EDIT 
 	Step=0;
 	ModeBackup=0;
+	LedGreenON();
 	while(1)
 	{
-      if(BatterCharge ==1){
+       KK=ReadKey();
+
+	  if(BatterCharge ==1|| P1_0 ==1){
 	     AllStop();
 		 LedGreenON();
 		 Delay_ms(500);
@@ -163,13 +170,36 @@ void main(void)
 	  
 	  }
 	  else{
-		  CheckHandsetIR();
-		  CheckRun();
+		 // CheckHandsetIR();
+		 // CheckRun();
+		 CheckGround();
+		 CheckRun();
+	     CheckMode(KK);
+
+		 if(KK==1){ //left key 
+			 keylock = keylock ^ 0x01 ;
+			 if(keylock ==1){
+			    AllStop();
+			  }
+			  
+		    LedRedOff();
+			LedGreenON();
+			 KK=0;
+		 }
+		 else if(KK==2){ //right Key Works Mode 
+		    LedGreenOff();
+			LedRedON();
+		    RunStep=1;
+		
+			 KK=0;
+		   }
+	     //CheckMode(KK);
+	   }
 	  }
 	
   }
 
-}
+
 /************************************************************
 	*
 	*Function Name:void INT8_17_Rpt() interrupt INT8_17_VECTOR 

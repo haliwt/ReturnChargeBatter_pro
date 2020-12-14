@@ -36,11 +36,11 @@ void Init_MotorSpeed()
 }
 void Init_MotorSpeedIR()
 {
-	P1M5 = 0x84;			        	//P15设置为
+	//P1M5 = 0x84;			        	//P15设置为
 }
 void MotorSpeedIRON()
 {
-  P1_5=0;
+  //P1_5=0;
 }
 
 void MotorSpeedIROff()
@@ -263,11 +263,16 @@ void RightStop()
 
 void AllStop()
 {
-   PWMEN &= 0xee;
+    PWMEN &= 0xee;
+	
     P1_1=0;
     P1_2=0;
     P1_3=0;
     P1_4=0;
+	P1_1=0;
+	
+  
+	
 	LeftMoveMotorData.MotorMode=0;
 	RightMoveMotorData.MotorMode=0;
 }
