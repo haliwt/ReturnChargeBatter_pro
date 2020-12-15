@@ -157,7 +157,7 @@ void CheckGround()
    {
    	   GroundAD[0][0]=(AD5ms[3]>>4);
 	   GroundAD[1][0]=(AD5ms[2]>>4);
-	  // GroundAD[2][0]=(AD5ms[1]>>4);
+	   GroundAD[2][0]=(AD5ms[1]>>4);
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
     if(GroundAD[0][1]>GroundAD[0][0])
@@ -200,7 +200,7 @@ void CheckGround()
    {
    	   GroundAD[0][1]=(AD5ms[3]>>4);
 	   GroundAD[1][1]=(AD5ms[2]>>4);
-	 //  GroundAD[2][1]=(AD5ms[1]>>4);// GroundDp[2]
+	   GroundAD[2][1]=(AD5ms[1]>>4);// GroundDp[2]
 	   ADFlashFlag=0;
    }
 

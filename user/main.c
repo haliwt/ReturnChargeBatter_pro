@@ -168,13 +168,13 @@ void main(void)
 	  
 	  }
 	  else{
-
+          CheckGround();
 		  KK=ReadKey();
           //CheckHandsetIR();
 		
 		  CheckMode(KK);
 		  CheckRun();
-		  CheckGround();
+		  
 		
 	     
 		 }
@@ -339,7 +339,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  GroundSecond++;
 	  ImpSecond++;
 	  
-      #if 0
+      #if 1
 	  Usart1Send[0]=3;
 	 // Usart1Send[1]=Voltage/100;
 	 // Usart1Send[2]=Voltage%100;
@@ -416,11 +416,11 @@ void TIMER5_Rpt(void) interrupt T5_VECTOR
 	}
 	#endif 
     if(InterruptTime >10){  //>6
-					  Usart1Send[0]=2;
-					  Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
-                      Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
-					  SendCount=1;
-					  SBUF=Usart1Send[SendCount];
+					 // Usart1Send[0]=2;
+					 // Usart1Send[1]=gui_T5Value ;//Remote1_ReadIR.ReadIRData[Remote1_ReadIR.ReadIRBit];
+                     // Usart1Send[2]=Remote1_ReadIR.Interrupt_IR2  ;//0xff;
+					 // SendCount=1;
+					 // SBUF=Usart1Send[SendCount];
 					  InterruptTime =0;
                       // Remote1_ReadIR.ReadA_Time++;
 					  // Remote1_ReadIR.ReadASTAR[Remote1_ReadIR.ReadA_Time]=Remote1_ReadIR.Interrupt_IR2;
