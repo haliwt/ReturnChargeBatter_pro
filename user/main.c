@@ -132,7 +132,7 @@ void main(void)
 	Init_IR();
 	InitBuzzer();
 	SetBuzzerTime(2);
-	//InitIMP();
+	InitIMP();
 	KeyInit(); //WT.EDIT 
 	ReChargeBatter_Init();//WT.EDIT 
 	Init_MotorSpeedIR();
@@ -329,14 +329,14 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  
 	}
 	
-	if(t_1s>99)
+	if(t_1s>99)//100ms * 100 =1s
 	{
 	  t_1s=0;
 	  KeyclearTime++;
 	  EdgeErrordelayTime++;
 	  EdgeCollectDelayTime++;
 	  RunSecond++;	 
-	  GroundSecond++;
+	  GroundSecond++; //1s
 	  ImpSecond++;
 	  
       #if 1

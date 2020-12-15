@@ -87,6 +87,7 @@ void InitIMP(void)
   //P2_1=0;
   P3M4 = 0x60;                         //P3_4 =  ‰»Îœ¬¿≤
   P3M5 = 0x60 ;
+  
 
 }
 void SetIMPOutOn()

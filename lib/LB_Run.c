@@ -305,7 +305,7 @@ void CheckMode(INT8U Key)
 			  LedGreenOff();
 			//  After_Lowpowermode=1;
 			  Step=2;
-   
+              #if 0
    
    //		  P0M0 = 0x02;			  //P25设置为模拟输入
 			  P0M1 = 0x02;			  //P26设置为模拟输入
@@ -345,6 +345,7 @@ void CheckMode(INT8U Key)
 			  TCON	= 0x00; 					   //使能T1
 			  EA=1;
 			  PCON |= 0x02; 						   //低功耗寄存器
+			  #endif 
    
 			}
 			else if(ReadPowerDCIn())
@@ -396,18 +397,19 @@ void CheckMode(INT8U Key)
 			break;
 			case 1:
 			{
-			   if(RunSecond>1)
+			   if(RunSecond>1) //1s
 			   {
 				    Step=2;
 				   SetFan(255);
 				   SetEdge(200);
-				   RunStep=1;
+				   RunStep=1;  //-------
 			   }
 			}
 			break;
 			case 2:
 			{
-			   if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			  //边碰撞
+			   if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			   {
 				   GroundSecond=0; //无障碍物
 			   }
@@ -643,7 +645,7 @@ void CheckMode(INT8U Key)
 			break; 
 			case 2:
 			{
-			   if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin))//if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			   if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin))//if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			   {
 				   GroundSecond=0;
 			   }
@@ -864,7 +866,7 @@ void CheckMode(INT8U Key)
 			break; 
 			case 2:
 			{
-			   if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			   if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			   {
 				   GroundSecond=0;
 			   }
@@ -1398,7 +1400,7 @@ void CheckMode(INT8U Key)
 		 break;
 		 case 2:
 		 {
-			if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			{
 				GroundSecond=0;
 			}
@@ -1628,7 +1630,7 @@ void CheckMode(INT8U Key)
 		 break;	
 		 case 2:
 		 {
-			if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			{
 				GroundSecond=0;
 			}
@@ -1844,7 +1846,7 @@ void CheckMode(INT8U Key)
 		 break;	
 		 case 2:
 		 {
-			if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			{
 				GroundSecond=0;
 			}
@@ -2333,7 +2335,7 @@ void  CheckRun()
 			}
 			else 
 
-			if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,10);
@@ -2364,7 +2366,7 @@ void  CheckRun()
 				RunStep=0x1;
 				AllStop();
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,10);
@@ -2391,10 +2393,12 @@ void  CheckRun()
 		}
 		break;
 
+		//弓行模式切换过来。RunStep =1;
+
 		case 1:
 		{
 			ImpSecond=0;
-			SetXMotor(1,10,15,1,1,10,15,1);
+			SetXMotor(1,10,15,1,1,10,15,1); //直行 ----
 			SetMotorcm(1,1000);
 			RunStep=2;
 			RunMs=0;
@@ -2405,18 +2409,18 @@ void  CheckRun()
 		     if(ImpSecond>5)
 			 Imp2Time=0;
 
-			if(GroundDp[1]<GroundMin)
+			if(GroundDp[1]>GroundMin) //right IR 发生碰撞
 			{
 
 				NoImpSecond=0;
 				RunStep=0x3;
-				SetXMotor(2,10,25,1,2,10,25,1);
+				SetXMotor(2,10,25,1,2,10,25,1); //大的弧形走
 				SetMotorcm(2,5);
 				RunMs=20;
 				Imp2Time++;
 				Enter3=1;
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]>GroundMin) //left IR 发生碰撞 
 			{
 
 				NoImpSecond=0;
@@ -2428,7 +2432,7 @@ void  CheckRun()
 				Enter3=2;
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2479,7 +2483,7 @@ void  CheckRun()
 		case 3:
             if(RunMs>10)
 			{
-				SetXMotor(2,10,20,1,2,10,20,1);
+				SetXMotor(2,10,20,1,2,10,20,1); //走大的弧形 CCW
 				SetMotorcm(2,5);
 				RunMs=0;
 				RunStep=4;
@@ -2519,7 +2523,7 @@ void  CheckRun()
 		case 5:
 			if(RunMs>10)
 			{
-				SetXMotor(2,10,20,1,1,10,20,1);
+				SetXMotor(2,10,20,1,1,10,20,1); //走大的弧形CCW 
 				SetMotorcm(3,90);
 				RunMs=0;
 				RunStep=6;
@@ -2543,13 +2547,13 @@ void  CheckRun()
 				CurrentMax++;
 				NoImpSecond=0;
 				RunStep=3;
-				SetXMotor(2,10,20,1,2,10,20,1);
+				SetXMotor(2,10,20,1,2,10,20,1);//走大的弧形
 				SetMotorcm(2,5);
 				RunMs=0;
 				Enter3=12;
 
 			}
-			else if(GroundDp[1]<GroundMin)
+			else if(GroundDp[1] > GroundMin) //right IR 
 			{
 
 				NoImpSecond=0;
@@ -2559,7 +2563,7 @@ void  CheckRun()
 				RunMs=20;
 				Enter3=13;
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2570,7 +2574,7 @@ void  CheckRun()
 				Enter3=14;
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2624,7 +2628,7 @@ void  CheckRun()
 				RunMs=0;
 				CurrentMax++;
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2635,7 +2639,7 @@ void  CheckRun()
 				Imp2Time++;
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2740,7 +2744,7 @@ void  CheckRun()
 				RunMs=20;
 				Enter3=16;
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2751,7 +2755,7 @@ void  CheckRun()
 				Enter3=17;
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2785,7 +2789,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2796,7 +2800,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -2824,7 +2828,7 @@ void  CheckRun()
 				RunMs=20;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -2834,7 +2838,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -2959,7 +2963,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -2970,7 +2974,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3024,7 +3028,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3035,7 +3039,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3106,7 +3110,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3117,7 +3121,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3151,7 +3155,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3162,7 +3166,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 				Imp2Time++;
 				NoImpSecond=0;
@@ -3247,7 +3251,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3258,7 +3262,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3303,7 +3307,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3315,7 +3319,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3357,7 +3361,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3368,7 +3372,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3409,7 +3413,7 @@ void  CheckRun()
 				RunMs=0;
 				RunStep=0x21;
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3465,7 +3469,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3510,7 +3514,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3555,7 +3559,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3600,7 +3604,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3646,7 +3650,7 @@ void  CheckRun()
 				RunMs=0;
 
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3724,7 +3728,7 @@ void  CheckRun()
 				SetXMotor(2,10,10,1,1,10,10,1);
 				SetMotorcm(3,360);
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3757,7 +3761,7 @@ void  CheckRun()
 				SetXMotor(2,10,10,1,1,10,10,1);
 				SetMotorcm(3,360);
 			}
-			else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[2]<GroundMin))
+			else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//else if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin)||(GroundDp[0]<GroundMin))
 			{
 				SetXMotor(2,10,20,1,2,10,20,1);
 				SetMotorcm(2,5);
@@ -3875,7 +3879,7 @@ void  CheckRun()
 				}
 				RunMs=20;
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -3905,7 +3909,7 @@ void  CheckRun()
 				}
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -4072,7 +4076,7 @@ void  CheckRun()
 				RunMs=20;
 
 			}
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
@@ -4083,7 +4087,7 @@ void  CheckRun()
 
 			}
 			#if 0
-			else if(GroundDp[2]<GroundMin)
+			else if(GroundDp[0]<GroundMin)
 			{
 
 				NoImpSecond=0;
