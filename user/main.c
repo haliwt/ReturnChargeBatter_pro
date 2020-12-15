@@ -114,8 +114,8 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
-	INT8U KK,KEY;
-	static INT8U ikey;
+	INT8U KK;
+
 	InitSysclk(1);
 
 	InitT1();
@@ -293,7 +293,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  CheckRCurrent();
 	  CheckFanCurrent();
 	  CheckEdgeCurrent();
-	  ReadIMP();
+	  ReadIMP();  //IR impact 
 
 	  #if 0
 	  Usart1Send[0]=19;

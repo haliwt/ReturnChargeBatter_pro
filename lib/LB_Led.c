@@ -85,8 +85,8 @@ void InitIMP(void)
   //P2M0 = 0xC2;                        //P21
   //P2_0=0;
   //P2_1=0;
-  P3M4 = 0x52;                       //P3_4 = 输入下啦
-  P3M5 = 0x52 ;
+  P3M4 = 0x60;                         //P3_4 = 输入下啦
+  P3M5 = 0x60 ;
 
 }
 void SetIMPOutOn()
@@ -99,13 +99,20 @@ void SetIMPOutOn()
 {
   P2_0=0;
 }
-
+/******************************************************************
+	*
+	*Function Name: void ReadIMP(void)
+	*Function : impact 
+	*
+	*
+	*
+*******************************************************************/
 void ReadIMP(void)
 {
-  if(P2_1)
-  ImpStatus=1;
+  if(P3_4 ==0 || P3_5==0)//if(P2_1)
+     ImpStatus=1;
   else
-  ImpStatus=0;
+   ImpStatus=0;
 }
 
 /*********************************************************************/
@@ -129,7 +136,7 @@ void KeyInit(void)
 INT8U  ReadKey(void)
 {
 
-  static INT8U  K1temp,K2temp,K12temp;
+  static INT8U  K1temp,K2temp,K12temp,keyValue;
   INT8U t_Key;
   t_Key=0;
 
@@ -191,8 +198,8 @@ INT8U  ReadKey(void)
   if(K2temp==190)
   {
     K2temp=201;
-   //return(1);
-	t_Key =2;  //right key --Power On and Power down
+
+    t_Key =2;  //left  --Power On and Power down
   }
   return(t_Key);  
 }
@@ -213,32 +220,33 @@ INT8U  ReadKey(void)
 void InitBuzzer(void)
 {
 
-    P2M2 = 0xC2;                        //P35设置为推挽输出
-	PWM3_MAP = 0x22;					//PWM3映射P35口
-	//周期计算 	= 0xFF / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
-	//			= 0xFF /(16000000 / 4)			
-	// 			= 255 /4000000
-	//			= 63.75us		即15.69KHZ		
-
-	PWM3P = 0xc4;						//PWM周期为0xFF
-	//有效电平时间计算（即占空比） 	
-	//			= 0x55 / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
-	//			= 0x55 /(16000000 / 4)			
-	// 			= 85 /4000000
-	//			= 21.25us		占空比为 21.25 / 63.75 = 34%
-
-	PWM3D = 0x30;						//PWM占空比设置
-	PWM3C = 0x06; 						//使能PWM3，关闭中断，允许输出，时钟32分频	
-
-
-//  P2M2 = 0x84;                        //P01设置为施密特数字带上拉输入
-//  P2_2=0;
+   
+	P2M2 = 0xC2;						//P35????????????
+	PWM3_MAP = 0x22;					//PWM3???P35??
+		//???????	= 0xFF / (Fosc / PWM??????)		??Fosc????????????????
+		//			= 0xFF /(16000000 / 4)			
+		//			= 255 /4000000
+		//			= 63.75us		??15.69KHZ		
+	
+		PWM3P = 0xc4;						//PWM?????0xFF
+		//??Ч????????????????	
+		//			= 0x55 / (Fosc / PWM??????)		??Fosc????????????????
+		//			= 0x55 /(16000000 / 4)			
+		//			= 85 /4000000
+		//			= 21.25us		????? 21.25 / 63.75 = 34%
+	
+		PWM3D = 0x30;						//PWM????????
+		PWM3C = 0x06;						//???PWM3??????ж??????????????32??? 
+	
+	
+	//	P2M2 = 0x84;						//P01???????????????????????
+	//	P2_2=0;
 
 }
 void BuzzerON()
 {
  // BuzzerFlag=1; //WT.EDIT
- //SetBuzzerTime(4); //WT.EDIT 
+// SetBuzzerTime(4); //WT.EDIT 
 //  PWM3C = 0x96; 						//使能PWM3，关闭中断，允许输出，时钟32分频
 //  P2_2=0;
 }
@@ -246,16 +254,16 @@ void BuzzerON()
 
 void BuzzerOff()
 {
-  BuzzerFlag=0;
+ // BuzzerFlag=0; //WT.EDIT 
 //  PWM3C = 0x06; 						//使能PWM3，关闭中断，允许输出，时钟32分频
 //  P2_2=1;
 }
 
 void SetBuzzerTime(INT8U time)
 {
-	//BuzzerTime=time; //WT.EDIT
+	BuzzerTime=time; //WT.EDIT
 	
-	//PWM3C = 0x96; //WT.EDIT 						//使能PWM3，关闭中断，允许输出，时钟32分频	
+	PWM3C = 0x96; //WT.EDIT 						//使能PWM3，关闭中断，允许输出，时钟32分频	
 }
 
 void CheckBuzzer()

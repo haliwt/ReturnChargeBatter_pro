@@ -67,7 +67,10 @@ void CheckMode(INT8U Key)
 	  switch(Key)
 	  {
 		
+         case 0:
+		 	RunStep =0 ;
 
+		 break ;
 	
          //
 		  case 1:
@@ -110,7 +113,7 @@ void CheckMode(INT8U Key)
 		  {
 			 if(Mode!=1)
 			 {
-			   Mode=1;
+			   Mode=1; //模式1 
 			   Step=0; 
 			   ModeBackup=0;		 
 			 }
@@ -137,19 +140,19 @@ void CheckMode(INT8U Key)
 			SetXMotor(1,10,10,1,1,10,10,1);
 			SetMotorcm(1,10);
 			}
-			if(Mode==0)
+			if(Mode==0)  //模式 0 
 			{
 			  RunStep=0x0D;
 			}
-			if(Mode==1)
+			if(Mode==1) //模式 1 
 			{
 			  RunStep=0x0C;
 			}
-			if(Mode==2)
+			if(Mode==2) //模式 2
 			{
 			  RunStep=0x3c;
 			}
-			if(Mode==3)
+			if(Mode==3) //模式 3 
 			{
 			  RunStep=0x2c;
 			}
@@ -292,7 +295,7 @@ void CheckMode(INT8U Key)
 				   Step=1;
 				   RunSecond=0;
 				   ADCtl=1;
-				   MotorSpeedIRON();
+				 //  MotorSpeedIRON();
 				   AllStop();
 				   LedGreenON();
 			break;
@@ -374,6 +377,7 @@ void CheckMode(INT8U Key)
           /**********Mode =1 start***********************/
 		 /***********************************************/
 		 //弓形
+		 //Mode =1 start 
 		 case 1:
 		 {
 		  switch(Step)
@@ -403,9 +407,9 @@ void CheckMode(INT8U Key)
 			break;
 			case 2:
 			{
-			   if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin))//if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			   if((GroundDp[2]<GroundMin)||(GroundDp[1]<GroundMin))//if((GroundDp[2]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
 			   {
-				   GroundSecond=0;
+				   GroundSecond=0; //无障碍物
 			   }
 			   if((RunSecond%30)==0)
 			   {
@@ -498,7 +502,7 @@ void CheckMode(INT8U Key)
 			   
 			   }
 			   //卡壳
-			   else if(IMPTime>5)
+			   else if(IMPTime>5) //
 			   {
 				   Mode=5;
 				   Step=0;		   
@@ -2318,7 +2322,7 @@ void  CheckRun()
 		}
 		break;
 
-		case 0x0D:
+		case 0x0D:  //forward Step =5 to RunStep = 0x0D 
 		{
 
 			if((LeftMoveMotorData.Flag==1)||(RightMoveMotorData.Flag==1))
@@ -2338,14 +2342,14 @@ void  CheckRun()
 			}
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
-				SetXMotor(2,10,20,1,2,10,20,1);
+				SetXMotor(2,10,20,1,2,10,20,1);  //Big radian run 
 				SetMotorcm(2,10);
 				RunMs=0;
 				RunStep=0;
 			}
 			else if(ImpStatus==1)
 			{
-				SetXMotor(2,10,20,1,2,10,20,1);
+				SetXMotor(2,10,20,1,2,10,20,1); //
 				SetMotorcm(2,10);
 				RunMs=0;
 				RunStep=0;
