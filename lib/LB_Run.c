@@ -4215,12 +4215,20 @@ void RunRandom_Mode(INT8U randomStep)
 		case 2:
         {
 		   // floor Robot to touch to wall 
-          if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin))
+          if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||CloseSwitch_L==1||CloseSwitch_R==1)
 			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
 				  randomStep=3;
 				 RunMs=0;			
+			}
+			if(InfraredHead_L ==0 || InfraredHead_R==0){
+				AllStop();
+				 //SetXMotor(1,20,1,1,1,20,1,1);
+				  randomStep=3;
+				 RunMs=0;	
+
+
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
