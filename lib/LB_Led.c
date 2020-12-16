@@ -137,7 +137,7 @@ void KeyInit(void)
 INT8U  ReadKey(void)
 {
 
-  static INT8U  K1temp,K2temp,K12temp,keyValue;
+  static INT8U  K1temp,K2temp,K12temp;
   INT8U t_Key;
   t_Key=0;
 
@@ -192,19 +192,20 @@ INT8U  ReadKey(void)
 
   if(K1temp==190)
   {
-    K1temp=201;
+    K1temp=201;  //SW1
    //return(1);
 	t_Key =10;  //woks Mode 
   }
   if(K2temp==190)
   {
-    K2temp=201;
+    K2temp=201;//SW2
+	t_Key=2;
 
-    t_Key =2;  //left  --Power On and Power down
+    //t_Key|=1;  //left  --Power On and Power down
   }
   return(t_Key);  
 }
-
+   return(t_Key);
 }
 
 

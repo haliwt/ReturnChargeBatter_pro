@@ -67,10 +67,7 @@ void CheckMode(INT8U Key)
 	  switch(Key)
 	  {
 		
-         case 0:
-		 	RunStep =0 ;
-
-		 break ;
+       
 	
          //
 		  case 1:
@@ -124,14 +121,15 @@ void CheckMode(INT8U Key)
 		  {
 		  
 			 Mode++;
-			 Step=0;
-			 if(Mode>3)
-			  Mode=1;
-			 ModeBackup=0;
+			// Step=0;
+			// if(Mode>3)
+			  //Mode=1;
+			 //Step = 0; //WT.EDIT 
+			// ModeBackup=0;
 		  }
-		  break;
+		 // break;
 		  //Ç°
-		  case 5:
+		 // case 5: //WT.EDIT 
 		  {
 			RunSecond=0;
 			//KeyRunTime=0;
@@ -388,7 +386,7 @@ void CheckMode(INT8U Key)
 			   RunSecond=0;
 			   Step=1;
 			   ADCtl=1;
-   //		   LedGreenON();
+   		       LedGreenON();
 			   AllStop();
 			   SetIMPOutOn();   //ºìÍâÅö×²¿ªÆô
 			  // MotorSpeedIRON();
@@ -573,6 +571,7 @@ void CheckMode(INT8U Key)
 			   }
 			else LedGreenON();			
 			}
+			
 			break;
 			  case 3:
 			  {
