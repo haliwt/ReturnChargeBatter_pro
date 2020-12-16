@@ -53,7 +53,7 @@ void CheckMode(INT8U Key)
     
 		if(KeydelayTime>3)
 		{
-				  //¶¨µã
+				  //ï¿½ï¿½ï¿½ï¿½
 		  if(Key>0)
 		  {
 			KeydelayTime=0;
@@ -83,7 +83,7 @@ void CheckMode(INT8U Key)
 		   }
 		  }
 		  break;
-		  //Æô¶¯/ÔÝÍ£
+		  //ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½Í£
 		  case 2:
 		  case 7:
 		  {
@@ -105,7 +105,7 @@ void CheckMode(INT8U Key)
 			 }
 		  }
 		  break;
-		  //¹­ÐÎ
+		  //ï¿½ï¿½ï¿½ï¿½
 		  case 3:
 		  {
 			 if(Mode!=1)
@@ -116,7 +116,7 @@ void CheckMode(INT8U Key)
 			 }
 		  }
 		  break;
-		  //Ä£Ê½ÇÐ»»
+		  //Ä£Ê½ï¿½Ð»ï¿½
 		  case 10:
 		  {
 		  
@@ -189,7 +189,7 @@ void CheckMode(INT8U Key)
    
 		  }
 		  break;
-		  //×ó
+		  //ï¿½ï¿½
 		  case 6:
 		  {
 			RunSecond=0;
@@ -217,7 +217,7 @@ void CheckMode(INT8U Key)
 			}
 		  }
 		  break;
-		  //ÓÒ
+		  //ï¿½ï¿½
 		  case 8:
 		  {
 			RunSecond=0;
@@ -245,7 +245,7 @@ void CheckMode(INT8U Key)
 			}
 		  }
 		  break;
-		  //ºó
+		  //ï¿½ï¿½
 		  case 9:
 		  {
 			RunSecond=0;
@@ -275,13 +275,13 @@ void CheckMode(INT8U Key)
 		  break;
 		}	  
 /****************************************************/
-	 //³õÊ¼»¯Öµ £º Mode=1; Step=0;ImpStatus=0;
+	 //ï¿½ï¿½Ê¼ï¿½ï¿½Öµ ï¿½ï¿½ Mode=1; Step=0;ImpStatus=0;
       // RunStep=0; modeBackup =0 ; 
       
 /****************************************************/
        switch(Mode)
 	   {
-		 //ÔÝÍ£
+		 //ï¿½ï¿½Í£
 		 case 0:
 		 {
 		  switch(Step)
@@ -305,44 +305,44 @@ void CheckMode(INT8U Key)
 			  Step=2;
               #if 0
    
-   //		  P0M0 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M1 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M2 = 0x02;			  //P27ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M3 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M4 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M5 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M6 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P0M7 = 0x02;			  //P27ÉèÖÃÎªÄ£ÄâÊäÈë
+   //		  P0M0 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M1 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M2 = 0x02;			  //P27ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M3 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M4 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M5 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M6 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P0M7 = 0x02;			  //P27ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    
-			  P1M0 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P1M1 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P1M2 = 0x02;			  //P27ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P1M3 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P1M4 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P1M5 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-   //		  P1M6 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
+			  P1M0 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P1M1 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P1M2 = 0x02;			  //P27ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P1M3 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P1M4 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P1M5 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   //		  P1M6 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    
-			  P2M0 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M1 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M2 = 0x02;			  //P27ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M3 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M4 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M5 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M6 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P2M7 = 0x02;			  //P27ÉèÖÃÎªÄ£ÄâÊäÈë
+			  P2M0 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M1 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M2 = 0x02;			  //P27ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M3 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M4 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M5 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M6 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P2M7 = 0x02;			  //P27ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    
-			  P3M0 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P3M1 = 0x02;			  //P26ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P3M2 = 0x02;			  //P27ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P3M3 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
-			  P3M4 = 0x02;			  //P25ÉèÖÃÎªÄ£ÄâÊäÈë
+			  P3M0 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P3M1 = 0x02;			  //P26ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P3M2 = 0x02;			  //P27ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P3M3 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			  P3M4 = 0x02;			  //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			  P3M5 = 0x02;
    
    
 			  IE &= 0xef;  
-			  TCON	= 0x00; 					   //Ê¹ÄÜT1
+			  TCON	= 0x00; 					   //Ê¹ï¿½ï¿½T1
 			  EA=1;
-			  PCON |= 0x02; 						   //µÍ¹¦ºÄ¼Ä´æÆ÷
+			  PCON |= 0x02; 						   //ï¿½Í¹ï¿½ï¿½Ä¼Ä´ï¿½ï¿½ï¿½
 			  #endif 
    
 			}
@@ -371,11 +371,11 @@ void CheckMode(INT8U Key)
 		 break;
 		 /****************Mode = 0 END*******************/
 		 /**************************************************/
-		  //³õÊ¼»¯Öµ £º Mode=1; Step=0;ImpStatus=0;
+		  //ï¿½ï¿½Ê¼ï¿½ï¿½Öµ ï¿½ï¿½ Mode=1; Step=0;ImpStatus=0;
           // RunStep=0; modeBackup =0 ; 
           /**********Mode =1 start***********************/
 		 /***********************************************/
-		 //¹­ÐÎ
+		 //ï¿½ï¿½ï¿½ï¿½
 		 //Mode =1 start 
 		 case 1:
 		 {
@@ -388,7 +388,7 @@ void CheckMode(INT8U Key)
 			   ADCtl=1;
    		       LedGreenON();
 			   AllStop();
-			   SetIMPOutOn();   //ºìÍâÅö×²¿ªÆô
+			   SetIMPOutOn();   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½
 			  // MotorSpeedIRON();
 			   IMPTime=0;
 			}
@@ -406,17 +406,17 @@ void CheckMode(INT8U Key)
 			break;
 			case 2:
 			{
-			  //±ßÅö×²
+			  //ï¿½ï¿½ï¿½ï¿½×²
 			   if((GroundDp[0]<GroundMin)||(GroundDp[1]<GroundMin))//if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[0]>GroundMin))
 			   {
-				   GroundSecond=0; //ÎÞÕÏ°­Îï
+				   GroundSecond=0; //ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½
 			   }
 			   if((RunSecond%30)==0)
 			   {
 				   CurrentMax=0;
 				   RunSecond++;
 			   }
-			   //Çý¶¯ÂÖ
+			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			   if(CurrentMax>4)
 			   {
 				   Mode=5;
@@ -426,7 +426,7 @@ void CheckMode(INT8U Key)
 				   SetFan(0);
 				   SetEdge(0);		   
 			   }
-			   //±ßÉ¨µçÁ÷
+			   //ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½
 			   else if(EdgeCurrentCount>5)
 			   {
 				   EdgeCurrentCount2++;
@@ -490,7 +490,7 @@ void CheckMode(INT8U Key)
 					  SetEdge(0);
 				   }						   
 			   }
-			   //·ç»úµçÁ÷
+			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			   else if(FanCurrent>2300)
 			   {
 				   Mode=5;
@@ -501,7 +501,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);			   
 			   
 			   }
-			   //¿¨¿Ç
+			   //ï¿½ï¿½ï¿½ï¿½
 			   else if(IMPTime>5) //
 			   {
 				   Mode=5;
@@ -614,7 +614,7 @@ void CheckMode(INT8U Key)
 		 /******************Mode =1 END *****************/
 		 /************************************************************/
 		 /************************************************************/
-		 //¶¨µã
+		 //ï¿½ï¿½ï¿½ï¿½
 		 //Mode =2 start 
 		 case 2:
 		 {	
@@ -653,7 +653,7 @@ void CheckMode(INT8U Key)
 				   CurrentMax=0;
 				   RunSecond++;
 			   }
-			   //Çý¶¯ÂÖ
+			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			   if(CurrentMax>4)
 			   {
 				   Mode=5;
@@ -663,7 +663,7 @@ void CheckMode(INT8U Key)
 				   SetFan(0);
 				   SetEdge(0);		   
 			   }
-			   //±ßÉ¨µçÁ÷
+			   //ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½
 			   else if(EdgeCurrentCount>5)
 			   {
 				   EdgeCurrentCount2++;
@@ -734,7 +734,7 @@ void CheckMode(INT8U Key)
    //			   SetEdge(0);			   
 			   
 			   }
-			   //·ç»úµçÁ÷
+			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			   else if(FanCurrent>2300)
 			   {
 				   Mode=5;
@@ -745,7 +745,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);			   
 			   
 			   }
-			   //¿¨¿Ç
+			   //ï¿½ï¿½ï¿½ï¿½
 			   else if(IMPTime>5)
 			   {
 				   Mode=5;
@@ -835,7 +835,7 @@ void CheckMode(INT8U Key)
 		 /**********************Mode =3 END**************************/
 		 /***********************************************************/
 		 /**********************************************************/
-		 //ÑØ±ß
+		 //ï¿½Ø±ï¿½
 		 //Mode =3 
 		 case 3:
 		 {
@@ -874,7 +874,7 @@ void CheckMode(INT8U Key)
 				   CurrentMax=0;
 				   RunSecond++;
 			   }
-			   //Çý¶¯ÂÖ
+			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			   if(CurrentMax>4)
 			   {
 				   Mode=5;
@@ -884,7 +884,7 @@ void CheckMode(INT8U Key)
 				   SetFan(0);
 				   SetEdge(0);		   
 			   }
-			   //±ßÉ¨µçÁ÷
+			   //ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½
 			   else if(EdgeCurrentCount>5)
 			   {
 				   EdgeCurrentCount2++;
@@ -954,7 +954,7 @@ void CheckMode(INT8U Key)
    //			   SetFan(0);
    //			   SetEdge(0);			   
 			   }
-			   //·ç»úµçÁ÷
+			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			   else if(FanCurrent>2300)
 			   {
 				   Mode=5;
@@ -965,7 +965,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);			   
 			   
 			   }
-			   //¿¨¿Ç
+			   //ï¿½ï¿½ï¿½ï¿½
 			   else if(IMPTime>5)
 			   {
 				   Mode=5;
@@ -1057,7 +1057,7 @@ void CheckMode(INT8U Key)
 		 /**********************************************************/
 		 /*********************************************************/
 		 break;
-		 //³äµç
+		 //ï¿½ï¿½ï¿½
 		 //Mode =4 start 
 		 case 4:
 		 {
@@ -1132,12 +1132,12 @@ void CheckMode(INT8U Key)
 			}	 
 		 }
 		 break;
-		 //¹ÊÕÏ
+		 //ï¿½ï¿½ï¿½ï¿½
 		 case 5:
 		 {
 		   switch(Step)
 		   {
-			  //»úÆ÷¿¨×¡,ºìµÆÁÁ£¬Ã¿¸ô5ÃëÏìÒ»ÉùßÙÉù£»
+			  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¡,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			  case 0:
 			  {
 				 LedRedON();
@@ -1159,7 +1159,7 @@ void CheckMode(INT8U Key)
 				 }
 			  }
 			  break;
-			  //±ßÉ¨Âí´ï¶Â×ª	ºìµÆÁÁ£¬Ã¿¸ô5ÃëÏìÈýÉùßÙÉù£»
+			  //ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½×ª	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    
 			  case 2:
 			  {
@@ -1201,7 +1201,7 @@ void CheckMode(INT8U Key)
 				}
 			  }
 			  break;
-			  //ºóÂÖÂí´ï¶Â×ª ºìµÆÁÁ£¬Ã¿¸ô5ÃëÏìÁ½ÉùßÙÉù£¬1ÃëºóÏìÒ»ÉùßÙÉù£»
+			  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			  case 5:
 			  {
 				 LedRedON();
@@ -1255,7 +1255,7 @@ void CheckMode(INT8U Key)
 			  
 			  }
 			  break;
-			  //·çÉÈ¶Â×ª»òÕßµçÁ÷´ó    ºìµÆÁÁ£¬Ã¿¸ô5ÃëÏìÈýÉùßÙÉù£¬1ÃëºóÏìÁ½ÉùßÙÉù£»
+			  //ï¿½ï¿½ï¿½È¶ï¿½×ªï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			  case 9:
 			  {
 				 LedRedON();
@@ -1326,7 +1326,7 @@ void CheckMode(INT8U Key)
    
    
    
-   /***************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ä£Ê?*************************/
+   /***************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ä£ï¿½?*************************/
    /**************************************************************************/
     switch(Mode) ///Ä£Ê½ Mode -> step
 	{
@@ -1482,7 +1482,7 @@ void CheckMode(INT8U Key)
 				   SetEdge(0);
 				}							
 			}
-			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1719,7 +1719,7 @@ void CheckMode(INT8U Key)
 //				SetEdge(0);				
 			
 			}
-			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -1934,7 +1934,7 @@ void CheckMode(INT8U Key)
 //				SetFan(0);
 //				SetEdge(0);				
 			}
-			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 			else if(FanCurrent>1700)
 			{
 				Mode=5;
@@ -2032,7 +2032,7 @@ void CheckMode(INT8U Key)
 		 }	   
 	  }
 	  break;
-	  //ï¿½ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½
+	  //ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½
 	  case 4:
 	  {
 	    switch(Step)
@@ -2110,7 +2110,7 @@ void CheckMode(INT8U Key)
 	  {
 	    switch(Step)
 		{
-		   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¡,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¡,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		   case 0:
 		   {
 		   	  LedRedON();
@@ -2132,7 +2132,7 @@ void CheckMode(INT8U Key)
 			  }
 		   }
 		   break;
-		   //ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½×? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		   //ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		   case 2:
 		   {
@@ -2174,7 +2174,7 @@ void CheckMode(INT8U Key)
 			 }
 		   }
 		   break;
-		   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+		   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 		   case 5:
 		   {
 		   	  LedRedON();
@@ -2226,7 +2226,7 @@ void CheckMode(INT8U Key)
 		   
 		   }
 		   break;
-		   //ï¿½ï¿½ï¿½È¶ï¿½×ªï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+		   //ï¿½ï¿½ï¿½È¶ï¿½×ªï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 		   case 9:
 		   {
 		   	  LedRedON();
@@ -2392,12 +2392,12 @@ void  CheckRun()
 		}
 		break;
 
-		//¹­ÐÐÄ£Ê½ÇÐ»»¹ýÀ´¡£RunStep =1;
+		//ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½RunStep =1;
 
 		case 1:
 		{
 			ImpSecond=0;
-			SetXMotor(1,10,15,1,1,10,15,1); //Ö±ÐÐ ----
+			SetXMotor(1,10,15,1,1,10,15,1); //Ö±ï¿½ï¿½ ----
 			SetMotorcm(1,1000);
 			RunStep=2;
 			RunMs=0;
@@ -2408,18 +2408,18 @@ void  CheckRun()
 		     if(ImpSecond>5)
 			 Imp2Time=0;
 
-			if(GroundDp[1]>GroundMin) //right IR ·¢ÉúÅö×²
+			if(GroundDp[1]>GroundMin) //right IR ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×²
 			{
 
 				NoImpSecond=0;
 				RunStep=0x3;
-				SetXMotor(2,10,25,1,2,10,25,1); //´óµÄ»¡ÐÎ×ß
+				SetXMotor(2,10,25,1,2,10,25,1); //ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½
 				SetMotorcm(2,5);
 				RunMs=20;
 				Imp2Time++;
 				Enter3=1;
 			}
-			else if(GroundDp[0]>GroundMin) //left IR ·¢ÉúÅö×² 
+			else if(GroundDp[0]>GroundMin) //left IR ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×² 
 			{
 
 				NoImpSecond=0;
@@ -2482,7 +2482,7 @@ void  CheckRun()
 		case 3:
             if(RunMs>10)
 			{
-				SetXMotor(2,10,20,1,2,10,20,1); //×ß´óµÄ»¡ÐÎ CCW
+				SetXMotor(2,10,20,1,2,10,20,1); //ï¿½ß´ï¿½Ä»ï¿½ï¿½ï¿½ CCW
 				SetMotorcm(2,5);
 				RunMs=0;
 				RunStep=4;
@@ -2522,7 +2522,7 @@ void  CheckRun()
 		case 5:
 			if(RunMs>10)
 			{
-				SetXMotor(2,10,20,1,1,10,20,1); //×ß´óµÄ»¡ÐÎCCW 
+				SetXMotor(2,10,20,1,1,10,20,1); //ï¿½ß´ï¿½Ä»ï¿½ï¿½ï¿½CCW 
 				SetMotorcm(3,90);
 				RunMs=0;
 				RunStep=6;
@@ -2546,7 +2546,7 @@ void  CheckRun()
 				CurrentMax++;
 				NoImpSecond=0;
 				RunStep=3;
-				SetXMotor(2,10,20,1,2,10,20,1);//×ß´óµÄ»¡ÐÎ
+				SetXMotor(2,10,20,1,2,10,20,1);//ï¿½ß´ï¿½Ä»ï¿½ï¿½ï¿½
 				SetMotorcm(2,5);
 				RunMs=0;
 				Enter3=12;
@@ -3177,7 +3177,7 @@ void  CheckRun()
 			}
 			#endif 
 			break;
-			//ÑØÇ½
+			//ï¿½ï¿½Ç½
 		case 0x20:
 		{
 			if(RunMs>20)
@@ -3436,7 +3436,7 @@ void  CheckRun()
 			}
 		}
 		break;
-		//¶¨µã
+		//ï¿½ï¿½ï¿½ï¿½
 		case 0x30:
 		{
 			SetXMotor(2,10,10,1,1,10,10,1);
@@ -3784,7 +3784,7 @@ void  CheckRun()
 			}
 		}
 		break;
-		//´ò»¬
+		//ï¿½ï¿½
 		case 0x40:
 		{
 			AllStop();
@@ -3835,7 +3835,7 @@ void  CheckRun()
 			}
 		}
 		break;
-		//	×ÔÓÉ×ß
+		//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		case 0x50:
 		{
 
@@ -4106,7 +4106,7 @@ void  CheckRun()
 			}
 			break;
 
-			//±ßÉ¨ÍÑÀ§
+			//ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½
 		case 0x70:
 		{
 			SetXMotor(2,10,20,1,2,10,20,1);
@@ -4188,4 +4188,143 @@ void  CheckRun()
 
 		}
 }
+/***********************************************************
+	*
+	*Function Name :void RunRandom_Mode(void)
+	*Function : 
+	*Input Ref:NO
+	*Retrun Ref:NO 
+	*
+***********************************************************/
+void RunRandom_Mode(INT8U randomStep)
+{
+	
+    switch(randomStep){
+	case 0:
+          AllStop();
+
+	 break; 
+	 case 1: //KEY press  RunStep =1 
+		{
+            SetXMotor(2,10,20,2,2,10,20,2);//SetXMotor(2,5,20,2,2,5,20,2);//WT.EDIT //SetXMotor(2,20,40,2,2,20,40,2);//new line SetXMotor(1,20,40,1,1,20,40,1);
+			SetMotorcm(1,5000);
+			randomStep=2;
+			RunMs=0;
+	     }
+		break;
+		case 2:
+        {
+		   // floor Robot to touch to wall 
+          if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin))
+			{
+				 AllStop();
+				 //SetXMotor(1,20,1,1,1,20,1,1);
+				  randomStep=3;
+				 RunMs=0;			
+			}
+			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
+			{
+ 				
+					SetXMotor(2,10,20,2,2,10,20,2);//SetXMotor(2,5,20,2,2,5,20,2);//WT.EDIT //SetXMotor(2,20,40,2,2,20,40,2);//new line SetXMotor(1,20,40,1,1,20,40,1);  //???
+					
+					SetMotorcm(1,5000);
+ 				
+			}
+			
+			if(RunMs>2000)//if(RunMs>3000)
+			{
+				 AllStop();
+				 //SetXMotor(1,20,1,1,1,20,1,1);
+				randomStep=3;
+				RunMs=0;	
+			}
+			
+		}
+		break;
+		case 3:
+		   if(RunMs>20)  //Back run 
+		   {
+			SetXMotor(1,10,20,2,1,10,20,2);//SetXMotor(1,5,20,2,1,5,20,2);//WT.EDIT //SetXMotor(1,20,40,2,1,20,40,2);//new line //SetXMotor(2,20,40,1,2,20,40,1); //back 
+			SetMotorcm(2,1000);
+			randomStep=4;
+			}
+		break;
+		case 4:
+		{
+			if(RunMs>120)
+			{
+				AllStop();
+				RunMs=0;
+				randomStep=5;
+		
+			}
+			
+		}
+			break;
+	    case 5:
+		  {
+			if(RunMs>20) //right run  --
+			{
+				
+				SetXMotor(1,10,20,2,2,10,20,2);//SetXMotor(1,5,20,2,2,5,20,2);//SetXMotor(1,20,40,2,2,20,40,2);//new line SetXMotor(2,20,40,1,1,20,40,1); //right turn 
+				SetMotorcm(3,5000);//SetMotorcm(3,9000);
+				randomStep=6;
+		
+			}	
+		}
+		break;
+		case 6:
+			if(RunMs > 100)//if(RunMs>100)
+			{
+				AllStop();
+				RunMs=0;
+				randomStep=7;
+			
+			}
+			
+			break;
+		case 7: //water pump
+			
+			if(RunMs>10) //20 * 10ms =200ms
+			{
+				SetXMotor(2,10,20,2,1,10,20,2);//SetXMotor(2,5,20,2,1,5,20,2);//WT.EDIT  //SetXMotor(2,20,40,2,1,20,40,2);//SetXMotor(1,20,40,1,2,20,40,1); //left turn run è½¬åœˆ
+						SetMotorcm(4,4000);//WT.EDIT 2020.11.17//SetMotorcm(4,9000); //??
+						SetXMotor(1,10,20,2,2,10,20,2);//SetXMotor(1,5,20,2,2,5,20,2); //WT.EDIT //SetXMotor(1,20,40,2,2,20,40,2); //SetXMotor(2,20,40,1,1,20,40,1); //right turn 
+				        SetMotorcm(3,9000);
+						randomStep=8;
+			}
+		break;
+		case 8: // water pump
+		   if(RunMs > 100)//if(RunMs>100)
+			{
+				AllStop();
+				RunMs=0;
+				randomStep=9;
+			
+			}
+			
+			break;
+			     
+		 break;
+		 case 9:
+		 
+		   if(RunMs > 240)
+		   {
+			
+			
+			    RunMs=0;
+			    randomStep=0;
+				SetXMotor(2,10,20,2,2,10,20,2);//SetXMotor(2,5,20,2,2,5,20,2);//WT.EDIT //SetXMotor(2,20,40,2,2,20,40,2);//new line //SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+				SetMotorcm(1,5000);	
+		   }
+			
+		 break;
+		   
+	   }
+}
+	
+	
+
+
+
 

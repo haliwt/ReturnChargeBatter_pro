@@ -9,6 +9,10 @@ version  : 见文件尾端
 #ifndef  LB_Motor_h
 #define  LB_Motor_h
 
+#include "..\lib\lb_led.h"
+#include "..\lib\lb_key.h"
+#include "..\lib\LB_Motor.h"
+#include "..\lib\LB_Run.h"
 
 
 #ifdef   CodeC_Includes
@@ -16,7 +20,6 @@ version  : 见文件尾端
 #else
 
 #include "..\include\PJ_TypeRedefine.h"
-
 
 #endif
 

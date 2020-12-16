@@ -1,14 +1,6 @@
-/*
-
----------- file information -----------------------------------------------
-file name: 
-define   : <文件说明>
-version  : 见文件尾端
----------------------------------------------------------------------------
-*/
 
 //全局变量声明
-#define  KAKA_Motor_GB
+#define   KAKA_Motor_GB
 
 #ifdef   CodeC_Includes
 #include "PJ_Includes.h"
@@ -16,7 +8,7 @@ version  : 见文件尾端
 //#include "LB_hc89f003_IO.h"
 #include "..\include\HC89F0541.h"
 #include "..\include\PJ_TypeRedefine.h"
-#include "LB_Motor.h"
+#include "lb_motor.h"
 
 #endif
 
