@@ -28,7 +28,13 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #define  KAKA_Led_EXT extern
 #endif
 
-#define BatterCharge    P2_1 
+#define BatterCharge    	P2_1 
+#define CloseSwitch_L  		P1_5	
+#define CloseSwitch_R  		P3_2
+#define InfraredHead_L     P3_5 
+#define InfraredHead_R     P3_4
+
+
 
 KAKA_Led_EXT  INT8U  ImpStatus;
 KAKA_Led_EXT  INT8U  BuzzerFlag;

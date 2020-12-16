@@ -81,12 +81,16 @@ void AllLedOff()
 
 void InitIMP(void)
 {
-  //P2M1 = 0x60;                        //P2_1设置为施密特数字带上拉输入
-  //P2M0 = 0xC2;                        //P21
-  //P2_0=0;
-  //P2_1=0;
-  P3M4 = 0x60;                         //P3_4 = 输入下啦
-  P3M5 = 0x60 ;
+  P1M5 = 0X60;   //close switch Left pull up 
+  P3M2 = 0x60;   //close switch Right
+
+  P3M4 =0x60;   //Infrared way IR right pull up 
+  P3M5 = 0x60;  //infrared ir left
+
+  P1_5 =1;
+  P3_2 =1;
+  P3_4 =1;
+  P3_5 =1;
   
 
 }
@@ -110,7 +114,7 @@ void SetIMPOutOn()
 *******************************************************************/
 void ReadIMP(void)
 {
-  if(P3_4 ==0 || P3_5==0)//if(P2_1)
+  if(P3_4 ==0 || P3_5==0)// infrared IR 
      ImpStatus=1;
   else
    ImpStatus=0;
