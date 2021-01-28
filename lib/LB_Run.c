@@ -1733,8 +1733,7 @@ void rechargeBatMode(void)
 					SetStop();
 					RunMs=0;
 					RunStep=5;
-//					timeCircle = 13;//WT.EDIT ∞Î»¶ //27;//timeCircle = 50;
-//					InitMotorRightCircleRecharge();
+
 				}
                 else if(IRLocation.NearMid>0)
 				{
@@ -1810,7 +1809,6 @@ void rechargeBatMode(void)
 				}
                 else if(RunMs > 30 )//else if(RunMs>250) //WT.EIDT
 				{
-					//timeCircle = 10;//WT.EDIT ∞Î»¶ //27;//timeCircle = 50;
 					SetStop();
 
 					RunMs=0;
