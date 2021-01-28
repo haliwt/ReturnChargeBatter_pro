@@ -1524,16 +1524,40 @@ void rechargeBatMode(void)
 				else
 				if(IRLocation.TopIR >1)
 				{
-						RunStep = 0x10; //TopIr PROC
-						RunMs = 0;
-						InitMotorLeft();				
+                        if(topir_flag ==2){ //The first TOPIR
+							InitMotorForward_TOPIR();
+							RunStep = 0x1d; //TopIr PROC
+						    RunMs = 0;
+							
+                        }
+						else{
+							RunStep = 0x10; //TopIr PROC
+							RunMs = 0;
+							InitMotorLeft();
+						}
 				
 				}				
 			    else if(connect>timeCircle){
 					connect = 0;
-					RunMs = 0;
-					RunStep = 6;
-					InitMotorForward();
+					if(topir_flag ==1){ //The seconde TOPIR
+					     SetStop();
+                         InitMotorLeft_TOPIR();//left
+						 RunMs = 0;
+						 RunStep = 0x19; // new charge pile
+					}
+					else if(topir_flag ==2){
+						      //The second TOPIR
+							InitMotorForward_TOPIR();
+							RunStep = 0x1d; //TopIr PROC
+						    RunMs = 0;
+							
+                        
+					}
+					else{
+						RunMs = 0;
+						RunStep = 6; //
+						InitMotorForward();
+					}
 					findCnt++;
 					if(findCnt>= 20){
 						findCnt = 0;
@@ -1664,15 +1688,14 @@ void rechargeBatMode(void)
 			
 			case 0xa0:
 				if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
-				{
-					NoImpSecond=0; //WT.EDIT 2021.01.19
-				   {
+				{   
+				
 						NoImpSecond=0;
 						RunStep=0x3;
 						SetStop();
 						RunMs=0;
 						CurrentMax++;			
-					}
+					
 			    }			
 
 			   else  if(RunMs>100)//100 - 45 degree //RunMs>200 = 180 degree
@@ -1705,7 +1728,17 @@ void rechargeBatMode(void)
 			break;
 
 			case 0xa2:
-			  if(RunMs >300){
+			  if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+				{
+					
+						NoImpSecond=0;
+						RunStep=0x3;
+						SetStop();
+						RunMs=0;
+						CurrentMax++;			
+					
+			    }		
+			  else if(RunMs >300){
 				  dir = 0;
 				  SetStop();
 				  RunMs =0;
@@ -1790,9 +1823,17 @@ void rechargeBatMode(void)
 				else
 				if(IRLocation.TopIR >1)
 				{
+					  if(topir_flag ==1){
+							InitMotorForward_TOPIR();
+							RunStep = 0x1d; //TopIr PROC
+						    RunMs = 0;
+						}
+						else{
+                        
 						RunStep = 0x10; //TopIr PROC
 						RunMs = 0;
-						InitMotorLeft();				
+						InitMotorLeft();
+						}
 				
 				}				
 					
@@ -1816,6 +1857,7 @@ void rechargeBatMode(void)
 				}
                 else if(IRLocation.NearMid>0)
 				{
+					
 					RunStep=0x50;
 				}
 				else if(IRLocation.NearPreRight>0)
@@ -1869,9 +1911,18 @@ void rechargeBatMode(void)
 				else
 				if(IRLocation.TopIR >1)
 				{
-						RunStep = 0x10; //TopIr PROC
-						RunMs = 0;
-						InitMotorLeft();			
+						if(topir_flag ==2){
+							InitMotorForward_TOPIR();
+							RunStep = 0x1d ; //TopIr PROC
+						    RunMs = 0;
+							
+
+						}
+						else{
+							RunStep = 0x10; //TopIr PROC
+							RunMs = 0;
+							InitMotorLeft();
+						}
 				
 				}								
 			break;
@@ -1920,7 +1971,8 @@ void rechargeBatMode(void)
 		    }
 			else if(topir_flag ==1){
 			
-				RunStep=0;
+				InitMotorForward_TOPIR();
+				RunStep=0x1f;
 				RunMs =0;
 
             }
@@ -1960,7 +2012,16 @@ void rechargeBatMode(void)
 
         case 0x15://return back  
 		{
-		  if(RunMs>150)//if(RunMs>150)
+		   if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			   {
+					NoImpSecond=0;
+					RunStep=0x3;
+					SetStop();
+					RunMs=0;
+					CurrentMax++;			
+			}
+
+		  else if(RunMs>150)//if(RunMs>150)
 		  {
 			  SetStop();
 			  RunStep=0x16;
@@ -1981,7 +2042,15 @@ void rechargeBatMode(void)
         break;
 
 		case 0x17:
-		 if(RunMs>300)// if(RunMs>500)
+			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			{
+					NoImpSecond=0;
+					RunStep=0x3;
+					SetStop();
+					RunMs=0;
+					CurrentMax++;			
+			}
+		    else if(RunMs>300)// if(RunMs>500)
 		   {
 			   SetStop();
 			   RunStep=0x18;
@@ -1996,11 +2065,124 @@ void rechargeBatMode(void)
 
 				 RunStep=0;
 			     RunMs = 0;
-
+				 IRLocation.TopIR=0;
+				 topir_flag =1;
 			 }
 		
 		}
 		break;
+		/*The first new charge pile*/
+		case 0x19 :
+			 if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			   {
+					NoImpSecond=0;
+					RunStep=0x3;
+					SetStop();
+					RunMs=0;
+					CurrentMax++;			
+			}
+             else if(RunMs > 200){ //left  180 degree position
+
+				 SetStop();
+				 RunStep=0x1a;
+			     RunMs = 0;
+				 IRLocation.TopIR=0;
+				 topir_flag =2;
+			 }
+
+
+		break;
+
+		
+
+		case 0x1a:
+			 if(RunMs >30){
+
+                InitMotorForward_TOPIR();
+                RunStep = 0x1b;
+				RunMs =0; 
+           }
+        break;
+
+		case 0x1b :
+			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			 {
+					NoImpSecond=0;
+					RunStep=0x3;
+					SetStop();
+					RunMs=0;
+					CurrentMax++;			
+			}
+			else if(RunMs >600){ //line run 
+
+                SetStop();
+                RunStep = 0x1c;
+				RunMs =0; 
+           }
+
+		break;
+
+		case 0x1c :
+			if(RunMs >30){
+                RunStep = 0;
+				RunMs =0; 
+			    topir_flag =2;
+           }
+
+		break;
+			
+        //the second be check TOPIR =1
+		case 0x1d:
+			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			 {
+					NoImpSecond=0;
+					RunStep=0x3;
+					SetStop();
+					RunMs=0;
+					CurrentMax++;			
+			}
+			else if(RunMs >300){ //line run 
+
+                SetStop();
+                RunStep = 0x1e;
+				RunMs =0; 
+				IRLocation.TopIR=0;
+           }
+
+
+		break;
+		case 0x1e:
+		if(RunMs >30){
+				RunStep = 0;
+				RunMs =0; 
+				topir_flag =0;
+		   }
+
+
+		break;
+
+		case 0x1f:
+		if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+					 {
+							NoImpSecond=0;
+							RunStep=0x3;
+							SetStop();
+							RunMs=0;
+							CurrentMax++;			
+				}
+				else if(RunMs >60){ //line run 
+		
+						SetStop();
+						RunStep = 0x1e;
+						RunMs =0; 
+						IRLocation.TopIR=0;
+				}
+
+
+
+		break;
+
+		
 	
 
 		/*********************************************/
@@ -2013,6 +2195,7 @@ void rechargeBatMode(void)
 			  RunStep=0x31;
 			  RunMs  = 0;
 			  TOP_impact =0;
+			  topir_flag =1;
 		  }
 		}
 		break;
@@ -2035,6 +2218,7 @@ void rechargeBatMode(void)
               SetStop();
 			  RunStep = 0x33;  //LINE RUN
 		      RunMs = 0;
+			  topir_flag =1;
 
 
 		  }
@@ -2059,7 +2243,7 @@ void rechargeBatMode(void)
 				SetStop();
 				RunStep = 0x35;
 			    RunMs = 0;
-
+  
 			 }
 
 
@@ -2073,48 +2257,13 @@ void rechargeBatMode(void)
 				SetStop();
 	            RunStep =0;
 			    RunMs = 0;
-
+                topir_flag =1;
             }
 		break;
 
 		
 
-		case 0x37:  //恢复到原来直线上，右转90度
-		   if(RunMs>30)
-			  {
-			  	  InitMotorRight_TOPIR();//right
-				  RunStep=0x38;
-				  RunMs  = 0;
-			  }
-
-		break;
-		case 0x38: //恢复到直线，继续检测--中点信号
-             if(IRLocation.NearMid>0){//if is center position
-
-                      SetStop();
-	                  RunStep =0x50;
-					  RunMs = 0;
-				      TOP_Left =0;
-					  IRLocation.TopIR =0;
-			  }
-		      else if(RunMs > 400){
-			    SetStop();
-				RunStep = 0x39; //run Line 
-			    RunMs = 0;
-                
-
-			}
-		 break;
-
-		 case 0x39:
-		 	
-			 if(RunMs >30) {
-					    RunStep = 0; //第二判断
-					    RunMs = 0;
-	                   
-			}
-				   
-		break;
+	
 
 		/*************************************************/
 		case 0x40:   //far away
