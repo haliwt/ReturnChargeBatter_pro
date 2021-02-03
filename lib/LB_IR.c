@@ -45,7 +45,7 @@ code INT8U IRcode[100]={
 0xaa,0x86,0x00,	  //远右		19
 0xAA,0X00,0X00,   //近右      20  //WT.EDIT --在回充座的右边。
 0xAA,0xA8,0X00,   //TOP IR  21  //WT.EDIT 
-0xAA,0X11,0X80,    //正中   22
+0x18,0x61,0x18,   //正中     22
 0x00,0x00,0x00, 
 };
 void Init_IR()
@@ -251,8 +251,8 @@ void CheckRechargeIR()
 0xaa,0x86,0x00,	  //远右		19
 0xAA,0X00,0X00,   //近右      20  //WT.EDIT --在回充座的右边。
 0xAA,0xA8,0X00,   //TOP IR  21  //WT.EDIT 
-0xAA,0X11,0X80,   //远中    22
-0x18,0x61,0x18    //正中
+//0xAA,0X11,0X80,   //远中    22
+0x18,0x61,0x18    //正中     22
 */
 	
 	if(Mid_ReadIR.ReadIRFlag==3)
@@ -322,12 +322,10 @@ void CheckRechargeIR()
 			IRLocation.TopIR++;
 		break;
 		case 22:
-           	IRLocation.FarMid++;//IRLocation.NearMid++;
+           	IRLocation.NearMid++;//WT.EDIT 2021.02.03
 
 		break;
-		case 23:
-			IRLocation.NearMid++;
-		break;
+		
 	  }
 
 	  #if 0
