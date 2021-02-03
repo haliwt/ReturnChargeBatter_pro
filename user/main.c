@@ -170,9 +170,11 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 		{
 			t_1s=0;
 			twinkle++;
+			
 			ModeStopTime ++ ;
 			MidWallOffSecond++;
 			CheckTime++;
+			Plugging++;
 			battDetect1sFlag = 1;
 			#if 0			
 			Usart1Send[0]=3;
@@ -202,7 +204,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 //				Usart1Send[8]=RCurrent;
 //				Usart1Send[9]=EdgeCurrent;
 //				Usart1Send[10]=FanCurrent;
-				Usart1Send[4]=IMP;
+				Usart1Send[4]=Plugging;//IMP;
 				Usart1Send[5]=RunStep;
 				SendCount=1;
 				SBUF=Usart1Send[SendCount];	
