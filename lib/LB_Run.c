@@ -1446,6 +1446,7 @@ void rechargeBatMode(void)
           
 			findCnt = 0;
 			connect = 0; //WT.EIDT 2021.01.23
+			Plugging = 0;
 		}
 			break;
 				
@@ -2280,7 +2281,7 @@ void rechargeBatMode(void)
 				CurrentMax++;	
 
 			}
-			else if(RunMs >20 && RunMs < 40)//else if(RunMs>40 ) //WT.EDIT 
+			else if(RunMs >20)//else if(RunMs>40 ) //WT.EDIT 
 			{
 				RunMs=0;
 				distance = 0;
@@ -2680,7 +2681,7 @@ void rechargeBatMode(void)
 				#endif 
 				if(Plugging > 30){
 						SetStop();
-						RunStep =3;
+						RunStep =0x51;
 						RunMs = 0;
 						Plugging =0;
 				}
@@ -2758,7 +2759,8 @@ void rechargeBatMode(void)
 						RunNoIRsenorTime=0;
 						if(RunNoIRsenorLastStep==1)
 						{
-							   RunStep = 3;
+							   SetStop();
+							   RunStep = 0x51;
 							   RunMs = 0;
 							   RunNoIRsenorLastStep=0;
 						}
@@ -2789,12 +2791,23 @@ void rechargeBatMode(void)
 			
 		}
 			break;
-		
 
-		
-		
-        
-		
+		case 0x51 :
+				if(RunMs >30){
+			
+					InitMotorRetreat();
+					RunMs=0;
+					RunStep=0x52;
+				}
+        break;
+		case 0x52:
+             if(RunMs >100){
+				RunMs = 0 ;
+				RunStep =0;
+				Plugging = 0;
+
+			 }
+		break;
 		default:
 			break;
 	}	
