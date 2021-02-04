@@ -43,8 +43,10 @@ KAKA_Run_EXT INT8U  TOP_Right;
 KAKA_Run_EXT INT8U  TOP_Left;
 KAKA_Run_EXT  INT8U BatteryRechargeFlag;//WT.EDIT
 KAKA_Run_EXT  INT16U Imp2Time;
-KAKA_Run_EXT  INT16U twinkle;  //WT.EDIT 
+KAKA_Run_EXT  INT8U twinkle;  //WT.EDIT 
 KAKA_Run_EXT  INT8U  Plugging;
+KAKA_Run_EXT  INT8U  topir_flag;
+KAKA_Run_EXT  INT8U  topir_left;
 KAKA_Run_EXT  INT16U ImpSecond;
 KAKA_Run_EXT  INT16U Imp2Second;
 

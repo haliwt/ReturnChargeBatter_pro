@@ -18,7 +18,8 @@ INT8U AutoDC_ReChargeStatus(void)
 {
     static INT8U full=0;
 	if(Auto_DCCharge ==1 || DC_Recharge  ==1 ){//�س�͵�Դ������DC�����⣬û������??
-	     
+	           topir_flag =0;
+	           topir_left=0;
              if(chargeflag ==0){
 					chargeflag ++ ;
 					SetStop();
@@ -35,8 +36,8 @@ INT8U AutoDC_ReChargeStatus(void)
 					SetBuzzerTime(25);
 					Delay_ms(500);
 					BuzzerOff();
-					
-					
+					topir_flag =0;
+	                topir_left=0;
 			}
             if(BatteryRechargStatus ==1){
 			   LedRedOff();
@@ -50,7 +51,6 @@ INT8U AutoDC_ReChargeStatus(void)
 					SetStop();
 					RunMode = 0;
 					RunStep = 0;
-					SetBuzzerTime(4);
 					Delay_ms(10);
 					BuzzerOff();
 		            SetFan(0);  //WT.EDIT 

@@ -1428,9 +1428,8 @@ void rechargeBatMode(void)
 	static INT8U leftLostFlag = 0;
 	static INT16U timeCircle;
 	static INT8U findCnt = 0;
-	static INT8U topir_flag =0;
 	static INT8U dir=0,i=0;
- 
+  
 	
 	switch(RunStep)
 	{
@@ -1467,12 +1466,13 @@ void rechargeBatMode(void)
 				connect++;
 				rightLostFlag = 0;
 				leftLostFlag = 0;
-
-
-
-				if(IRLocation.NearMid>0)
+                if(IRLocation.NearMid>0)
 				{
 					RunStep=0x50;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -1501,6 +1501,10 @@ void rechargeBatMode(void)
 				{
 					RunStep=0x40;
 					InitMotorForwardSlow();
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
@@ -1525,8 +1529,21 @@ void rechargeBatMode(void)
 				else if(IRLocation.TopIR >1)
 				{
                     if(topir_flag ==1){
-                          RunStep =0x40;
-						  RunMs = 0;
+						  i++;
+						  if(i>8)i=10;
+						  if(i>3){
+							 InitMotorLeft_TOPIR();
+							 RunMs =0;
+							 RunStep = 0x20;
+							  IRLocation.TopIR=0;
+
+						  }
+						  else {
+                           InitMotorRetreat();
+						   RunStep =0x1f;
+						   RunMs = 0;
+						   IRLocation.TopIR=0;
+						 }
 					}    
 					else{
 						RunStep = 0x10; //TopIr PROC
@@ -1592,8 +1609,16 @@ void rechargeBatMode(void)
 		
 			case 3:   //impact occur after run step
 			{
-				if(RunMs>20)
-				{
+			if(IMP>0)
+			{
+				NoImpSecond=0;
+				RunStep=0x3;
+				InitMotorRetreat();
+				RunMs=10;
+				CurrentMax++;
+			}
+			else if(RunMs>20)
+			{
 					InitMotorRetreat();
 					RunMs=0;
 					RunStep=4;
@@ -1604,7 +1629,15 @@ void rechargeBatMode(void)
 			
 			case 4:  //??
 			{
-				if(RunMs>200)
+			if(IMP>0)
+			{
+				NoImpSecond=0;
+				RunStep=0x3;
+				InitMotorRetreat();
+				RunMs=10;
+				CurrentMax++;
+			}
+			else if(RunMs>200)
 				{
 					SetStop();
 					RunMs=0;
@@ -1691,7 +1724,7 @@ void rechargeBatMode(void)
 			    if(RunMs>30)
 				{
 					dir++;
-					if(dir > 5){
+					if(dir > 8){
 						
 					   InitMotorForward();
 					   RunMs =0;
@@ -1746,6 +1779,10 @@ void rechargeBatMode(void)
                 else if(IRLocation.NearMid>0)
 				{
 					RunStep=0x50;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -1774,6 +1811,10 @@ void rechargeBatMode(void)
 				{
 					RunStep=0x40;
 					InitMotorForwardSlow();
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
@@ -1799,8 +1840,21 @@ void rechargeBatMode(void)
 				{
 					 
 						if(topir_flag ==1){
-                          RunStep =0x40;
-						  RunMs = 0;
+                           
+						  i++;
+						  if(i>8)i=10;
+						  if(i>3){
+							 InitMotorLeft_TOPIR();
+							 RunMs =0;
+							 RunStep = 0x20;
+								 IRLocation.TopIR=0;
+						  }
+						  else {
+                           InitMotorRetreat();
+						   RunStep =0x1f;
+						   RunMs = 0;
+						   IRLocation.TopIR=0;
+						 }
 					    }
 						else{
                         
@@ -1835,6 +1889,10 @@ void rechargeBatMode(void)
 				{
 					
 					RunStep=0x50;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -1863,6 +1921,10 @@ void rechargeBatMode(void)
 				{
 					RunStep=0x40;
 					InitMotorForwardSlow();
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
@@ -1888,8 +1950,22 @@ void rechargeBatMode(void)
 				{
 						
 					if(topir_flag ==1){
-                          RunStep =0x40;
-						  RunMs = 0;
+						  
+                          i++;
+						  if(i>8)i=10;
+						  if(i>3){
+							 InitMotorLeft_TOPIR();
+							 RunMs =0;
+							 RunStep = 0x20;
+							 IRLocation.TopIR=0;
+
+						  }
+						  else {
+                           
+						   RunStep =0x20;
+						   RunMs = 0;
+						   IRLocation.TopIR=0;
+						 }
 					}
 					else{
 						RunStep = 0x10; //TopIr PROC
@@ -1904,7 +1980,15 @@ void rechargeBatMode(void)
         /**********TOP_IR_RIGHT************************/
 		case 0x10:
 		{
-		 if(RunMs>40 ) //Left 45 degree // if(RunMs>60)
+		 if(IMP>0)
+			{
+				NoImpSecond=0;
+				RunStep=0x3;
+				InitMotorRetreat();
+				RunMs=10;
+				CurrentMax++;
+			}
+		 else if(RunMs>40 ) //Left 45 degree // if(RunMs>60)
 		   {
 		   	  SetStop();
 		   	  RunStep=0x11;
@@ -1924,8 +2008,8 @@ void rechargeBatMode(void)
 		  }
 		}
 		break;
-		case 0x12:
-		    if((WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+		case 0x12://TOP IR selection left and right TOP IR 
+		    if(IMP>0)
 			{
 				NoImpSecond=0;
 				RunStep=0x30;
@@ -1934,24 +2018,8 @@ void rechargeBatMode(void)
 				TOP_impact =1;
 
 			}
-			else if(IMP>0)
-			{
-				NoImpSecond=0;
-				RunStep=0x30;
-				InitMotorRetreat();
-				RunMs=0;
-				TOP_impact =1;
-
-		    }
-			else if(topir_flag >0){
-			
-				
-				RunStep=3;
-				RunMs =0;
-
-            }
-			else if(RunMs >800){ //600
-
+	        else if(RunMs >1200){ //600
+               SetStop();
 				RunStep=0x13;
 			    RunMs =0;
 				TOP_impact =0;
@@ -1962,30 +2030,23 @@ void rechargeBatMode(void)
 	
 		case 0x13:
 		{
-		   if(RunMs>30)
+		
+		   if(RunMs>30)//left ×ªÍä
 		   {
 			  SetStop();
-		   	  RunStep=0x14;
-			  RunMs=0;
+			  InitMotorLeft_TOPIR();//left
+			  RunStep=0x14;
 			  IRLocation.TopIR=0;
 			  topir_flag=1;
+			  topir_left=1;
 			  
 		   }
 		}
 		break;
 
-		case 0x14://left ×ªÍä
-		{
-		  if(RunMs>30)
-		  {
-		  	  InitMotorLeft_TOPIR();//left
-			  RunStep=0x15;
-			  IRLocation.TopIR=0;
-		  }
-		}
-		break;	
+	
 
-        case 0x15://return back  
+        case 0x14://return back  
 		{
 		   if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
 			   {
@@ -2055,21 +2116,18 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-             else if(RunMs > 200){ //left  180 degree position
+             else if(RunMs > 200){ //right  180 degree position
 
 				 SetStop();
 				 RunStep=0x1a;
 			     RunMs = 0;
 				 IRLocation.TopIR=0;
-				 topir_flag =2;
 			 }
 
 
 		break;
 
-		
-
-		case 0x1a:
+	    case 0x1a:
 			 if(RunMs >30){
 
                 InitMotorForward_TOPIR();
@@ -2087,7 +2145,7 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-			else if(RunMs >600){ //line run 
+			else if(RunMs >300){ //line run 
 
                 SetStop();
                 RunStep = 0x1c;
@@ -2100,7 +2158,7 @@ void rechargeBatMode(void)
 			if(RunMs >30){
                 RunStep = 0;
 				RunMs =0; 
-			    topir_flag =2;
+			    
            }
 
 		break;
@@ -2142,14 +2200,61 @@ void rechargeBatMode(void)
 							RunMs=0;
 							CurrentMax++;			
 		}
-		else if(RunMs >100){ //line run 
+		else if(RunMs >120){ //line run 
 		
 			SetStop();
-			RunStep = 0x1e;
-			RunMs =0; 
-			IRLocation.TopIR=0;
+			if(topir_left ==1){
+				InitMotorRight_TOPIR();//ritht turn run
+				RunStep = 0x19;
+				RunMs = 0;
+			}
+			else{
+				RunStep = 0x1e;
+				RunMs =0; 
+				IRLocation.TopIR=0;
+			}
+			
 		}
 		break;
+		//record top ir numbers more three 
+		case 0x20:
+		      if(RunMs >100){ //left 180
+		
+			    SetStop();
+				RunStep = 0x21;
+				RunMs = 0;
+			}
+
+		break;
+
+		case 0x21 :
+		     if(RunMs >30){
+                
+			    InitMotorForward_TOPIR();
+				RunStep= 0x22;
+				RunMs = 0;
+
+			 }
+
+
+		break;
+		case 0x22:
+			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			 {
+					NoImpSecond=0;
+					RunStep=0x3;
+					SetStop();
+					RunMs=0;
+					CurrentMax++;			
+			}
+			else if(RunMs > 500){
+				SetStop();
+				RunStep = 0x1e;
+				RunMs = 0;
+			}
+
+		break;
+	
 
 	/*********************************************/
         //TOP_LEFT IR
@@ -2227,10 +2332,6 @@ void rechargeBatMode(void)
             }
 		break;
 
-		
-
-	
-
 		/*************************************************/
 		case 0x40:   //far away
 		{
@@ -2255,35 +2356,38 @@ void rechargeBatMode(void)
 				if(IRLocation.NearMid>0)
 				{
 					RunStep=0x50;
-				
+				    topir_flag=0;	
+					topir_left=0;	
 					i=0;
+					IRLocation.TopIR=0;		
+					
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
 					//RunStep=0x53;
 					RunStep=0x50;
 				
-					i=0;
+					
 				}
 				else if(IRLocation.NearPreLeft>0)
 				{
 					//RunStep=0x56;
 					RunStep=0x50;
-				;
-					i=0;
+				
+					
 				}
 				else if(IRLocation.NearRight>0)
 				{
 					//RunStep=0x59;
 					RunStep=0x50;
 				
-					i=0;
+				
 				}
 				else if(IRLocation.NearLeft>0)
 				{
 					//RunStep=0x5c;
 					RunStep=0x50;
-					i=0;
+				
 				}
 				else if(IRLocation.FarMid>0)
 				{
@@ -2291,8 +2395,11 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
-				
-					i=0;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;		
+					IRLocation.TopIR=0;
+					
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
@@ -2301,7 +2408,7 @@ void rechargeBatMode(void)
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=2;
 				
-					i=0;
+					
 				}
 				else if(IRLocation.FarPreLeft>0)
 				{
@@ -2309,7 +2416,7 @@ void rechargeBatMode(void)
 					//RunStep=0x46;
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=3;
-					i=0;
+					
 				}
 				else if(IRLocation.FarRight>0)
 				{
@@ -2317,7 +2424,7 @@ void rechargeBatMode(void)
 					InitMotorForwardLeftSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=2;
-					i=0;
+					
 				}
 				else if(IRLocation.FarLeft>0)
 				{
@@ -2325,7 +2432,7 @@ void rechargeBatMode(void)
 					InitMotorForwardRightSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=3;
-					i=0;
+					
 				}
 				else
 				{   //lost signal process
@@ -2385,6 +2492,10 @@ void rechargeBatMode(void)
 				if(IRLocation.NearMid>0)
 				{
 					RunStep=0x50;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;		
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -2412,6 +2523,10 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;	
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
@@ -2521,6 +2636,10 @@ void rechargeBatMode(void)
 				if(IRLocation.NearMid>0)
 				{
 					RunStep=0x50;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;	
+					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -2548,6 +2667,10 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;		
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
@@ -2657,7 +2780,7 @@ void rechargeBatMode(void)
 					SBUF=Usart1Send[SendCount];
 				}
 				#endif 
-				if(Plugging > 30){
+				if(Plugging > 20){
 						SetStop();
 						RunStep = 3;
 						RunMs = 0;
@@ -2668,7 +2791,10 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow_Target();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;	
-					topir_flag=0;				
+					topir_flag=0;
+					topir_left =0;
+					i=0;
+					IRLocation.TopIR=0;				
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -2704,7 +2830,10 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow_Target();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;	
-					topir_flag=0;				
+					topir_flag=0;	
+					topir_left=0;	
+					i=0;
+					IRLocation.TopIR=0;		
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
