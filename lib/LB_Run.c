@@ -1609,15 +1609,7 @@ void rechargeBatMode(void)
 		
 			case 3:   //impact occur after run step
 			{
-			if(IMP>0)
-			{
-				NoImpSecond=0;
-				RunStep=0x3;
-				InitMotorRetreat();
-				RunMs=10;
-				CurrentMax++;
-			}
-			else if(RunMs>20)
+		    if(RunMs>20)
 			{
 					InitMotorRetreat();
 					RunMs=0;
@@ -1629,15 +1621,7 @@ void rechargeBatMode(void)
 			
 			case 4:  //??
 			{
-			if(IMP>0)
-			{
-				NoImpSecond=0;
-				RunStep=0x3;
-				InitMotorRetreat();
-				RunMs=10;
-				CurrentMax++;
-			}
-			else if(RunMs>200)
+			 if(RunMs>200)
 				{
 					SetStop();
 					RunMs=0;
