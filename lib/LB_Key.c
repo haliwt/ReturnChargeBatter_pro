@@ -38,6 +38,7 @@ INT8U AutoDC_ReChargeStatus(void)
 					BuzzerOff();
 					topir_flag =0;
 	                topir_left=0;
+					Plugging = 0;
 			}
             if(BatteryRechargStatus ==1){
 			   LedRedOff();

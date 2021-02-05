@@ -2732,11 +2732,11 @@ void rechargeBatMode(void)
 			break;
 		case 0x50:   //near 
 		{
-             topir_flag =0;
+             
              if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin)) //WT.EDIT 2021.01.19
 			 {
 					NoImpSecond=0;
-					RunStep=3;
+					RunStep=0x51;
 					SetStop();
 					RunMs=0;
 					CurrentMax++;			
@@ -2766,7 +2766,7 @@ void rechargeBatMode(void)
 				#endif 
 				if(Plugging > 20){
 						SetStop();
-						RunStep = 3;
+						RunStep = 0x51;
 						RunMs = 0;
 						Plugging =0;
 				}
@@ -2898,9 +2898,9 @@ void rechargeBatMode(void)
 				}
         break;
 		case 0x52:
-             if(RunMs >100){
+             if(RunMs >150){
 				RunMs = 0 ;
-				RunStep =0;
+				RunStep =0x40;
 				Plugging = 0;
 
 			 }
