@@ -176,18 +176,20 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			CheckTime++;
 			Plugging++;
 			battDetect1sFlag = 1;
-			#if 0			
-			Usart1Send[0]=3;
-			Usart1Send[1]=Voltage/100;
-			Usart1Send[2]=Voltage%100;
-			Usart1Send[3] =0xAB;
+			#if 1			
+			Usart1Send[0]=5;
+			Usart1Send[1]=Mid_ReadIR.ReadIR[0];
+			Usart1Send[2]=Mid_ReadIR.ReadIR[1];
+			Usart1Send[3]=Mid_ReadIR.ReadIR[2];	
+			Usart1Send[4]=lastMode;
+			Usart1Send[5]=RunStep;
+			//Usart1Send[3] =0xAB;
 			SendCount=1;
 			SBUF=Usart1Send[SendCount];
-			Battery_HigVoltage = Voltage/100;
-			Battery_LowVoltage = Voltage%100;
+			
   	       #endif
 
-           #if 1			
+           #if 0			
 			if(SendCount>=5)//if(SendCount>=12)
 			{
 				Usart1Send[0]=5;
@@ -204,7 +206,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 //				Usart1Send[8]=RCurrent;
 //				Usart1Send[9]=EdgeCurrent;
 //				Usart1Send[10]=FanCurrent;
-				Usart1Send[4]=Plugging;//IMP;
+				Usart1Send[4]=lastMode;//topir_flag;//Plugging;//IMP;
 				Usart1Send[5]=RunStep;
 				SendCount=1;
 				SBUF=Usart1Send[SendCount];	

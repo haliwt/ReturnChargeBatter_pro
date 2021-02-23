@@ -43,11 +43,11 @@ code INT8U IRcode[100]={
 0xa8,0x61,0x80,	  //远右		17
 0x61,0x80,0x00,   //远右		18
 0xaa,0x86,0x00,	  //远右		19
-0xAA,0X00,0X00,   //近右      20  //WT.EDIT --在回充座的右边。
-0xAA,0xA8,0X00,   //TOP IR  21  //WT.EDIT 
-0x18,0x61,0x18,   //正中     22
-0x86,0x11,0x18,   //正中     23
-0xAA,0x11,0x80,   //远中	 24
+0xAA,0X00,0X00,   //近右        20  //WT.EDIT --在回充座的右边。
+0xAA,0xA8,0X00,   //TOP IR     21  //WT.EDIT 
+0x18,0x61,0x18,   //正中       22
+0x86,0x11,0x18,   //正中       23
+0xAA,0x11,0x80,   //正中	   24
 0x00,0x00,0x00, 
 };
 void Init_IR()
@@ -241,7 +241,7 @@ void CheckRechargeIR()
 0xa8,0x61,0x80,	  //近右	    8 
 0xa8,0x60,0x80,	  //近右		9
 
-0xaa,0x1a,0x00,	  //远左		10
+0xAA,0x1a,0x00,	  //远左		10
 0xa1,0x86,0x80,   //远左		11
 0x18,0x61,0xa0,	  //远偏左		12
 0x18,0x41,0x11,	  //远中		13
@@ -250,12 +250,12 @@ void CheckRechargeIR()
 0x86,0x18,0x60,	  //远偏右		16
 0xa8,0x61,0x80,	  //远右		17
 0x61,0x80,0x00,   //远右		18
-0xaa,0x86,0x00,	  //远右		19
+0xAA,0x86,0x00,	  //远右		19
 0xAA,0X00,0X00,   //近右      20  //WT.EDIT --在回充座的右边。
 0xAA,0xA8,0X00,   //TOP IR  21  //WT.EDIT 
 0x18,0x61,0x18    //正中     22
 0x86,0x11,0x18,   //正中     23
-0xAA,0x11,0x80,   //远中	 24
+0xAA,0x11,0x80,   //正中	 24  //WT.EDIT 
 0xAA,0x
 */
 	
@@ -309,7 +309,6 @@ void CheckRechargeIR()
 	  	case 13:
 	  	case 14:
 	  	case 15:
-		case 24:                  //WT.EDIT
 		IRLocation.FarMid++;
 		break;
 	  	case 16:
@@ -332,8 +331,13 @@ void CheckRechargeIR()
 		break;
 		case 23:
            	IRLocation.NearMid++;//WT.EDIT 2021.02.03
-
+        
 		break;
+
+		case 24:
+				IRLocation.NearMid++;//WT.EDIT 2021.02.23
+		break;
+		
 
 		
 	  }
@@ -353,7 +357,7 @@ void CheckRechargeIR()
 				findRechargeFlag = 1;	
 		}
 
-//  		  Mid_ReadIR.ReadIR[0]=0;
+//  		Mid_ReadIR.ReadIR[0]=0;
 //		    Mid_ReadIR.ReadIR[1]=0;
 //			Mid_ReadIR.ReadIR[2]=
 			Mid_ReadIR.ReadIRFlag=0;
