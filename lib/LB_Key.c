@@ -25,20 +25,34 @@ INT8U AutoDC_ReChargeStatus(void)
 					SetStop();
 					SetFan(0);
 					SetEdge(0);	
-					Delay_ms(1000);
-					Delay_ms(1000);
+					LedRedOff();
+					 LedGreenOff();
 					SetBuzzerTime(25);
 					Delay_ms(500);
 					BuzzerOff();
+					LedGreenOff();
+					LedRedON();
+					
 					SetBuzzerTime(25);
 					Delay_ms(500);
 					BuzzerOff();
+					LedRedOff();
+					LedGreenOff();
+					
 					SetBuzzerTime(25);
 					Delay_ms(500);
 					BuzzerOff();
+					LedGreenOff();
+					LedRedON();
 					topir_flag =0;
 	                topir_left=0;
 					Plugging = 0;
+					Delay_ms(1000);
+					LedRedOff();
+					LedGreenOff();
+					Delay_ms(1000);
+					LedGreenOff();
+					LedRedON();
 			}
             if(BatteryRechargStatus ==1){
 			   LedRedOff();

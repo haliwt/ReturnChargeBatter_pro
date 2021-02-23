@@ -1498,7 +1498,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow();
+					InitMotorForwardSlow_Target();//InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
@@ -1791,7 +1791,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow();
+					InitMotorForwardSlow_Target();//InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
@@ -1866,7 +1866,8 @@ void rechargeBatMode(void)
 				}
                 else if(IRLocation.NearMid>0)
 				{
-					
+					RunNoIRsenorTime=0;
+					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
@@ -1899,7 +1900,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow();
+					InitMotorForwardSlow_Target();//WT.EDIT //InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
@@ -2353,6 +2354,8 @@ void rechargeBatMode(void)
               
 				if(IRLocation.NearMid>0)
 				{
+					RunNoIRsenorTime=0;
+					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 				    topir_flag=0;	
 					topir_left=0;	
@@ -2389,8 +2392,8 @@ void rechargeBatMode(void)
 				}
 				else if(IRLocation.FarMid>0)
 				{
-					//RunStep=0x40;
-					InitMotorForwardSlow();
+					RunStep=0x50;
+					InitMotorForwardSlow_Target();//WT.EDIT //InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
 					topir_flag=0;	
@@ -2489,6 +2492,8 @@ void rechargeBatMode(void)
 
 				if(IRLocation.NearMid>0)
 				{
+					RunNoIRsenorTime=0;
+					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
@@ -2518,7 +2523,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow();
+					InitMotorForwardSlow_Target();//WT.EDIT //InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
 					topir_flag=0;	
@@ -2633,6 +2638,8 @@ void rechargeBatMode(void)
 
 				if(IRLocation.NearMid>0)
 				{
+					RunNoIRsenorTime=0;
+					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
@@ -2662,7 +2669,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow();
+					InitMotorForwardSlow_Target();//WT.EDIT//InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
 					topir_flag=0;	
@@ -2755,7 +2762,7 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-			else if(RunMs>20)
+			else if(RunMs>20  && RunMs < 30)
 			{
 				RunMs=0;
 				#if 0
@@ -2778,13 +2785,14 @@ void rechargeBatMode(void)
 					SBUF=Usart1Send[SendCount];
 				}
 				#endif 
-				if(Plugging > 20){
-						SetStop();
-						RunStep = 0x51;
-						RunMs = 0;
-						Plugging =0;
-				}
-				else if(IRLocation.NearMid>0)
+				//if(Plugging > 4000){
+					//	SetStop();
+					//	RunStep = 0x51;
+					//	RunMs = 0;
+					//	Plugging =0;
+				//}
+				//else 
+				if(IRLocation.NearMid>0)
 				{
 					InitMotorForwardSlow_Target();
 					RunNoIRsenorTime=0;
@@ -2912,7 +2920,7 @@ void rechargeBatMode(void)
 				}
         break;
 		case 0x52:
-             if(RunMs >150){
+             if(RunMs >50){
 				RunMs = 0 ;
 				RunStep =0x40;
 				Plugging = 0;
@@ -2951,11 +2959,11 @@ void sysMode(INT8U val)
 				return;
 			}
 			
-			if(lastMode == 5){ //standby Modes
-				lastMode = 6; //auto recharge Modes
+			if(lastMode != 5){ //standby Modes //WT.EDIT 2021.02.23
+				lastMode = 5; //auto recharge Modes
 			}
 			else{
-				lastMode = 5;	//standby Mode			
+				lastMode = 6;	//standby Mode	//WT.EDIT 2021.02.23		
 			}
 			ModeStopTime =0;
 		
