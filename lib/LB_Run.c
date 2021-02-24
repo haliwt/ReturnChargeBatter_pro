@@ -2478,12 +2478,12 @@ void rechargeBatMode(void)
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
-					//RunStep=0x53;
+					
 					RunStep=0x50;
 				}
 				else if(IRLocation.NearPreLeft>0)
 				{
-					//RunStep=0x56;
+				
 					RunStep=0x50;
 				}
 				else if(IRLocation.NearRight>0)
@@ -2880,8 +2880,6 @@ void rechargeBatMode(void)
 	}	
 	return;
 }
-
-
 /***************************************************************
 	*
 	*Function Name:void sysMode(INT8U val)
