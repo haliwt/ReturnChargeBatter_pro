@@ -1840,10 +1840,7 @@ void rechargeBatMode(void)
 						}
 							
 				}
-				
-							
-					
-				break;						
+			break;						
 		
 		case 7:
               if(IMP>0)
@@ -1994,7 +1991,7 @@ void rechargeBatMode(void)
 				TOP_impact =1;
 
 			}
-	        else if(RunMs >1200){ //600
+	        else if(RunMs >600){ // 1200
                SetStop();
 				RunStep=0x13;
 			    RunMs =0;
@@ -2567,9 +2564,9 @@ void rechargeBatMode(void)
 //						}
 						if(lostCnt++>=2){
 							lostCnt = 0;
-							RunNoIRsenorTime=0;
+							RunNoIRsenorTime=0; // lost signal number
 							RunStep = 1;
-							timeCircle = 27;//timeCircle = 50;//
+							timeCircle =27;//timeCircle = 50;//
 							InitMotorRightCircleRecharge();
 						}
 
@@ -2699,7 +2696,7 @@ void rechargeBatMode(void)
 							SetStop();
 							RunNoIRsenorTime=0;
 							RunStep = 1;
-							timeCircle = 27;//timeCircle = 50;
+							timeCircle = 27; //27;//timeCircle = 50;
 							InitMotorRightCircleRecharge();
 						}
 

@@ -492,8 +492,8 @@ void InitFanEdgeIO(void)
 	*
 	*Function Name:void InitMotorForwardRightSlow(void)
 	*Function :Line run slowly
-	*
-	*
+	*Input Ref:NO
+    *Return Ref:NO
 	*
 ***************************************************************/
  void SetMotorForwardPWMUP()
@@ -1106,13 +1106,13 @@ void InitMotorRightCircleRecharge(void)
 	PWMM |= 0x10;						//PWM0工作于互补模式						
 
 
-	PWM0PH = 0x02;						//周期高4位设置为0x03
-	PWM0PL = 0xDD;						//周期低8位设置为0xFF
+	PWM0PH = 0x01;						//周期高4位设置为0x03
+	PWM0PL = 0x00;						//周期低8位设置为0xFF
 
-	PWM0DH = 0x01;						//PWM0高4位占空比0x01
-	PWM0DL = 0x00;						//PWM0低8位占空比0x55
-	PWM0DTH = 0x01;						//PWM01高4位占空比0x01
-	PWM0DTL = 0x00;						//PWM01低8位占空比0x55
+	PWM0DH = 0x00;						//PWM0高4位占空比0x01
+	PWM0DL = 0x80;						//PWM0低8位占空比0x55
+	PWM0DTH = 0x00;						//PWM01高4位占空比0x01
+	PWM0DTL = 0x80;						//PWM01低8位占空比0x55
 	PWMEN |= 0x11;						//使能PWM0以及PWM01
 	ForwardFlag=18;
 }
