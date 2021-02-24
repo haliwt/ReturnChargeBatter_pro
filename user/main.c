@@ -181,7 +181,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			Usart1Send[1]=Mid_ReadIR.ReadIR[0];
 			Usart1Send[2]=Mid_ReadIR.ReadIR[1];
 			Usart1Send[3]=Mid_ReadIR.ReadIR[2];	
-			Usart1Send[4]=lastMode;
+			Usart1Send[4]=SubRunStep;//lastMode;
 			Usart1Send[5]=RunStep;
 			//Usart1Send[3] =0xAB;
 			SendCount=1;

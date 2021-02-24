@@ -1152,7 +1152,7 @@ void wallMode(void)
 			InitMotorForward();
 			RunStep=2;				
 			RunMs = 0;
-		    WallDp[0] = 0;
+		  WallDp[0] = 0;
 			WallDp[1] = 0;
 			WallDp[2] = 0;
 			WallDp[3] = 0;
@@ -1408,6 +1408,8 @@ void wallMode(void)
 	}
 	return;
 }
+
+
 /************************************************************************************
  * 	*
     *Function Name:void rechargeBatMode(void)
@@ -1439,7 +1441,7 @@ void rechargeBatMode(void)
 			RunStep=1;
 //			ADCtl = 0;
 			ClearAllIR();
-            timeCircle= 28 ;//27;// н?μ?±??timeCircle= 50;//
+            timeCircle= 27;// н?μ?±??timeCircle= 50;//
           
 			findCnt = 0;
 			connect = 0; //WT.EIDT 2021.01.23
@@ -1450,7 +1452,7 @@ void rechargeBatMode(void)
 		case 1:
 		{
 
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
             {
                 NoImpSecond=0;
 				RunStep=0x3;
@@ -1498,7 +1500,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow_Target();//InitMotorForwardSlow();
+					InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
@@ -1528,12 +1530,12 @@ void rechargeBatMode(void)
 				{
                     if(topir_flag ==1){
 						  i++;
+						  if(i>8)i=10;
 						  if(i>3){
 							 InitMotorLeft_TOPIR();
 							 RunMs =0;
 							 RunStep = 0x20;
-							 IRLocation.TopIR=0;
-							 topir_flag=0;
+							  IRLocation.TopIR=0;
 
 						  }
 						  else {
@@ -1572,15 +1574,7 @@ void rechargeBatMode(void)
 			break;
 		
 		case 0x02: //
-			if((WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
-			{
-				NoImpSecond=0;
-				RunStep=0x3;
-				InitMotorRetreat();
-				RunMs=10;
-				CurrentMax++;
-			}
-			else if(IMP>0)
+		   if(IMP>0)
 			{
 				NoImpSecond=0;
 				RunStep=0x3;
@@ -1638,15 +1632,16 @@ void rechargeBatMode(void)
 			break;
 
 			case 0xb1:
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+			if(IMP>0)
 			{
-				
+				NoImpSecond=0; //WT.EDIT 2021.01.19
+			   {
 					NoImpSecond=0;
 					RunStep=0x3;
 					SetStop();
 					RunMs=0;
 					CurrentMax++;			
-				
+				}
 			  }
 			  else if(RunMs>50) //
 			  {
@@ -1660,7 +1655,7 @@ void rechargeBatMode(void)
 			case 5:  //??
 			{
 
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+			if(IMP>0)
 			{
 			
 					NoImpSecond=0;
@@ -1680,7 +1675,7 @@ void rechargeBatMode(void)
 			break;
 			
 			case 0xa0:
-				if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+				if(IMP>0)
 				{   
 				
 						NoImpSecond=0;
@@ -1701,16 +1696,15 @@ void rechargeBatMode(void)
 
 			break;
 
-			case 0xa1: //random model 
+			case 0xa1:
 			    if(RunMs>30)
 				{
 					dir++;
-					if(dir > 4){//WT.EDIT 2021.02.23 EDIT dir > 8
-				      // dir = 0;
-					   InitMotorForward();//InitMotorLeft_TOPIR();//left
-					   RunMs=0;
-					   RunStep=0xa2;//InitMotorForward();
-					  
+					if(dir > 8){
+						
+					   InitMotorForward();
+					   RunMs =0;
+					   RunStep = 0xa2;
 					}
 					else{
 						SetStop();
@@ -1722,27 +1716,28 @@ void rechargeBatMode(void)
 			break;
 
 			case 0xa2:
-			  if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+			  if(IMP>0)
 				{
 					
 						NoImpSecond=0;
 						RunStep=0x3;
 						SetStop();
 						RunMs=0;
-						CurrentMax++;
-						dir=0;//WT.EDIT 
+						CurrentMax++;			
 					
 			    }		
-			  else if(RunMs >600){ //300
+			  else if(RunMs >300){
 				  dir = 0;
 				  SetStop();
 				  RunMs =0;
 				  RunStep = 7;
-               }
+
+
+			  }
 
 			break;
 			case 6:  //??	
-				if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
+				if(IMP>0)
 				{
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -1791,7 +1786,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow_Target();//InitMotorForwardSlow();
+					InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
@@ -1823,12 +1818,12 @@ void rechargeBatMode(void)
 						if(topir_flag ==1){
                            
 						  i++;
+						  if(i>8)i=10;
 						  if(i>3){
 							 InitMotorLeft_TOPIR();
 							 RunMs =0;
 							 RunStep = 0x20;
-							 IRLocation.TopIR=0;
-							 topir_flag=0;
+								 IRLocation.TopIR=0;
 						  }
 						  else {
                            InitMotorRetreat();
@@ -1846,10 +1841,12 @@ void rechargeBatMode(void)
 							
 				}
 				
-			break;						
+							
+					
+				break;						
 		
 		case 7:
-               if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+              if(IMP>0)
 			   {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -1866,8 +1863,7 @@ void rechargeBatMode(void)
 				}
                 else if(IRLocation.NearMid>0)
 				{
-					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=1;
+					
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
@@ -1900,7 +1896,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow_Target();//WT.EDIT //InitMotorForwardSlow();
+					InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
@@ -1932,12 +1928,12 @@ void rechargeBatMode(void)
 					if(topir_flag ==1){
 						  
                           i++;
+						  if(i>8)i=10;
 						  if(i>3){
 							 InitMotorLeft_TOPIR();
 							 RunMs =0;
 							 RunStep = 0x20;
 							 IRLocation.TopIR=0;
-							 topir_flag=0;
 
 						  }
 						  else {
@@ -2028,7 +2024,7 @@ void rechargeBatMode(void)
 
         case 0x14://return back  
 		{
-		   if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+		  if(IMP>0)
 			   {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2058,7 +2054,7 @@ void rechargeBatMode(void)
         break;
 
 		case 0x17:
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			{
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2088,7 +2084,7 @@ void rechargeBatMode(void)
 		break;
 		/*The first new charge pile*/
 		case 0x19 :
-			 if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			   {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2117,7 +2113,7 @@ void rechargeBatMode(void)
         break;
 
 		case 0x1b :
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			 {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2145,7 +2141,7 @@ void rechargeBatMode(void)
 			
         //the second be check TOPIR =1
 		case 0x1d:
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			 {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2172,7 +2168,7 @@ void rechargeBatMode(void)
 		break;
 
 		case 0x1f:
-		if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+		if(IMP>0)
 		{
 							NoImpSecond=0;
 							RunStep=0x3;
@@ -2198,15 +2194,7 @@ void rechargeBatMode(void)
 		break;
 		//record top ir numbers more three 
 		case 0x20:
-		    if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
-			 {
-					NoImpSecond=0;
-					RunStep=0x3;
-					SetStop();
-					RunMs=0;
-					CurrentMax++;			
-			}
-		    else if(RunMs >150){ //left 180
+		      if(RunMs >100){ //left 180
 		
 			    SetStop();
 				RunStep = 0x21;
@@ -2227,7 +2215,7 @@ void rechargeBatMode(void)
 
 		break;
 		case 0x22:
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			 {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2248,7 +2236,7 @@ void rechargeBatMode(void)
         //TOP_LEFT IR
 		case 0x30:
 		{
-	     if(RunMs>350) ////300后退 --OK
+		  if(RunMs>350) ////300后退 --OK
 		  {
 		  	  SetStop();
 			  RunStep=0x31;
@@ -2272,20 +2260,12 @@ void rechargeBatMode(void)
 
 		case 0x32 : // 右转 90度
 
-		 if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
-			 {
-					NoImpSecond=0;
-					RunStep=0x3;
-					SetStop();
-					RunMs=0;
-					CurrentMax++;			
-			}
-		  else if(RunMs >300){ //if(RunMs >400){ //600
+		 if(RunMs >300){ //if(RunMs >400){ //600
 
               SetStop();
 			  RunStep = 0x33;  //LINE RUN
 		      RunMs = 0;
-			 
+			  topir_flag =1;
 
 
 		  }
@@ -2304,15 +2284,8 @@ void rechargeBatMode(void)
 		break ;
 
 		case 0x34:
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)) //WT.EDIT 2021.01.19
-			 {
-					NoImpSecond=0;
-					RunStep=0x3;
-					SetStop();
-					RunMs=0;
-					CurrentMax++;			
-			}
-		    else if(RunMs>400){  //line run  //500
+
+		     if(RunMs>500){  //line run 
 
 				SetStop();
 				RunStep = 0x35;
@@ -2324,10 +2297,14 @@ void rechargeBatMode(void)
 		break;
 
 		case 0x35 : //left 90 --check siginal has or not 
-		if(RunMs > 30){
+
+
+			if(RunMs > 30){
+				 
+				SetStop();
 	            RunStep =0;
 			    RunMs = 0;
-                IRLocation.TopIR=0;		
+                topir_flag =1;
             }
 		break;
 
@@ -2335,7 +2312,7 @@ void rechargeBatMode(void)
 		case 0x40:   //far away
 		{
            topir_flag =0;
-		   if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin)) //WT.EDIT 2021.01.19
+		   if(IMP>0)
             {
                 NoImpSecond=0;
 				RunStep=0x3;
@@ -2344,8 +2321,9 @@ void rechargeBatMode(void)
 				CurrentMax++;	
 
 			}
-			else if(RunMs >20)//else if(RunMs>40 ) //WT.EDIT 
+			else if(RunMs >20 || ReceiveIR_Flag==1)//else if(RunMs>40 ) //WT.EDIT 
 			{
+				ReceiveIR_Flag=0;
 				RunMs=0;
 				distance = 0;
 				lostCnt = 0;
@@ -2354,27 +2332,26 @@ void rechargeBatMode(void)
               
 				if(IRLocation.NearMid>0)
 				{
-					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 				    topir_flag=0;	
 					topir_left=0;	
 					i=0;
-					IRLocation.TopIR=0;		
-					
+					IRLocation.TopIR=0;	
+					Plugging = 0;	//WT.EDIT 2021.02.23	
+					SubRunStep =0x41;
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
 					//RunStep=0x53;
 					RunStep=0x50;
-				
+					SubRunStep =0x42;
 					
 				}
 				else if(IRLocation.NearPreLeft>0)
 				{
 					//RunStep=0x56;
 					RunStep=0x50;
-				
+
 					
 				}
 				else if(IRLocation.NearRight>0)
@@ -2392,8 +2369,8 @@ void rechargeBatMode(void)
 				}
 				else if(IRLocation.FarMid>0)
 				{
-					RunStep=0x50;
-					InitMotorForwardSlow_Target();//WT.EDIT //InitMotorForwardSlow();
+					//RunStep=0x40;
+					InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
 					topir_flag=0;	
@@ -2478,7 +2455,7 @@ void rechargeBatMode(void)
 		case 0x41:  //right side
 		{
 
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			 {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2486,19 +2463,18 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-            else if(RunMs>20 && RunMs < 40)//else if(RunMs>30)
+            else if(RunMs>20 || ReceiveIR_Flag==1)//else if(RunMs>30)
 			{
 				RunMs=0;
-
+				ReceiveIR_Flag=0;
 				if(IRLocation.NearMid>0)
 				{
-					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
-					IRLocation.TopIR=0;		
+					IRLocation.TopIR=0;	
+					
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
@@ -2523,7 +2499,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow_Target();//WT.EDIT //InitMotorForwardSlow();
+					InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
 					topir_flag=0;	
@@ -2593,7 +2569,7 @@ void rechargeBatMode(void)
 							lostCnt = 0;
 							RunNoIRsenorTime=0;
 							RunStep = 1;
-							timeCircle = 28;//27;//timeCircle = 50;//
+							timeCircle = 27;//timeCircle = 50;//
 							InitMotorRightCircleRecharge();
 						}
 
@@ -2606,7 +2582,7 @@ void rechargeBatMode(void)
 		case 0x42:   //leftt side 
 		{
             
-			if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin)) //WT.EDIT 2021.01.19
+			if(IMP>0)
 			 {
 					NoImpSecond=0;
 					RunStep=0x3;
@@ -2614,32 +2590,14 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-			else if(RunMs>20 && RunMs<40  )//else if(RunMs>30)
+			else if(RunMs>20 || ReceiveIR_Flag==1 )//else if(RunMs>30)
 			{
 				RunMs=0;
-//				if(SendCount>=12)
-//				{
-//					Usart1Send[0]=12;
-//					Usart1Send[1]=IRLocation.NearMid;
-//					Usart1Send[2]=IRLocation.NearPreRight;
-//					Usart1Send[3]=IRLocation.NearPreLeft;
-//					Usart1Send[4]=IRLocation.NearRight;
-//					Usart1Send[5]=IRLocation.NearLeft;
-//					Usart1Send[6]=IRLocation.FarMid;
-//					Usart1Send[7]=IRLocation.FarPreRight;
-//					Usart1Send[8]=IRLocation.FarPreLeft;
-//					Usart1Send[9]=IRLocation.FarRight;
-//					Usart1Send[10]=IRLocation.FarLeft;
-//					Usart1Send[11]=RunNoIRsenorLastStep;
-//					Usart1Send[12]=RunStep;
-//					SendCount=1;
-//					SBUF=Usart1Send[SendCount];
-//				}
+				ReceiveIR_Flag=0;
+
 
 				if(IRLocation.NearMid>0)
 				{
-					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=1;
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
@@ -2669,7 +2627,7 @@ void rechargeBatMode(void)
 				else if(IRLocation.FarMid>0)
 				{
 					RunStep=0x40;
-					InitMotorForwardSlow_Target();//WT.EDIT//InitMotorForwardSlow();
+					InitMotorForwardSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=1;
 					topir_flag=0;	
@@ -2741,7 +2699,7 @@ void rechargeBatMode(void)
 							SetStop();
 							RunNoIRsenorTime=0;
 							RunStep = 1;
-							timeCircle = 28;//27;//timeCircle = 50;
+							timeCircle = 27;//timeCircle = 50;
 							InitMotorRightCircleRecharge();
 						}
 
@@ -2753,39 +2711,19 @@ void rechargeBatMode(void)
 			break;
 		case 0x50:   //near 
 		{
-             
-             if(IMP>0 ||(WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin)) //WT.EDIT 2021.01.19
-			 {
+            if(IMP>0)
+			{
 					NoImpSecond=0;
 					RunStep=0x51;
 					SetStop();
 					RunMs=0;
 					CurrentMax++;			
 			}
-			else if(RunMs>20  && RunMs < 30)
+			else if(RunMs>20 || ReceiveIR_Flag==1)
 			{
 				RunMs=0;
-				#if 0
-				if(SendCount>=12)
-				{
-					Usart1Send[0]=12;
-					Usart1Send[1]=IRLocation.NearMid;
-					Usart1Send[2]=IRLocation.NearPreRight;
-					Usart1Send[3]=IRLocation.NearPreLeft;
-					Usart1Send[4]=IRLocation.NearRight;
-					Usart1Send[5]=IRLocation.NearLeft;
-					Usart1Send[6]=IRLocation.FarMid;
-					Usart1Send[7]=IRLocation.FarPreRight;
-					Usart1Send[8]=IRLocation.FarPreLeft;
-					Usart1Send[9]=IRLocation.FarRight;
-					Usart1Send[10]=IRLocation.FarLeft;
-					Usart1Send[11]=IMP;
-					Usart1Send[12]=RunStep;
-					SendCount=1;
-					SBUF=Usart1Send[SendCount];
-				}
-				#endif 
-				//if(Plugging > 4000){
+				ReceiveIR_Flag=0;
+				//if(Plugging > 20){
 					//	SetStop();
 					//	RunStep = 0x51;
 					//	RunMs = 0;
@@ -2800,27 +2738,29 @@ void rechargeBatMode(void)
 					topir_flag=0;
 					topir_left =0;
 					i=0;
-					IRLocation.TopIR=0;				
+					IRLocation.TopIR=0;	
+					SubRunStep =1;			
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
 					InitMotorForwardLeftSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=2;
-									
+					SubRunStep =2;					
 				}
 				else if(IRLocation.NearPreLeft>0)
 				{
 					InitMotorForwardRightSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=3;	
-									
+					SubRunStep =3;					
 				}
 				else if(IRLocation.NearRight>0)
 				{
 					InitMotorForwardLeftSlow();
 					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=2;	
+					RunNoIRsenorLastStep=2;
+					SubRunStep =4;		
 									
 				}
 				else if(IRLocation.NearLeft>0)
@@ -2828,7 +2768,7 @@ void rechargeBatMode(void)
 					InitMotorForwardRightSlow();
 					RunNoIRsenorTime=0;
 					RunNoIRsenorLastStep=3;	
-								
+					SubRunStep =5;				
 				}
 				else if(IRLocation.FarMid>0)
 				{
@@ -2839,35 +2779,40 @@ void rechargeBatMode(void)
 					topir_flag=0;	
 					topir_left=0;	
 					i=0;
-					IRLocation.TopIR=0;		
+					IRLocation.TopIR=0;	
+					SubRunStep =6;		
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
 					//RunStep=0x53;
 					InitMotorForwardLeftSlow();
 					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=2;					
+					RunNoIRsenorLastStep=2;	
+					SubRunStep =7;					
 				}
 				else if(IRLocation.FarPreLeft>0)
 				{
 					//RunStep=0x56;
 					InitMotorForwardRightSlow();
 					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=3;					
+					RunNoIRsenorLastStep=3;	
+					SubRunStep =8;					
 				}
 				else if(IRLocation.FarRight>0)
 				{
 					//RunStep=0x59;
 					InitMotorForwardLeftSlow();
 					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=2;					
+					RunNoIRsenorLastStep=2;	
+					SubRunStep =9;					
 				}
 				else if(IRLocation.FarLeft>0)
 				{
 					//RunStep=0x5c;
 					InitMotorForwardRightSlow();
 					RunNoIRsenorTime=0;
-					RunNoIRsenorLastStep=2;					
+					RunNoIRsenorLastStep=2;
+					SubRunStep =0x0A;						
 				}
 				else
 				{
@@ -2878,10 +2823,11 @@ void rechargeBatMode(void)
 						RunNoIRsenorTime=0;
 						if(RunNoIRsenorLastStep==1)
 						{
-							   SetStop();
-							   RunStep = 0x51;
+							 //  SetStop();
+							   RunStep = 0x41; // 0x41 // 0x51
 							   RunMs = 0;
 							   RunNoIRsenorLastStep=0;
+							   SubRunStep =0x0B;	
 						}
 						else	if(RunNoIRsenorLastStep==2)
 						{
@@ -2891,6 +2837,7 @@ void rechargeBatMode(void)
 							rightLostFlag = 1;
 							leftLostFlag = 0; //2021.01.22 YAO
 							RunNoIRsenorLastStep=0;
+							SubRunStep =0x0C;
 						}
 						else	if(RunNoIRsenorLastStep==3)
 						{
@@ -2900,6 +2847,7 @@ void rechargeBatMode(void)
 							rightLostFlag = 0;
 							leftLostFlag = 1; //2021.01.22 YAO
 							RunNoIRsenorLastStep=0;
+							SubRunStep =0x0D;
 						}
 
 
@@ -2920,7 +2868,7 @@ void rechargeBatMode(void)
 				}
         break;
 		case 0x52:
-             if(RunMs >50){
+             if(RunMs >100){ //150
 				RunMs = 0 ;
 				RunStep =0x40;
 				Plugging = 0;
@@ -2959,11 +2907,11 @@ void sysMode(INT8U val)
 				return;
 			}
 			
-			if(lastMode != 5){ //standby Modes //WT.EDIT 2021.02.23
-				lastMode = 5; //auto recharge Modes
+			if(lastMode == 5){ //standby Modes
+				lastMode = 6; //auto recharge Modes
 			}
 			else{
-				lastMode = 6;	//standby Mode	//WT.EDIT 2021.02.23		
+				lastMode = 5;	//standby Mode			
 			}
 			ModeStopTime =0;
 		

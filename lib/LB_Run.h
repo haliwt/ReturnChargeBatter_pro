@@ -33,6 +33,8 @@ KAKA_Run_EXT  INT8U Mode;
 KAKA_Run_EXT  INT8U Step;
 KAKA_Run_EXT  INT8U RunMode;
 KAKA_Run_EXT  INT8U RunStep;
+KAKA_Run_EXT  INT8U SubRunStep;
+KAKA_Run_EXT  INT8U ReceiveIR_Flag;
 KAKA_Run_EXT  INT8U RunNoIRsenorTime;
 KAKA_Run_EXT  INT8U RunNoIRsenorLastStep;
 KAKA_Run_EXT  INT16U RunMs;
