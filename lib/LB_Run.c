@@ -1966,25 +1966,13 @@ void rechargeBatMode(void)
 		    else if(RunMs>300)// if(RunMs>500)
 		   {
 			   SetStop();
+			   InitMotorRight_TOPIR();//right turn  on 20 degree
 			   RunStep=0x18;
 			   RunMs = 0;
 		   	 
 		   }
 		break;
-		
-		case 0x18:
-		{
-		    if(RunMs > 30){
-
-				 RunStep=0;
-			     RunMs = 0;
-				 IRLocation.TopIR=0;
-			 }
-		
-		}
-		break;
-		/*The first new charge pile*/
-		case 0x19 :
+		case 0x18 :
 			if(IMP>0)
 			   {
 					NoImpSecond=0;
@@ -1993,106 +1981,57 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-             else if(RunMs > 200){ //right  180 degree position
+             else if(RunMs > 60){ //right  180 degree position
 
 				 SetStop();
-				 RunStep=0x1a;
+				 RunStep=0x19;
 			     RunMs = 0;
 				 IRLocation.TopIR=0;
 			 }
 
 
 		break;
+		
+		case 0x19:  //line run 
+		   if(RunMs > 30){
+               InitMotorForward_TOPIR();
+			   RunMs =0;
+			   RunStep = 0x1a;
 
-	    case 0x1a:
-			 if(RunMs >30){
+		   }
 
-                InitMotorForward_TOPIR();
-                RunStep = 0x1b;
-				RunMs =0; 
-           }
-        break;
+		break;
 
-		case 0x1b :
-			if(IMP>0)
-			 {
+        case 0x1a:
+		{
+		    if(IMP>0)
+			{
 					NoImpSecond=0;
 					RunStep=0x3;
 					SetStop();
 					RunMs=0;
 					CurrentMax++;			
 			}
-			else if(RunMs >300){ //line run 
+			else if(RunMs > 200){
+                 SetStop();
+				 RunStep=0;
+			     RunMs = 0x1b;
+				 IRLocation.TopIR=0;
+			 }
+		
+		}
+		break;
+		
+	     case 0x1b :
+		 if(RunMs >30){ //line run 
 
                 SetStop();
-                RunStep = 0x1c;
-				RunMs =0; 
-           }
-
-		break;
-
-		case 0x1c :
-			if(RunMs >30){
                 RunStep = 0;
 				RunMs =0; 
-			    
            }
 
 		break;
-			
-        //the second be check TOPIR =1
-		case 0x1d:
-			if(IMP>0)
-			 {
-					NoImpSecond=0;
-					RunStep=0x3;
-					SetStop();
-					RunMs=0;
-					CurrentMax++;			
-			}
-			else if(RunMs >60){ //line run 
 
-                SetStop();
-                RunStep = 0x1e;
-				RunMs =0; 
-				IRLocation.TopIR=0;
-           }
-
-
-		break;
-		case 0x1e:
-		if(RunMs >30){
-				RunStep = 0;
-				RunMs =0; 
-				//topir_flag =0;
-		   }
-		break;
-
-		case 0x1f:
-		if(IMP>0)
-		{
-							NoImpSecond=0;
-							RunStep=0x3;
-							SetStop();
-							RunMs=0;
-							CurrentMax++;			
-		}
-		else if(RunMs >120){ //line run 
-		
-			SetStop();
-			if(topir_left ==1){
-				InitMotorRight_TOPIR();//ritht turn run
-				RunStep = 0x19;
-				RunMs = 0;
-			}
-			else{
-				RunStep = 0x1e;
-				RunMs =0; 
-				IRLocation.TopIR=0;
-			}
-			
-		}
-		break;
 		//record top ir numbers more three 
 		case 0x20:
 		      if(RunMs >100){ //left 180
