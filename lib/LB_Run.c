@@ -1428,7 +1428,7 @@ void rechargeBatMode(void)
 	static INT8U leftLostFlag = 0;
 	static INT16U timeCircle;
 	static INT8U findCnt = 0;
-	static INT8U dir=0,i=0;
+	static INT8U i=0;
   
 	
 	switch(RunStep)
@@ -1441,7 +1441,7 @@ void rechargeBatMode(void)
 			RunStep=1;
 //			ADCtl = 0;
 			ClearAllIR();
-            timeCircle= 27;// §ß?¦Ì?¡À??timeCircle= 50;//
+            timeCircle= 30;// §ß?¦Ì?¡À??timeCircle= 50;//
           
 			findCnt = 0;
 			connect = 0; //WT.EIDT 2021.01.23
@@ -1624,9 +1624,9 @@ void rechargeBatMode(void)
 			case 0xb0:
             if(RunMs>30) //
 			  {
-				    InitMotorLeft_TOPIR();//left
+				    //InitMotorLeft_TOPIR();//left
 					RunMs=0;
-					RunStep=0xb1;
+					RunStep=0;
 			  }
 		
 			break;
@@ -1699,44 +1699,13 @@ void rechargeBatMode(void)
 			case 0xa1:
 			    if(RunMs>30)
 				{
-					dir++;
-					if(dir > 8){
-						
-					   InitMotorForward();
-					   RunMs =0;
-					   RunStep = 0xa2;
-					}
-					else{
-						SetStop();
-						RunMs=0;
-						RunStep=0;
-					}
+					RunMs=0;
+					RunStep=0;
 				}
-
 			break;
 
-			case 0xa2:
-			  if(IMP>0)
-				{
-					
-						NoImpSecond=0;
-						RunStep=0x3;
-						SetStop();
-						RunMs=0;
-						CurrentMax++;			
-					
-			    }		
-			  else if(RunMs >300){
-				  dir = 0;
-				  SetStop();
-				  RunMs =0;
-				  RunStep = 7;
-
-
-			  }
-
-			break;
-			case 6:  //??	
+			
+			case 6:  //NO signal 	
 				if(IMP>0)
 				{
 					NoImpSecond=0;
@@ -1749,7 +1718,7 @@ void rechargeBatMode(void)
 				{
 					SetStop();
 					RunMs=0;
-					RunStep=5;
+					RunStep=0xa1;//WT.EDIT 2021.02.24 //RunStep=5;
 
 				}
                 else if(IRLocation.NearMid>0)
@@ -2566,7 +2535,7 @@ void rechargeBatMode(void)
 							lostCnt = 0;
 							RunNoIRsenorTime=0; // lost signal number
 							RunStep = 1;
-							timeCircle =27;//timeCircle = 50;//
+							timeCircle =30;//timeCircle = 50;//
 							InitMotorRightCircleRecharge();
 						}
 
@@ -2696,7 +2665,7 @@ void rechargeBatMode(void)
 							SetStop();
 							RunNoIRsenorTime=0;
 							RunStep = 1;
-							timeCircle = 27; //27;//timeCircle = 50;
+							timeCircle = 30; //27;//timeCircle = 50;
 							InitMotorRightCircleRecharge();
 						}
 
@@ -2934,6 +2903,7 @@ void sysMode(INT8U val)
 				SetFan(0);
 			  	SetEdge(0);	
 				SysFlag = OVER;
+				
 			}
 			else{
 				powerUp = 0;
@@ -3403,6 +3373,7 @@ void getOutMode(void)
 				{
 					RunMode = oldMode;
 					RunStep = 1;
+					CheckTime = 0;
 					SetEdge(250);		
 				}	
 			}

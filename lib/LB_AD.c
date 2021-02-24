@@ -250,30 +250,39 @@ void CheckWall()
 
  }
 }
+/*********************************************************************************
+ *
+ *Function Name: void CheckEdgeCurrent()
+ *Function : detected side sweep brush of churrent
+ *Input Ref:NO
+ *Return Ref:NO
+ * 
+ * ******************************************************************************/
 void CheckEdgeCurrent()
 {
  //EdgeCurrent=(EdgeCurrent*9+((AD5ms[8])/2))/10;
-	if(CheckTime>5){
+	if(CheckTime>3){ //10 seocnd
 		 EdgeCurrent=(EdgeCurrentAD[0]+EdgeCurrentAD[2]+EdgeCurrentAD[4]+EdgeCurrentAD[6])/4;
 		
-		 if(RunMode==6)
-			 return;
-		 
-		 if(EdgeCurrent>0xd0){
+		 if(RunMode == 6) return ;
+		
+		if(EdgeCurrent>0xd0){
 			 EdgeCurrentCount++;
-			 if(EdgeCurrentCount>3){
+			 if(EdgeCurrentCount>=2){
 					EdgeCurrentCount = 0;
 					RunMode = 0;
 					RunStep = 0;
 					SetFan(0);
 					SetEdge(0);		
 					SetStop();
-					SysFlag = 0XFF;		 
+					SysFlag = 0XFF;	
+						 
 			 }
 			 else {
 					oldMode = RunMode ;
-					RunMode = 6;
+					RunMode = 6; //脱困模式
 					RunStep = 1;
+					CheckTime = 0;
 				 	SetEdge(0);		
 					SetStop();
 				}
@@ -281,17 +290,21 @@ void CheckEdgeCurrent()
 		 else 
 		 {
 			 EdgeCurrentCount = 0;
-		//   if(EdgeCurrentCount>1)
+//		//   if(EdgeCurrentCount>1)
 		//     EdgeCurrentCount--;
-		 }		
+		 }	
 		
+		EdgeCurrentAD[0]=0;
+		EdgeCurrentAD[2]=0;
+        EdgeCurrentAD[4]=0;
+		EdgeCurrentAD[6]=0;
 	}
 }
 
 void CheckFanCurrent()
 {
-	if(CheckTime>5){
-		CheckTime = 6;
+	if(CheckTime>3){
+		CheckTime = 4;
 		FanCurrent=(FanCurrentAD[0]+FanCurrentAD[1]+FanCurrentAD[2]+FanCurrentAD[3]+FanCurrentAD[4]+FanCurrentAD[5]+FanCurrentAD[6]+FanCurrentAD[7])/64;
 		if(FanCurrent > 0x40){
 			RunMode = 0;
@@ -302,8 +315,8 @@ void CheckFanCurrent()
 			SysFlag = 0XFF;
 		}		
 	}
-	else
-		CheckTime++;
+//	else
+//		CheckTime++;
 
 }
 

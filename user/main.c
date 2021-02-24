@@ -178,12 +178,11 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			battDetect1sFlag = 1;
 			#if 1			
 			Usart1Send[0]=5;
-			Usart1Send[1]=Mid_ReadIR.ReadIR[0];
-			Usart1Send[2]=Mid_ReadIR.ReadIR[1];
-			Usart1Send[3]=Mid_ReadIR.ReadIR[2];	
-			Usart1Send[4]=SubRunStep;//lastMode;
-			Usart1Send[5]=RunStep;
-			//Usart1Send[3] =0xAB;
+			Usart1Send[1]=EdgeCurrent;
+            Usart1Send[2]=EdgeCurrentCount;
+			Usart1Send[3] =CheckTime;
+			Usart1Send[4] = RunMode;
+			Usart1Send[5] =0xAB;
 			SendCount=1;
 			SBUF=Usart1Send[SendCount];
 			
@@ -193,21 +192,13 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			if(SendCount>=5)//if(SendCount>=12)
 			{
 				Usart1Send[0]=5;
-				Usart1Send[1]=Mid_ReadIR.ReadIR[0];
-				Usart1Send[2]=Mid_ReadIR.ReadIR[1];
-				Usart1Send[3]=Mid_ReadIR.ReadIR[2];				
-				//	Usart1Send[1]=Voltage/100;
-				//	Usart1Send[2]=Voltage%100;
+				Usart1Send[1]=EdgeCurrentCount;//Mid_ReadIR.ReadIR[0];
+				//Usart1Send[2]=Mid_ReadIR.ReadIR[1];
+				//Usart1Send[3]=Mid_ReadIR.ReadIR[2];				
 				//	Usart1Send[3]=WallDp[0];
-//				Usart1Send[4]=WallDp[1];
-//				Usart1Send[5]=WallDp[2];
-//				Usart1Send[6]=WallDp[3];
-//				Usart1Send[7]=LCurrent;
-//				Usart1Send[8]=RCurrent;
-//				Usart1Send[9]=EdgeCurrent;
-//				Usart1Send[10]=FanCurrent;
-				Usart1Send[4]=lastMode;//topir_flag;//Plugging;//IMP;
-				Usart1Send[5]=RunStep;
+				//Usart1Send[4]=lastMode;//topir_flag;//Plugging;//IMP;
+				//Usart1Send[5]=RunStep;
+				Usart1Send[2]=0xAB;
 				SendCount=1;
 				SBUF=Usart1Send[SendCount];	
             				
