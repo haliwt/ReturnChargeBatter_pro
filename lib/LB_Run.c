@@ -1471,7 +1471,6 @@ void rechargeBatMode(void)
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
-					i=0;
 					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
@@ -1503,7 +1502,6 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
-					i=0;
 					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
@@ -1526,30 +1524,13 @@ void rechargeBatMode(void)
 					RunStep=0x40;
 					InitMotorForwardRightSlow();
 				}
-				else if(IRLocation.TopIR >1)
+				else if(IRLocation.TopIR >0)
 				{
-                    if(topir_flag ==1){
-						  i++;
-						  if(i>8)i=10;
-						  if(i>3){
-							 InitMotorLeft_TOPIR();
-							 RunMs =0;
-							 RunStep = 0x20;
-							  IRLocation.TopIR=0;
-
-						  }
-						  else {
-                           InitMotorRetreat();
-						   RunStep =0x1f;
-						   RunMs = 0;
-						   IRLocation.TopIR=0;
-						 }
-					}    
-					else{
+                    
 						RunStep = 0x10; //TopIr PROC
 						RunMs = 0;
 						InitMotorLeft();
-					}
+					
 							
 				}				
 			    else if(connect>timeCircle){
@@ -1726,7 +1707,6 @@ void rechargeBatMode(void)
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
-					i=0;
 					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
@@ -1758,7 +1738,6 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
-					i=0;
 					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
@@ -1781,33 +1760,13 @@ void rechargeBatMode(void)
 					RunStep=0x40;
 					InitMotorForwardRightSlow();
 				}
-				else if(IRLocation.TopIR >1)
+				else if(IRLocation.TopIR >0)
 				{
 					 
-						if(topir_flag ==1){
-                           
-						  i++;
-						  if(i>8)i=10;
-						  if(i>3){
-							 InitMotorLeft_TOPIR();
-							 RunMs =0;
-							 RunStep = 0x20;
-								 IRLocation.TopIR=0;
-						  }
-						  else {
-                           InitMotorRetreat();
-						   RunStep =0x1f;
-						   RunMs = 0;
-						   IRLocation.TopIR=0;
-						 }
-					    }
-						else{
-                        
-								RunStep = 0x10; //TopIr PROC
-								RunMs = 0;
-								InitMotorLeft();
-						}
-							
+					RunStep = 0x10; //TopIr PROC
+					RunMs = 0;
+					InitMotorLeft();
+						
 				}
 			break;						
 		
@@ -1833,7 +1792,6 @@ void rechargeBatMode(void)
 					RunStep=0x50;
 					topir_flag=0;	
 					topir_left=0;	
-					i=0;
 					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.NearPreRight>0)
@@ -1865,7 +1823,6 @@ void rechargeBatMode(void)
 					InitMotorForwardSlow();
 					topir_flag=0;	
 					topir_left=0;	
-					i=0;
 					IRLocation.TopIR=0;	
 				}
 				else if(IRLocation.FarPreRight>0)
@@ -1888,32 +1845,13 @@ void rechargeBatMode(void)
 					RunStep=0x40;
 					InitMotorForwardRightSlow();
 				}
-				else if(IRLocation.TopIR >1 )
+				else if(IRLocation.TopIR >0 )
 				{
 						
-					if(topir_flag ==1){
-						  
-                          i++;
-						  if(i>8)i=10;
-						  if(i>3){
-							 InitMotorLeft_TOPIR();
-							 RunMs =0;
-							 RunStep = 0x20;
-							 IRLocation.TopIR=0;
-
-						  }
-						  else {
-                           
-						   RunStep =0x20;
-						   RunMs = 0;
-						   IRLocation.TopIR=0;
-						 }
-					}
-					else{
-						RunStep = 0x10; //TopIr PROC
+				        RunStep = 0x10; //TopIr PROC
 						RunMs = 0;
 						InitMotorLeft();
-					}
+					
 			
 				}								
 			break;
@@ -1985,9 +1923,6 @@ void rechargeBatMode(void)
 		   }
 		}
 		break;
-
-	
-
         case 0x14://return back  
 		{
 		  if(IMP>0)
@@ -1999,7 +1934,7 @@ void rechargeBatMode(void)
 					CurrentMax++;			
 			}
 
-		  else if(RunMs>150)//if(RunMs>150)
+		  else if(RunMs>180)//if(RunMs>150)
 		  {
 			  SetStop();
 			  RunStep=0x16;
@@ -2251,7 +2186,7 @@ void rechargeBatMode(void)
 
 		case 0x34:
 
-		     if(RunMs>500){  //line run 
+		     if(RunMs>200){  //500 //line run 
 
 				SetStop();
 				RunStep = 0x35;

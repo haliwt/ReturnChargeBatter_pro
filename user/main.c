@@ -177,14 +177,18 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			Plugging++;
 			battDetect1sFlag = 1;
 			#if 1			
-			Usart1Send[0]=5;
-			Usart1Send[1]=EdgeCurrent;
-            Usart1Send[2]=EdgeCurrentCount;
-			Usart1Send[3] =CheckTime;
-			Usart1Send[4] = RunMode;
-			Usart1Send[5] =0xAB;
-			SendCount=1;
-			SBUF=Usart1Send[SendCount];
+			    Usart1Send[0]=5;
+				Usart1Send[1]=Mid_ReadIR.ReadIR[0];
+				Usart1Send[2]=Mid_ReadIR.ReadIR[1];
+				Usart1Send[3]=Mid_ReadIR.ReadIR[2];				
+				Usart1Send[4]=SubRunStep;
+				Usart1Send[5]=RunStep;
+				
+				SendCount=1;
+				SBUF=Usart1Send[SendCount];	
+				Mid_ReadIR.ReadIR[0]=0;
+				Mid_ReadIR.ReadIR[1]=0;
+				Mid_ReadIR.ReadIR[2]=0;
 			
   	       #endif
 
@@ -192,7 +196,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			if(SendCount>=5)//if(SendCount>=12)
 			{
 				Usart1Send[0]=5;
-				Usart1Send[1]=EdgeCurrentCount;//Mid_ReadIR.ReadIR[0];
+				Usart1Send[1]=Mid_ReadIR.ReadIR[0];
 				//Usart1Send[2]=Mid_ReadIR.ReadIR[1];
 				//Usart1Send[3]=Mid_ReadIR.ReadIR[2];				
 				//	Usart1Send[3]=WallDp[0];
