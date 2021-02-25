@@ -2128,15 +2128,13 @@ void rechargeBatMode(void)
 
 		case 0x32 : // ÓÒ×ª 90¶È
 
-		 if(RunMs >300){ //if(RunMs >400){ //600
+		 if(RunMs >200){ //if(RunMs >300){ //600
 
               SetStop();
 			  RunStep = 0x33;  //LINE RUN
 		      RunMs = 0;
 			  topir_flag =1;
-
-
-		  }
+        }
 		break;
 
 		case 0x33: //line run short time 
@@ -2153,7 +2151,7 @@ void rechargeBatMode(void)
 
 		case 0x34:
 
-		     if(RunMs>200){  //500 //line run 
+		     if(RunMs>300){  //200//500 //line run 
 
 				SetStop();
 				RunStep = 0x35;
