@@ -359,10 +359,11 @@ void CheckRechargeIR()
 			if(i<=20)
 				findRechargeFlag = 1;	
 		}
-
-  		//Mid_ReadIR.ReadIR[0]=0;
-		//Mid_ReadIR.ReadIR[1]=0;
-		//Mid_ReadIR.ReadIR[2]=0;
+      #if 1
+  		Mid_ReadIR.ReadIR[0]=0;
+		Mid_ReadIR.ReadIR[1]=0;
+		Mid_ReadIR.ReadIR[2]=0;
+	  #endif 
 		Mid_ReadIR.ReadIRFlag=0;
 
 	}

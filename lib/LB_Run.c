@@ -1441,7 +1441,7 @@ void rechargeBatMode(void)
 			RunStep=1;
 //			ADCtl = 0;
 			ClearAllIR();
-            timeCircle= 30;// §ß?¦Ì?¡À??timeCircle= 50;//
+            timeCircle= 22;// §ß?¦Ì?¡À??timeCircle= 50;//
           
 			findCnt = 0;
 			connect = 0; //WT.EIDT 2021.01.23
@@ -2437,7 +2437,7 @@ void rechargeBatMode(void)
 							lostCnt = 0;
 							RunNoIRsenorTime=0; // lost signal number
 							RunStep = 1;
-							timeCircle =30;//timeCircle = 50;//
+							timeCircle =22;//timeCircle = 50;//
 							InitMotorRightCircleRecharge();
 						}
 
@@ -2567,7 +2567,7 @@ void rechargeBatMode(void)
 							SetStop();
 							RunNoIRsenorTime=0;
 							RunStep = 1;
-							timeCircle = 30; //27;//timeCircle = 50;
+							timeCircle = 22; //27;//timeCircle = 50;
 							InitMotorRightCircleRecharge();
 						}
 

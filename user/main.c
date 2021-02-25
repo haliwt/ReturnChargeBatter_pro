@@ -176,7 +176,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 			CheckTime++;
 			Plugging++;
 			battDetect1sFlag = 1;
-			#if 1			
+			#if DEBUG			
 			    Usart1Send[0]=5;
 				Usart1Send[1]=Mid_ReadIR.ReadIR[0];
 				Usart1Send[2]=Mid_ReadIR.ReadIR[1];

@@ -27,6 +27,7 @@ version  : ���ļ�β��
 #else
 #define  KAKA_IR_EXT extern
 #endif
+#define  DEBUG   1
 
  typedef struct
 {

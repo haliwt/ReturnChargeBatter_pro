@@ -112,6 +112,13 @@ void InitFanEdgeIO(void)
 	PWMEN |= 0x11;						//使能PWM0以及PWM01
 	ForwardFlag=1;
 }
+/*******************************************************************
+ * 
+ * Function Name:void InitMotorForward_TOPIR(void)
+ * Function: auto charged be used to line run
+ * 
+ * 
+ * *****************************************************************/
  void InitMotorForward_TOPIR(void)
 {
     P1_1=0;  //right 
@@ -1093,7 +1100,14 @@ void InitMotorRightCircle(void)
 	PWMEN |= 0x11;						//使能PWM0以及PWM01
 	ForwardFlag=13;
 }
-
+/********************************************************************************
+ * 
+ * Function Name:void InitMotorRightCircleRecharge(void)
+ * Function: auto charge circile 
+ * 
+ * 
+ * 
+ * *****************************************************************************/
 void InitMotorRightCircleRecharge(void)
 {
 	P1_1=0;
@@ -1106,18 +1120,25 @@ void InitMotorRightCircleRecharge(void)
 	PWMM |= 0x10;						//PWM0工作于互补模式						
 
 
-	PWM0PH = 0x01;						//周期高4位设置为0x03
-	PWM0PL = 0x00;						//周期低8位设置为0xFF
+	PWM0PH = 0x00;						//周期高4位设置为0x03
+	PWM0PL = 0xFE;						//周期低8位设置为0xFF
 
 	PWM0DH = 0x00;						//PWM0高4位占空比0x01
-	PWM0DL = 0x80;						//PWM0低8位占空比0x55
+	PWM0DL = 0xA7;						//PWM0低8位占空比0x55
 	PWM0DTH = 0x00;						//PWM01高4位占空比0x01
-	PWM0DTL = 0x80;						//PWM01低8位占空比0x55
+	PWM0DTL = 0xA7;						//PWM01低8位占空比0x55
 	PWMEN |= 0x11;						//使能PWM0以及PWM01
 	ForwardFlag=18;
 }
 
-
+/********************************************************************************
+ * 
+ * Function Name:void InitMotorRightCircleRecharge(void)
+ * Function: auto charge circile 
+ * 
+ * 
+ * 
+ * *****************************************************************************/
  void InitMotorLeftCircle(void)
 {
 	P1_1=0;
