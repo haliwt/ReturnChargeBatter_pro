@@ -1892,7 +1892,7 @@ void rechargeBatMode(void)
 				TOP_impact =1;
 
 			}
-	        else if(RunMs >600){ // 1200
+	        else if(RunMs >800){ //600  1200
                SetStop();
 				RunStep=0x13;
 			    RunMs =0;
@@ -1960,7 +1960,7 @@ void rechargeBatMode(void)
 		    else if(RunMs>300)// if(RunMs>500)
 		   {
 			   SetStop();
-			   InitMotorRight_TOPIR();//right turn  on 20 degree
+			   InitMotorRight_TOPIR();//right turn  on 30 degree
 			   RunStep=0x18;
 			   RunMs = 0;
 		   	 
@@ -1975,8 +1975,8 @@ void rechargeBatMode(void)
 					RunMs=0;
 					CurrentMax++;			
 			}
-             else if(RunMs > 100){ //right  180 degree position
-
+             else if(RunMs > 150){ //100 right  180 degree position //WT.EDIT 2021.02.26
+    
 				 SetStop();
 				 RunStep=0x19;
 			     RunMs = 0;
@@ -2019,8 +2019,6 @@ void rechargeBatMode(void)
 		
 	     case 0x1b :
 		 if(RunMs >30){ //line run 
-
-                SetStop();
                 RunStep = 0;
 				RunMs =0; 
 				topIRleft =1;
@@ -2084,9 +2082,7 @@ void rechargeBatMode(void)
 			}
 
 		break;
-
-
-		case 0x21:
+        case 0x21:
 		      if(RunMs >30){ //left 180
 		
 			    SetStop();
@@ -2095,12 +2091,7 @@ void rechargeBatMode(void)
 			}
 
 		break;
-
-		
-	
-	
-
-	/*********************************************/
+		/*********************************************/
         //TOP_LEFT IR
 		case 0x30:
 		{
