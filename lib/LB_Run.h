@@ -37,6 +37,7 @@ KAKA_Run_EXT  INT8U SubRunStep;
 KAKA_Run_EXT  INT8U ReceiveIR_Flag;
 KAKA_Run_EXT  INT8U RunNoIRsenorTime;
 KAKA_Run_EXT  INT8U RunNoIRsenorLastStep;
+KAKA_Run_EXT  INT8U ImpactsFlag; 
 KAKA_Run_EXT  INT16U RunMs;
 KAKA_Run_EXT  INT8U  EdgeTime;
 KAKA_Run_EXT INT8U chargeflag;

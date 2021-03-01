@@ -624,6 +624,7 @@ void CleanMode_Random(void)
 				InitMotorRetreat();
 				RunMs=10;
 				CurrentMax++;
+				ImpactsFlag ++ ;
 			}
             else if(IMP>0)
 			{
@@ -631,7 +632,8 @@ void CleanMode_Random(void)
 				RunStep=0x3;
 				InitMotorRetreat();
 				RunMs=0;
-				CurrentMax++;			
+				CurrentMax++;	
+				ImpactsFlag ++ ;		
 			}
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
@@ -643,7 +645,11 @@ void CleanMode_Random(void)
 			}
 			else  if(RunMs>500)
 			{
+				SetStop();
 				CurrentMax=0;
+				ImpactsFlag=0 ;
+				RunMs=0; //WT.EDIT 
+				RunStep =0x05;
 			}
 		}
 			break;
@@ -652,8 +658,18 @@ void CleanMode_Random(void)
 			if(RunMs>30)
 			{
 				InitMotorRetreat();
-				RunMs=0;
-				RunStep=4;
+				if(ImpactsFlag >4){ //WT.EDIT 2021.03.01
+					ImpactsFlag =0;
+					RunMode =2; //edge wall model
+			        RunStep =1;
+					//SysFlag = WALL;		
+
+				}
+				else{
+					RunMs=0;
+					RunStep=4;
+				}
+
 			}
 			break;
         }
@@ -696,15 +712,17 @@ void CleanMode_Random(void)
 				RunStep=3;
 				InitMotorRetreat();
 				RunMs=10;
+				ImpactsFlag ++ ;	
 
 			}
-      else if(IMP>0)
+           else if(IMP>0)
 			{
 				NoImpSecond=0;
 				RunStep=0x3;
 				InitMotorRetreat();
 				RunMs=0;
-				CurrentMax++;			
+				CurrentMax++;	
+				ImpactsFlag ++ ;			
 			}
 
         }
@@ -733,7 +751,7 @@ void  CheckRun()
 				CleanMode_Random();
 				break;
 
-			case 2: //clean zMode --edge line Mode
+			case 2: // wall--edge line Mode
 			   
 			    wallMode();
 				break; 
@@ -3291,12 +3309,12 @@ void battVoltDetect(void)
 	if(lastMode == 0) //1?¨²??
 		return;
 	
-	if(Voltage < 0x3F6 && Voltage > 0x3a0 ){  //0x3f6??|7V¦Ì¬Ÿ  ¡ê?0x3a0??|6.1V¦Ì¬Ÿ ,0X3d0 ??|3.85V¦Ì¬Ÿ¡ê¡§?§¡?¦Ì??¬Ÿ¡ê?
+	if(Voltage < 0x3b3 && Voltage > 0x300 ){//if(Voltage < 0x3F6 && Voltage > 0x3a0 ){  //0x3f6??|7V¦Ì¬Ÿ  ¡ê?0x3a0??|6.1V¦Ì¬Ÿ ,0X3d0 ??|3.85V¦Ì¬Ÿ¡ê¡§?§¡?¦Ì??¬Ÿ¡ê?
 		if(RunMode == 5)
 			return;
 		
 		if(RunMode==1 || RunMode==2 || RunMode==3 || RunMode==4 ){
-			if(Voltage < 0x3D0){
+			if(Voltage < 0x380){//if(Voltage < 0x3D0){ //WT.EDIT 2021.03.01
 				cnt++;
 			}
 			else
@@ -3309,14 +3327,14 @@ void battVoltDetect(void)
 			cnt = 0;
 			RunMode =5;
 			RunStep =0;	
-      SetFan(0);
+            SetFan(0);
 			SetEdge(0);		
-		  ADCtl = 0;
+		    ADCtl = 0;
 			SysFlag = FIND;							
 		}
 		
 	}
-	else if(Voltage < 0x3a0){
+	else if(Voltage < 0x300){
 		if(cnt>10){
 			cnt = 0;
 			SetStop();
