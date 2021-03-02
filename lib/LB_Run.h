@@ -60,6 +60,7 @@ KAKA_Run_EXT  INT16U battDetect1sFlag;
 KAKA_Run_EXT  INT8U Run100MSecond;
 KAKA_Run_EXT  INT8U MidWallOffSecond;
 KAKA_Run_EXT  INT8U ModeStopTime; //WT.EDIT
+KAKA_Run_EXT   INT8U circle ; 
 KAKA_Run_EXT  idata INT16U RunSecond;
 KAKA_Run_EXT  void  CheckRun();
 KAKA_Run_EXT  INT8U  LowVoltageFlag;

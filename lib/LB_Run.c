@@ -1459,6 +1459,12 @@ void rechargeBatMode(void)
 			RunStep=1;
 //			ADCtl = 0;
 			ClearAllIR();
+			circle++;
+			if(circle >6){ //wall edge model
+				RunStep = 0xd0;
+				circle =0;
+				InitMotorForward();
+			}
             timeCircle= 22;// §ß?¦Ì?¡À??timeCircle= 50;//
           
 			findCnt = 0;
@@ -1594,7 +1600,7 @@ void rechargeBatMode(void)
 		
 			case 3:   //impact occur after run step
 			{
-		    if(RunMs>20)
+		    if(RunMs> 0)//if(RunMs>20)
 			{
 					InitMotorRetreat();
 					RunMs=0;
@@ -1720,22 +1726,26 @@ void rechargeBatMode(void)
 					topir_flag=0;	
 					topir_left=0;	
 					IRLocation.TopIR=0;	
+					circle =0;
 				}
 				else if(IRLocation.NearPreRight>0)
 				{
 					RunStep=0x50;
 					InitMotorForwardLeftSlow();
+					circle =0;
 				}
 				else if(IRLocation.NearPreLeft>0)
 				{
 					RunStep=0x50;
 					InitMotorForwardRightSlow();
+					circle =0;
 				}
 				else if(IRLocation.NearRight>0)
 				{
 				  
 						RunStep=0x50;
 						InitMotorForwardLeftSlow();
+						circle =0;
 
 				}
 				else if(IRLocation.NearLeft>0)
@@ -1743,6 +1753,7 @@ void rechargeBatMode(void)
 			
 						RunStep=0x50;
 						InitMotorForwardRightSlow();
+						circle =0;
 				}
 				else if(IRLocation.FarMid>0)
 				{
@@ -1751,26 +1762,31 @@ void rechargeBatMode(void)
 					topir_flag=0;	
 					topir_left=0;	
 					IRLocation.TopIR=0;	
+					circle =0;
 				}
 				else if(IRLocation.FarPreRight>0)
 				{
 					RunStep=0x40;
 					InitMotorForwardLeftSlow();
+					circle =0;
 				}
 				else if(IRLocation.FarPreLeft>0)
 				{
 					RunStep=0x40;
 					InitMotorForwardRightSlow();
+					circle =0;
 				}
 				else if(IRLocation.FarRight>0)
 				{
 					RunStep=0x40;
 					InitMotorForwardLeftSlow();
+					circle =0;
 				}
 				else if(IRLocation.FarLeft>0)
 				{
 					RunStep=0x40;
 					InitMotorForwardRightSlow();
+					circle =0;
 				}
 				else if(IRLocation.TopIR >0)
 				{
@@ -1778,6 +1794,7 @@ void rechargeBatMode(void)
 					RunStep = 0x10; //TopIr PROC
 					RunMs = 0;
 					InitMotorLeft();
+					circle =0;
 						
 				}
 			break;						
@@ -2757,6 +2774,137 @@ void rechargeBatMode(void)
 
 			 }
 		break;
+
+		/************************************************/
+		//Wall edge model
+		case 0xd0:
+		   if(IMP>0 ){
+                NoImpSecond=0;
+				RunStep=0xd1;
+				SetStop();
+				RunMs=0;
+
+			}
+			else  if(RunMs>30){ 
+				RunMs =0;
+               if(IRLocation.NearMid>0)
+				{
+					RunStep=0x50;
+					
+				}
+				else if(IRLocation.FarMid>0)
+				{
+					RunStep=0x40;
+					InitMotorForwardSlow();
+				}
+			
+				else if(IRLocation.FarLeft>0)
+				{
+					RunStep=0x40;
+					InitMotorForwardRightSlow();
+				}			
+				else if(IRLocation.FarRight>0)
+				{
+					RunStep=0x40;
+					InitMotorForwardLeftSlow();
+				}
+		        else if(IRLocation.TopIR >0)
+				{
+                        
+					RunStep = 0x10; //TopIr PROC
+					RunMs = 0;
+					InitMotorLeft();
+						
+				}			
+			}
+
+		break;
+		case 0xd1:
+		 if(RunMs>20){
+			      InitMotorRetreat();
+				   RunMs=0;
+				   RunStep=0xd2;
+		}
+
+		break;
+
+		case 0xd2:
+		   if(RunMs>60){			   
+					
+				SetStop();
+					RunMs=0;
+					RunStep=0xd3;
+			}
+
+		break;
+		case 0xd3:
+			if(RunMs>20){			   
+					InitMotorLeft();
+					RunMs=0;
+					RunStep=0xd4;
+			}
+		case 0xd4:
+		 if(RunMs>60){			   
+					
+				   SetStop();
+					RunMs=0;
+					RunStep=0xd5;
+			}	
+		
+		break;
+		
+          case 0xd5:
+		   if(RunMs>30)
+			  {
+			    InitMotorForwardLeft();//// InitMotorForwardRight(); //stright line run 
+			     RunMs=0;
+				 RunStep=0xd6;
+			  }
+
+		 
+
+		break;
+
+         case 0xd6:
+		     if(IMP>0){
+				NoImpSecond=0;
+				RunStep=0xd1;
+				SetStop();
+				RunMs=0;
+			 }
+			else if(RunMs >600){// else if(RunMs>600){
+			     InitMotorForward();//InitMotorForward(); //stright line run 
+			     RunMs=0;
+				 RunStep=0xd0;
+			}
+            else if(IRLocation.NearMid>0)
+				{
+					RunStep=0x50;
+				}
+				else if(IRLocation.FarMid>0)
+				{
+					RunStep=0x40;
+					InitMotorForwardSlow();
+				}
+			
+				else if(IRLocation.FarLeft>0)
+				{
+					RunStep=0x40;
+					InitMotorForwardRightSlow();
+				}			
+				else if(IRLocation.FarRight>0)
+				{
+					RunStep=0x40;
+					InitMotorForwardLeftSlow();
+				}
+		        else if(IRLocation.TopIR >1)
+				{
+                       
+							RunStep = 0x10; //TopIr PROC
+							RunMs = 0;
+							InitMotorLeft();
+				}			
+		break;
 		default:
 			break;
 	}	
@@ -3057,6 +3205,7 @@ void sysMode(INT8U val)
 		
 			RunMode =5;
 			RunStep =0;
+			circle =0; //WT.EDIT 2021.03.01
 			SetBuzzerTime(100);
 			Delay_ms(10);
 			BuzzerOff();	
@@ -3327,6 +3476,7 @@ void battVoltDetect(void)
 			cnt = 0;
 			RunMode =5;
 			RunStep =0;	
+			circle =0; //WT.EDIT 2021.03.01
             SetFan(0);
 			SetEdge(0);		
 		    ADCtl = 0;
