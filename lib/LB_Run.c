@@ -106,7 +106,7 @@ INT8U readRunTime()
 void CleanMode_BOW(void)
 {
 
-// 1-?
+       static INT8U impacts;
 	
 		
 		switch(RunStep)
@@ -133,6 +133,7 @@ void CleanMode_BOW(void)
 				InitMotorRetreat();
 				RunMs=30;
 				CurrentMax++;
+				impacts++;
 			}
             else if(IMP>0)
 			{
@@ -140,7 +141,8 @@ void CleanMode_BOW(void)
 				RunStep=0x4;
 				InitMotorRetreat();
 				RunMs=0;
-				CurrentMax++;			
+				CurrentMax++;
+				impacts++;			
 			}
 			else if((LCurrent>LCurrentMax)||(RCurrent>RCurrentMax))
 			{
@@ -599,7 +601,7 @@ void CleanMode_BOW(void)
 ************************************************************************/
 void CleanMode_Random(void)
 {
-	   
+	   static INT8U i;
 	  	switch(RunStep)
 		{
 		case 0:
@@ -643,13 +645,14 @@ void CleanMode_Random(void)
 				SetStop();
 				RunMs=0;
 			}
-			else  if(RunMs>500)
+			else  if(RunMs>600)
 			{
-				SetStop();
+				
 				CurrentMax=0;
 				ImpactsFlag=0 ;
 				RunMs=0; //WT.EDIT 
-				RunStep =0x05;
+				//RunStep =0x01;
+				
 			}
 		}
 			break;
@@ -658,11 +661,13 @@ void CleanMode_Random(void)
 			if(RunMs>30)
 			{
 				InitMotorRetreat();
-				if(ImpactsFlag >4){ //WT.EDIT 2021.03.01
+				if(ImpactsFlag >15){ //WT.EDIT 2021.03.01
 					ImpactsFlag =0;
 					RunMode =2; //edge wall model
 			        RunStep =1;
-					//SysFlag = WALL;		
+					RunMs =0;
+					//SysFlag = WALL;
+					SetEdge(250);		
 
 				}
 				else{
@@ -704,6 +709,7 @@ void CleanMode_Random(void)
 				RunStep=2;
 				LCurrent=0;
 				RCurrent=0;
+				//ImpactsFlag=0;
 			}
 			else if((WallDp[0]>WallMin)||(WallDp[1]>WallMin)||(WallDp[2]>WallMin)||(WallDp[3]>WallMin))
 			{
@@ -1170,17 +1176,17 @@ void wallMode(void)
 			InitMotorForward();
 			RunStep=2;				
 			RunMs = 0;
-		  WallDp[0] = 0;
+		    WallDp[0] = 0;
 			WallDp[1] = 0;
 			WallDp[2] = 0;
 			WallDp[3] = 0;
 			findRechargeFlag = 0;
 			findIR = 0;
 			firstTime = 1;
-			if(wallRechargeModeFlag){
-				SetFan(0);
-				SetEdge(0);
-			}
+			//if(wallRechargeModeFlag){
+				//SetFan(0);
+				//SetEdge(0);
+			//}
 			break;
 
 		case 2:  
@@ -1460,7 +1466,7 @@ void rechargeBatMode(void)
 //			ADCtl = 0;
 			ClearAllIR();
 			circle++;
-			if(circle >6){ //wall edge model
+			if(circle >20){ //wall edge model
 				RunStep = 0xd0;
 				circle =0;
 				InitMotorForward();
@@ -3463,7 +3469,7 @@ void battVoltDetect(void)
 			return;
 		
 		if(RunMode==1 || RunMode==2 || RunMode==3 || RunMode==4 ){
-			if(Voltage < 0x380){//if(Voltage < 0x3D0){ //WT.EDIT 2021.03.01
+			if(Voltage < 0x399){//if(Voltage < 0x3D0){ //WT.EDIT 2021.03.01
 				cnt++;
 			}
 			else
