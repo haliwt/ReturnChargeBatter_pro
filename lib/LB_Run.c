@@ -601,7 +601,6 @@ void CleanMode_BOW(void)
 ************************************************************************/
 void CleanMode_Random(void)
 {
-	   static INT8U i;
 	  	switch(RunStep)
 		{
 		case 0:
@@ -611,7 +610,11 @@ void CleanMode_Random(void)
 		break;
 		case 1:
 		{
-
+			ImpactsFlag=0;
+			WallDp[0] = 0;
+			WallDp[1] = 0;
+			WallDp[2] = 0;
+			WallDp[3] = 0;
 			InitMotorForward();
 			RunStep=2;
 		}
@@ -753,21 +756,26 @@ void  CheckRun()
 
             break;
 			case 1 : // clean random Mode
-           			
+           		SetEdge(250);
+				SetFan(250);		
 				CleanMode_Random();
 				break;
 
 			case 2: // wall--edge line Mode
-			   
+			   SetFan(250);
+				SetEdge(250);	
 			    wallMode();
 				break; 
 
 			case 3: //clean bow Mode
-			
+			    SetFan(250);
+				SetEdge(250);
 				CleanMode_BOW();
 				break;
 
 			case 4: //fixpoint clean Mode
+			    SetFan(250);
+				SetEdge(250);
 				circleMode();
 				break;
 
@@ -1386,12 +1394,12 @@ void wallMode(void)
 				if(wallRechargeModeFlag)
 					RunMs = 0;
 				else 
-					RunMs = 130;			
+					RunMs = 30;			
 			}			
 			break;
 
 			case 11:  		//?? stop
-				if(RunMs>170){	
+				if(RunMs>70){	
 					SetStop();
 					RunMs=0;
 					RunStep=12;
@@ -2789,6 +2797,7 @@ void rechargeBatMode(void)
 				RunStep=0xd1;
 				SetStop();
 				RunMs=0;
+			    findCnt = 0;
 
 			}
 			else  if(RunMs>30){ 
@@ -2877,11 +2886,18 @@ void rechargeBatMode(void)
 				RunStep=0xd1;
 				SetStop();
 				RunMs=0;
+				findCnt = 0;
 			 }
 			else if(RunMs >600){// else if(RunMs>600){
-			     InitMotorForward();//InitMotorForward(); //stright line run 
-			     RunMs=0;
-				 RunStep=0xd0;
+			    //  InitMotorForward();//InitMotorForward(); //stright line run //WT.EDIT 2021.03.05
+			     findCnt++;
+				 if(findCnt>5){
+					InitMotorForward(); 
+					RunStep=0xd0;
+				 }
+				 else
+					RunStep=0xd1; 
+				 RunMs=0;				 
 			}
             else if(IRLocation.NearMid>0)
 				{
@@ -2968,7 +2984,7 @@ void sysMode(INT8U val)
 				
 				SetStop();
 				RunStep = 0;
-				RunMode = 1;
+				RunMode = 0;
 				lastMode = 0;	
 				SetFan(0);
 			  	SetEdge(0);	
@@ -3495,7 +3511,7 @@ void battVoltDetect(void)
 			cnt = 0;
 			SetStop();
 			RunStep = 0;
-			RunMode = 1;
+			RunMode = 0;
 			SetFan(0);
 			SetEdge(0);	
 			lastMode = 0; 

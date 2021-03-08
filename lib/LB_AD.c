@@ -266,7 +266,7 @@ void CheckEdgeCurrent()
 		
 		 if(RunMode == 6) return ;
 		
-		if(EdgeCurrent>0xd0){
+		if(EdgeCurrent>0xd0){//WT.EDIT 2021.03.03//if(EdgeCurrent>0xd0){
 			 EdgeCurrentCount++;
 			 if(EdgeCurrentCount>=2){
 					EdgeCurrentCount = 0;
